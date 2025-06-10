@@ -13367,12 +13367,6 @@
 		(uuid "b8bbb478-6e66-4f4d-a913-6dda06395499")
 	)
 	(junction
-		(at 438.15 123.19)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ba50552b-9ffd-4294-a820-dd7537e53992")
-	)
-	(junction
 		(at 170.18 162.56)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -13843,6 +13837,10 @@
 	(no_connect
 		(at 388.62 196.85)
 		(uuid "31bbd93c-1504-4495-b22d-87c771c5cbd1")
+	)
+	(no_connect
+		(at 289.56 100.33)
+		(uuid "31c87741-4794-4f34-bd9c-1be51eb9c81d")
 	)
 	(no_connect
 		(at 412.75 254)
@@ -14915,6 +14913,10 @@
 	(no_connect
 		(at 283.21 146.05)
 		(uuid "d2340207-3e3a-4154-b715-4e2e973510e7")
+	)
+	(no_connect
+		(at 267.97 93.98)
+		(uuid "d2e7dec9-252a-4a24-8499-4a2dac56d8f5")
 	)
 	(no_connect
 		(at 463.55 254)
@@ -20040,16 +20042,6 @@
 	)
 	(wire
 		(pts
-			(xy 438.15 102.87) (xy 438.15 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a33e160f-95c9-427b-b5c6-b8baadac98ed")
-	)
-	(wire
-		(pts
 			(xy 232.41 152.4) (xy 232.41 154.94)
 		)
 		(stroke
@@ -20950,7 +20942,7 @@
 	)
 	(wire
 		(pts
-			(xy 438.15 123.19) (xy 438.15 125.73)
+			(xy 438.15 102.87) (xy 438.15 125.73)
 		)
 		(stroke
 			(width 0)
@@ -22929,140 +22921,6 @@
 		(uuid "ffad155a-4c5e-45e2-8b34-b25cbee03dd8")
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_02x12_Counter_Clockwise")
-		(at 430.53 135.89 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "14f40e23-939d-4212-af9e-eebda2c3a6b5")
-		(property "Reference" "J11"
-			(at 431.8 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Lvl_Shifter_Address_Lines_0_7"
-			(at 431.8 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 430.53 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 430.53 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, double row, 02x12, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 430.53 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "20"
-			(uuid "dd20bf47-8885-4f57-830b-12b92c2795a0")
-		)
-		(pin "24"
-			(uuid "6077f971-6562-4047-b594-33c3b8a12564")
-		)
-		(pin "1"
-			(uuid "155ecfa7-cef2-40d0-9fa1-0b6dc3296278")
-		)
-		(pin "12"
-			(uuid "d3833c14-b10b-48df-8091-3f2f9d2b89a6")
-		)
-		(pin "11"
-			(uuid "1b1c12c5-d540-4fbd-ac91-1e62af8eb37f")
-		)
-		(pin "13"
-			(uuid "ee019a1d-8694-449d-9b4b-64b2a3cb52b7")
-		)
-		(pin "10"
-			(uuid "ceab348d-bd3c-46f7-aeb4-0f380fa1641e")
-		)
-		(pin "4"
-			(uuid "4508e202-3367-4a37-86bd-86c3b2d10fb0")
-		)
-		(pin "7"
-			(uuid "0be8c9a9-c6aa-4e6d-b6a4-0207c8514f0c")
-		)
-		(pin "8"
-			(uuid "454f2877-a930-41ff-b074-88db8e00d940")
-		)
-		(pin "9"
-			(uuid "a8bcc22d-43ca-4081-91f0-6199ad95308f")
-		)
-		(pin "5"
-			(uuid "395f7622-97c1-4a32-9b71-262969b3a64d")
-		)
-		(pin "14"
-			(uuid "40670b55-14a2-4dc7-9ef9-dc5b6619bbfb")
-		)
-		(pin "19"
-			(uuid "0a54ad4b-8ca2-49ac-bc1e-7a740378ec7a")
-		)
-		(pin "18"
-			(uuid "16cd51d9-6a9c-44ea-ae2b-3cac75138c1d")
-		)
-		(pin "21"
-			(uuid "cedb0d93-7d6c-4dd7-9363-4139e982830e")
-		)
-		(pin "3"
-			(uuid "ababeef2-9919-4063-b0e7-0452f4b45049")
-		)
-		(pin "22"
-			(uuid "5bc3bb5c-22bb-4b19-861d-b84a739c676f")
-		)
-		(pin "17"
-			(uuid "aa3f8249-34f1-4ff1-aa21-17d1861a7244")
-		)
-		(pin "16"
-			(uuid "6f201d83-dcd4-4803-aee5-b73f894cfb7a")
-		)
-		(pin "2"
-			(uuid "587ada50-5ff8-4a0a-b392-2ce827fc328b")
-		)
-		(pin "23"
-			(uuid "58a38f8a-0311-46fe-8dbe-aec712b35be4")
-		)
-		(pin "15"
-			(uuid "88513ee5-585d-43a4-b554-3cc61d82dc73")
-		)
-		(pin "6"
-			(uuid "d9af16a8-ea74-4265-9642-62cc6c8acfe9")
-		)
-		(instances
-			(project "FMC_Adaper"
-				(path "/87c78429-be2b-40ed-8d3b-56cb9666a56f"
-					(reference "J11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_02x01")
 		(at 124.46 86.36 0)
 		(unit 1)
@@ -23087,7 +22945,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 124.46 86.36 0)
 			(effects
 				(font
@@ -23154,7 +23012,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 124.46 90.17 0)
 			(effects
 				(font
@@ -23290,7 +23148,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical"
 			(at 147.32 90.17 0)
 			(effects
 				(font
@@ -24967,7 +24825,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 124.46 97.79 0)
 			(effects
 				(font
@@ -25288,7 +25146,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"
 			(at 147.32 113.03 0)
 			(effects
 				(font
@@ -25705,7 +25563,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 124.46 93.98 0)
 			(effects
 				(font
@@ -26769,7 +26627,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 124.46 82.55 0)
 			(effects
 				(font

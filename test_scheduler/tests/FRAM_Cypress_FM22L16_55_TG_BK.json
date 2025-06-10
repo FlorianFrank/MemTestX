@@ -1,0 +1,12 @@
+{
+ "name": "FRAM_Cypress_FM22L16_55_TG",
+  "manufacturer": "Cypress",
+  "technology": "FRAM",
+  "model": "FM22L16_55_TG",
+  "interface_type": "parallel",
+  "address_width": 18,
+  "data_width": 16,
+  "min_addr": 0,
+  "max_addr": 262144,
+  "comment": "Also configurable as 8 bit using UB and LB"
+}

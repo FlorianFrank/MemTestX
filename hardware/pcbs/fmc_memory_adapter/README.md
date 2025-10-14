@@ -20,20 +20,20 @@ The pin headers on the left side are used to connect different reference voltage
 
 An additional connector is provided to supply a reference voltage to the FMC adapter’s VADJ_SENSE pin. This allows the VADJ_FMC power rail voltage to be selected using a resistor voltage divider.
 
-### Component Description
+### Components Description
 
 The design is assembled based on the following components identified by their symbol name:
 
-| Ref.      | Type                        | Manufacturer      | Component Number     | Description                             | ~ Unit Price                      | Verified |
-|-------------|-----------------------------|-------------------|-----------|------------------------------------------|---------------------|----------|
-| J8          | FMC Adapter                 | SAMTEC            | ASP-134488 | Connector between the FPGA J5 FMC adapter and the breakout board for Data Line D0 | 32 € | ✅       |
-| IC 1 - IC6  | Dual-Supply Bus Transceiver | Texas Instruments | SN74AVC8T245PWG4  | Logic Level shifting using two reference power rails. | 1.32 € | ✅       |
-| C1 - C12    | Capacitors                  | KEMET             | C0805C104K5RAC7411 | 0.1 µF, 50 V DC, decoupling capacitors for bus transceivers (VCCA/VCCB inputs) | 0.10 € | ✅ |
-| P1, P2    | Pin Headers 2×32              | MPE                          | 087-2-064-0-S-XS0-1260 | 2×32 straight pin headers, 2.54 mm pitch, for connecting the memory module | 1.10 € | ✅        |
-| J7        | Pin Headers Power Supply       | Würth Elektronik             | 61300621121          | 2×3 straight pin headers, 2.54 mm pitch, to access the power supply connector | 0.32 € | ✅        |
-| J10       | Pin Headers Ground Selectors   | Würth Elektronik             | 61301621121          | 2×8 straight pin headers, 2.54 mm pitch, to access ground connections | 0.81 € | ✅        |
-| J1 - J5   | Pin Headers Ground Selectors   | Amphenol Commercial Products | G800NA306018EU       | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 € | ✅        |
-| J9        | Debug Pin Header               | Würth Elektronik             | 61300311121          | 1×3 straight pin headers, 2.54 mm pitch, for debug pins      | 0.10 € | ✅        |
+| Ref.      | Type                        | Manufacturer      | Component Number     | Description                             | Unit Price | Qty | Total Price | Verified |
+|-----------|-----------------------------|-----------------|-------------------|-----------------------------------------|------------|-----|-------------|----------|
+| J8        | FMC Adapter                 | SAMTEC           | ASP-134488         | Connector between the FPGA J5 FMC adapter and the breakout board for Data Line D0 | 32 €       | 1   | 32 €        | ✅       |
+| IC1 - IC6 | Dual-Supply Bus Transceiver | Texas Instruments | SN74AVC8T245PWG4 | Logic Level shifting using two reference power rails. | 1.32 €     | 6   | 7.92 €      | ✅       |
+| C1 - C12  | Capacitors                  | KEMET             | C0805C104K5RAC7411 | 0.1 µF, 50 V DC, decoupling capacitors for bus transceivers (VCCA/VCCB inputs) | 0.10 €     | 12  | 1.20 €      | ✅       |
+| P1, P2    | Pin Headers 2×32            | MPE               | 087-2-064-0-S-XS0-1260 | 2×32 straight pin headers, 2.54 mm pitch, for connecting the memory module | 1.10 €     | 2   | 2.20 €      | ✅       |
+| J7        | Pin Headers Power Supply     | Würth Elektronik  | 61300621121        | 2×3 straight pin headers, 2.54 mm pitch, to access the power supply connector | 0.32 €     | 1   | 0.32 €      | ✅       |
+| J10       | Pin Headers Ground Selectors | Würth Elektronik  | 61301621121        | 2×8 straight pin headers, 2.54 mm pitch, to access ground connections | 0.81 €     | 1   | 0.81 €      | ✅       |
+| J1 - J5   | Pin Headers Ground Selectors | Amphenol Commercial Products | G800NA306018EU | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 €     | 5   | 0.45 €      | ✅       |
+| J9        | Debug Pin Header             | Würth Elektronik  | 61300311121        | 1×3 straight pin headers, 2.54 mm pitch, for debug pins | 0.10 €     | 1   | 0.10 €      | ✅       |
 
 
 

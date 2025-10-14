@@ -95,16 +95,16 @@ This section presents the different pinout descriptions based on the components 
 | G15  | LVCMOS18    | IC5             | A7            | Address Line A14 |    ✅    |
 | G16  | LVCMOS18    | IC5             | A8            | Address Line A15 |    ✅    |
 
-| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Verified |
-|------|-------------|-----------------|---------------|------------------|----------|
-| G18  | LVCMOS18    | IC6             | A1            | Address Line A16 |    ✅    |
-| G19  | LVCMOS18    | IC6             | A2            | Address Line A17 |    ✅    |
-| G21  | LVCMOS18    | IC6             | A3            | Address Line A18 |    ✅    |
-| G22  | LVCMOS18    | IC6             | A4            | Address Line A19 |    ✅    |
-| G24  | LVCMOS18    | IC6             | A5            | Address Line A20 |    ✅    |
-| G25  | LVCMOS18    | IC6             | A6            | Address Line A21 |    ✅    |
-| G27  | LVCMOS18    | IC6             | A7            | Address Line A22 |    ✅    |
-| G28  | LVCMOS18    | IC6             | A8            | Address Line A23 |    ✅    |
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description      | Verified |
+|------|-------------|-----------------|---------------|---------------------|----------|
+| G18  | LVCMOS18    | IC6             | A1            | Address Line A16    |    ✅    |
+| G19  | LVCMOS18    | IC6             | A2            | Address Line A17    |    ✅    |
+| G21  | LVCMOS18    | IC6             | A3            | Address Line A18    |    ✅    |
+| G22  | LVCMOS18    | IC6             | A4            | Address Line A19    |    ✅    |
+| G24  | LVCMOS18    | IC6             | A5            | Address Line A20    |    ✅    |
+| G25  | LVCMOS18    | IC6             | A6            | General Purpose Pin |    ✅    |
+| G27  | LVCMOS18    | IC6             | A7            | General Purpose Pin |    ✅    |
+| G28  | LVCMOS18    | IC6             | A8            | General Purpose Pin |    ✅    |
 
 | Pin  | I/O Standard | Mapping Component | Component Pin | Description         | Verified |
 |------|-------------|-----------------|---------------|------------------------|----------|
@@ -115,59 +115,98 @@ This section presents the different pinout descriptions based on the components 
 | G36  | LVCMOS18    | IC3             | A5            | Upper Byte Select !UB  |    ✅    |
 | G37  | LVCMOS18    | IC3             | A6            | Sleep Pin !ZZ          |    ✅    |
 
-| Pin  | I/O Standard | Mapping Component | Component Pin | Description                            | Verified |
-|------|---------------|------------------|----------------|----------------------------------------|-----------|
-| H11  | LVCMOS18      | J7               | 1              | 1.8 V reference pin                    | ✅ |
-| D36  | UTIL_3V3      | J7               | 1              | 3.3 V CMOS reference voltage           | ✅ |
-| C39  | UTIL_3V3      | J7               | 1              | 3.3 V power supply for the memory module | ✅ |
-| C34  | GND      | J10               | 1,3              | Pinheader ground connector P1 and P2. | ✅ |
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description                               | Verified |
+|------|---------------|------------------|----------------|------------------------------------------|----------|
+| H11  | LVCMOS18      | J7               | 1              | 1.8 V reference pin                      | ✅       |
+| D36  | UTIL_3V3      | J7               | 1              | 3.3 V CMOS reference voltage             | ✅       |
+| C39  | UTIL_3V3      | J7               | 1              | 3.3 V power supply for the memory module | ✅       |
+| C34  | GND      | J10               | 1,3              | Pinheader ground connector P1 and P2.      | ✅       |
 | D35  | GND      | J3, J4, J5               | 1,3              | External GND connector and GND for lvl shifter VREF_A | ✅ |
 | D35  | GND      | J3, J4, J5               | 1,3              | External GND connector and GND for lvl shifter VREF_A and VREF_B | ✅ |
 
-| Pin | I/O Standard | Mapping Component | Component Pin | Description                              | Verified |
-|------|--------------|------------------|----------------|------------------------------------------|-----------|
-| H8   | LVCMOS18     | IC1, IC2         | DIR            | Data line direction control              | ✅ |
-| H10  | LVCMOS18     | IC3–IC6          | DIR            | Address and control line direction control | ✅ |
-| H7   | LVCMOS18     | IC1–IC6          | OE             | Output enable control                    | ✅ |
+| Pin | I/O Standard | Mapping Component | Component Pin | Description                                 | Verified  |
+|------|--------------|------------------|----------------|--------------------------------------------|-----------|
+| H8   | LVCMOS18     | IC1, IC2         | DIR            | Data line direction control                | ✅        |
+| H10  | LVCMOS18     | IC3–IC6          | DIR            | Address and control line direction control | ✅        |
+| H7   | LVCMOS18     | IC1–IC6          | OE             | Output enable control                      | ✅        |
 
 
 #### Dual Transceiver (IC1)
 
-| Pin | I/O Standard | Mapping Component | Component Pin | Description                              | Verified |
-|------|--------------|------------------|----------------|------------------------------------------|-----------|
-| B1  | VCC REF     |   P1  |   PD14/D0          | Data Line  D0 | ✅ |
-| B2  | VCC REF     |   P1  |   PD15/D1          | Data Line D1 | ✅ |
-| B3  | VCC REF     |   P2  |   PD0/D2          | Data Line D2 | ✅ |
-| B4  | VCC REF     |   P2  |   PD1/D3          | Data Line D3 | ✅ |
-| B5  | VCC REF     |   P1  |   PE7/D4          | Data Line D4 | ✅ |
-| B6  | VCC REF     |   P1  |   PE8/D5          | Data Line D5 | ✅ |
-| B7  | VCC REF     |   P1  |   PE9/D6          | Data Line D6 | ✅ |
-| B8  | VCC REF     |   P1  |   PE10/D7          | Data Line D7 | ✅ |
+| Pin | I/O Standard | Mapping Component | Component Pin | Description | Verified  |
+|------|--------------|------------------|----------------|------------|-----------|
+| B1  | VCC REF     |   P1  |   PD14/D0          | Data Line D0        | ✅ |
+| B2  | VCC REF     |   P1  |   PD15/D1          | Data Line D1        | ✅ |
+| B3  | VCC REF     |   P2  |   PD0/D2           | Data Line D2        | ✅ |
+| B4  | VCC REF     |   P2  |   PD1/D3           | Data Line D3        | ✅ |
+| B5  | VCC REF     |   P1  |   PE7/D4           | Data Line D4        | ✅ |
+| B6  | VCC REF     |   P1  |   PE8/D5           | Data Line D5        | ✅ |
+| B7  | VCC REF     |   P1  |   PE9/D6           | Data Line D6        | ✅ |
+| B8  | VCC REF     |   P1  |   PE10/D7          | Data Line D7        | ✅ |
 
 #### Dual Transceiver (IC2)
 
-| Pin | I/O Standard | Mapping Component | Component Pin | Description                              | Verified |
-|------|--------------|------------------|----------------|------------------------------------------|-----------|
-| B1  | VCC REF     |   P1  |   PE11/D8          | Data Line  D8 | ✅ |
-| B2  | VCC REF     |   P1  |   PE12/D9          | Data Line  D9 | ✅ |
-| B3  | VCC REF     |   P1  |   PE13/D10          | Data Line  D10 | ✅ |
-| B4  | VCC REF     |   P1  |   PE14/D11          | Data Line  D11 | ✅ |
-| B5  | VCC REF     |   P1  |   PE15/D12          | Data Line  D12 | ✅ |
-| B6  | VCC REF     |   P1  |   PD8/D13          | Data Line  D13 | ✅ |
-| B7  | VCC REF     |   P1  |   PD9/D14          | Data Line  D14 | ✅ |
-| B8  | VCC REF     |   P1  |   PD10/D15          | Data Line  D15 | ✅ |
+| Pin | I/O Standard | Mapping Component | Component Pin | Description  | Verified |
+|------|--------------|------------------|----------------|-------------|----------|
+| B1  | VCC REF     |   P1  |   PE11/D8          | Data Line  D8        | ✅       |
+| B2  | VCC REF     |   P1  |   PE12/D9          | Data Line  D9        | ✅       |
+| B3  | VCC REF     |   P1  |   PE13/D10         | Data Line  D10       | ✅       |
+| B4  | VCC REF     |   P1  |   PE14/D11         | Data Line  D11       | ✅       |
+| B5  | VCC REF     |   P1  |   PE15/D12         | Data Line  D12       | ✅       |
+| B6  | VCC REF     |   P1  |   PD8/D13          | Data Line  D13       | ✅       |
+| B7  | VCC REF     |   P1  |   PD9/D14          | Data Line  D14       | ✅       |
+| B8  | VCC REF     |   P1  |   PD10/D15         | Data Line  D15       | ✅       |
+
+
+#### Dual Transceiver (IC3)
+
+| Pin  | I/O Standard | Mapping Component| Component Pin  | Description        | Verified |
+|------|--------------|------------------|----------------|--------------------|----------|
+| B1   | VCC REF      |   P2             |   PD4/OE       | Output Enable      | ✅       |
+| B2   | VCC REF      |   P2             |   PD5/WE       | Write Enable       | ✅       |
+| B3   | VCC REF      |   P2             |   PG9/CE       | Write Enable       | ✅       |
+| B4   | VCC REF      |   P2             |   PE0/LB       | Lower Byte Select  | ✅       |
+| B5   | VCC REF      |   P2             |   PE1/UB       | Uper Byte Select   | ✅       |
+| B6   | VCC REF      |   P2             |   PB9/ZZ       | Sleep Pin          | ✅       |
 
 
 #### Dual Transceiver (IC4)
 
-| Pin | I/O Standard | Mapping Component | Component Pin | Description                              | Verified |
-|------|--------------|------------------|----------------|------------------------------------------|-----------|
-| B1  | VCC REF     |   P2  |   PF0/A0          | Address Line A0 | ✅ |
-| B2  | VCC REF     |   P2  |   PF1/A1          | Address Line A1 | ✅ |
-| B3  | VCC REF     |   P2  |   PF2/A2          | Address Line A2 | ✅ |
-| B4  | VCC REF     |   P2  |   PF3/A3          | Address Line A3 | ✅ |
-| B5  | VCC REF     |   P2  |   PF4/A4          | Address Line A4 | ✅ |
-| B6  | VCC REF     |   P2  |   PF5/A5          | Address Line A5 | ✅ |
-| B7  | VCC REF     |   P1  |   PF12/A6          | Address Line A6 | ✅ |
-| B8  | VCC REF     |   P1  |   PF13/A7          | Address Line A7 | ✅ |
+| Pin | I/O Standard | Mapping Component | Component Pin | Description | Verified  |
+|------|--------------|------------------|----------------|------------|-----------|
+| B1  | VCC REF     |   P2  |   PF0/A0          | Address Line A0 | ✅             |
+| B2  | VCC REF     |   P2  |   PF1/A1          | Address Line A1 | ✅             |
+| B3  | VCC REF     |   P2  |   PF2/A2          | Address Line A2 | ✅             |
+| B4  | VCC REF     |   P2  |   PF3/A3          | Address Line A3 | ✅             |
+| B5  | VCC REF     |   P2  |   PF4/A4          | Address Line A4 | ✅             |
+| B6  | VCC REF     |   P2  |   PF5/A5          | Address Line A5 | ✅             |
+| B7  | VCC REF     |   P1  |   PF12/A6         | Address Line A6 | ✅             |
+| B8  | VCC REF     |   P1  |   PF13/A7         | Address Line A7 | ✅             |
 
+
+#### Dual Transceiver (IC5)
+
+| Pin | I/O Standard | Mapping Component | Component Pin | Description | Verified |
+|------|--------------|------------------|----------------|------------|----------|
+| B1  | VCC REF     |   P1  |   PF14/A0          | Address Line A8     | ✅       |
+| B2  | VCC REF     |   P1  |   PF15/A9          | Address Line A9     | ✅       |
+| B3  | VCC REF     |   P1  |   PG0/A10          | Address Line A10    | ✅       |
+| B4  | VCC REF     |   P1  |   PG1/A11          | Address Line A11    | ✅       |
+| B5  | VCC REF     |   P1  |   PG2/A12          | Address Line A12    | ✅       |
+| B6  | VCC REF     |   P1  |   PG3/A13          | Address Line A13    | ✅       |
+| B7  | VCC REF     |   P2  |   PG4/A14          | Address Line A14    | ✅       |
+| B8  | VCC REF     |   P2  |   PG5/A15          | Address Line A15    | ✅       |
+
+
+#### Dual Transceiver (IC6)
+
+| Pin | I/O Standard | Mapping Component | Component Pin       | Description         | Verified |
+|------|------------|--------------------|---------------------|---------------------|----------|
+| B1  | VCC REF     |   P1               |   PD11/A16          | Address Line A16    | ✅       |
+| B2  | VCC REF     |   P1               |   PD12/A17          | Address Line A17    | ✅       |
+| B3  | VCC REF     |   P1               |   PD13/A18          | Address Line A18    | ✅       |
+| B4  | VCC REF     |   P2               |   PD3/A19           | Address Line A19    | ✅       |
+| B5  | VCC REF     |   P1               |   PF11/A20          | Address Line A20    | ✅       |
+| B6  | VCC REF     |   P2               |   PG13              | General Purpose Pin | ✅       |
+| B7  | VCC REF     |   P2               |   PG15              | General Purpose Pin | ✅       |
+| B8  | VCC REF     |   P2               |   PB4               | General Purpose Pin | ✅       |

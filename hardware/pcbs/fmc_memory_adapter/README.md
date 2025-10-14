@@ -7,7 +7,7 @@ The board is designed to connect to the FPGA Mezzanine Card (FMC) J5 connector o
 The PCB design is shown in the following figure:
 
 <div style="text-align: center;">
-  <img src="doc/figures/fmc_memory_adapter-brd.svg" style="width: 80%;" alt="FMC Memory Adapter Board">
+  <img src="doc/figures/fmc_memory_adapter-brd.svg" style="width: 100%;" alt="FMC Memory Adapter Board">
 </div>
 
 The board uses an ANSI/VITA 57.1 compatible FMC adapter, shown at the bottom, and routes the logical signals, e.g., for the memory address bus, data bus, and control signals, to the two horizontal pin headers, which are compatible with the pinout of an STM32F429 (which served as the first evaluation platform).

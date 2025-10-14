@@ -131,7 +131,17 @@ This section presents the different pinout descriptions based on the components 
 | H7   | LVCMOS18     | IC1–IC6          | OE             | Output enable control                      | ✅        |
 
 
-#### Dual Transceiver (IC1)
+#### Dual Transceivers
+
+Next, we list the connections between the Texas Instruments SN74AVC8T245PWG4 dual transceivers and the J1 and J2 pin headers that interface with the memory module.
+Each transceiver operates with two reference power supplies: VCC (1.8 V) and VCC_REF. Both reference voltages are decoupled using 0.1 µF capacitors.
+
+The DIR and Output Enable (OE) lines are controlled by the FPGA. An additional pin, H8, is used to control the data line direction, enabling both read and write operations over the same bus.
+
+<div style="text-align: center;"> <img src="doc/figures/transceiver_connection.svg" style="width: 80%;" alt="FMC Memory Adapter Board"> </div>
+
+
+##### Dual Transceiver (IC1)
 
 | Pin | I/O Standard | Mapping Component | Component Pin | Description | Verified  |
 |------|--------------|------------------|----------------|------------|-----------|
@@ -144,7 +154,7 @@ This section presents the different pinout descriptions based on the components 
 | B7  | VCC REF     |   P1  |   PE9/D6           | Data Line D6        | ✅ |
 | B8  | VCC REF     |   P1  |   PE10/D7          | Data Line D7        | ✅ |
 
-#### Dual Transceiver (IC2)
+##### Dual Transceiver (IC2)
 
 | Pin | I/O Standard | Mapping Component | Component Pin | Description  | Verified |
 |------|--------------|------------------|----------------|-------------|----------|
@@ -158,7 +168,7 @@ This section presents the different pinout descriptions based on the components 
 | B8  | VCC REF     |   P1  |   PD10/D15         | Data Line  D15       | ✅       |
 
 
-#### Dual Transceiver (IC3)
+##### Dual Transceiver (IC3)
 
 | Pin  | I/O Standard | Mapping Component| Component Pin  | Description        | Verified |
 |------|--------------|------------------|----------------|--------------------|----------|
@@ -170,7 +180,7 @@ This section presents the different pinout descriptions based on the components 
 | B6   | VCC REF      |   P2             |   PB9/ZZ       | Sleep Pin          | ✅       |
 
 
-#### Dual Transceiver (IC4)
+##### Dual Transceiver (IC4)
 
 | Pin | I/O Standard | Mapping Component | Component Pin | Description | Verified  |
 |------|--------------|------------------|----------------|------------|-----------|
@@ -184,7 +194,7 @@ This section presents the different pinout descriptions based on the components 
 | B8  | VCC REF     |   P1  |   PF13/A7         | Address Line A7 | ✅             |
 
 
-#### Dual Transceiver (IC5)
+##### Dual Transceiver (IC5)
 
 | Pin | I/O Standard | Mapping Component | Component Pin | Description | Verified |
 |------|--------------|------------------|----------------|------------|----------|
@@ -198,7 +208,7 @@ This section presents the different pinout descriptions based on the components 
 | B8  | VCC REF     |   P2  |   PG5/A15          | Address Line A15    | ✅       |
 
 
-#### Dual Transceiver (IC6)
+##### Dual Transceiver (IC6)
 
 | Pin | I/O Standard | Mapping Component | Component Pin       | Description         | Verified |
 |------|------------|--------------------|---------------------|---------------------|----------|

@@ -22,7 +22,9 @@ An additional connector is provided to supply a reference voltage to the FMC ada
 
 ### Components Description
 
-The design is assembled based on the following components identified by their symbol name:
+The design uses the components listed by their schematic symbols.  
+>Prices are based on 2025 data from common distributors, including Mouser and DigiKey or Reichelt.
+
 
 | Ref.      | Type                        | Manufacturer      | Component Number     | Description                             | Unit Price | Qty | Total Price | Verified |
 |-----------|-----------------------------|-----------------|-------------------|-----------------------------------------|------------|-----|-------------|----------|
@@ -35,7 +37,11 @@ The design is assembled based on the following components identified by their sy
 | J1 - J5   | Pin Headers Ground Selectors | Amphenol Commercial Products | G800NA306018EU | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 €     | 5   | 0.45 €      | ✅       |
 | J9        | Debug Pin Header             | Würth Elektronik  | 61300311121        | 1×3 straight pin headers, 2.54 mm pitch, for debug pins | 0.10 €     | 1   | 0.10 €      | ✅       |
 
+The board was manufactured as a four-layer PCB with a standard HASL finish (TG150), leaded configuration, 2 mm thickness, 4 mil/4 mil track spacing, and a minimum hole size of 0.2 mm.  
 
+A batch of five pieces was priced at approximately 130 €, including shipping, from [PCBgogo](https://www.pcbgogo.com).
+
+The total cost to manufacture the complete PCB was approximately **175 €**, excluding the cost of additional materials required for soldering.
 
 ### Pinout Description
 

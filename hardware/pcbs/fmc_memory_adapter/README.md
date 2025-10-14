@@ -36,12 +36,12 @@ The design uses the components listed by their schematic symbols.
 | J10       | Pin Headers Ground Selectors | Würth Elektronik  | 61301621121        | 2×8 straight pin headers, 2.54 mm pitch, to access ground connections | 0.81 €     | 1   | 0.81 €      | ✅       |
 | J1 - J5   | Pin Headers Ground Selectors | Amphenol Commercial Products | G800NA306018EU | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 €     | 5   | 0.45 €      | ✅       |
 | J9        | Debug Pin Header             | Würth Elektronik  | 61300311121        | 1×3 straight pin headers, 2.54 mm pitch, for debug pins | 0.10 €     | 1   | 0.10 €      | ✅       |
+| - | Voltage/Ground Selectors | MPE | 149-1-002-F0-XS | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 16 | 1.60 € | ✅ |
 
-The board was manufactured as a four-layer PCB with a standard HASL finish (TG150), leaded configuration, 2 mm thickness, 4 mil/4 mil track spacing, and a minimum hole size of 0.2 mm.  
 
-A batch of five pieces was priced at approximately 130 €, including shipping, from [PCBgogo](https://www.pcbgogo.com).
+The board was manufactured as a four-layer PCB with a standard HASL finish (TG150), leaded configuration, 2 mm thickness, 4 mil/4 mil track spacing, and a minimum hole size of 0.2 mm. A batch of five pieces was priced at approximately 130 €, including shipping, from [PCBgogo](https://www.pcbgogo.com).
 
-The total cost to manufacture the complete PCB was approximately **175 €**, excluding the cost of additional materials required for soldering.
+The total cost to manufacture the complete PCB was approximately **177 €**, excluding the cost of additional materials required for soldering.
 
 ### Pinout Description
 
@@ -114,4 +114,19 @@ This section presents the different pinout descriptions based on the components 
 | G34  | LVCMOS18    | IC3             | A4            | Lower Byte Select !LB  |    ✅    |
 | G36  | LVCMOS18    | IC3             | A5            | Upper Byte Select !UB  |    ✅    |
 | G37  | LVCMOS18    | IC3             | A6            | Sleep Pin !ZZ          |    ✅    |
+
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description                            | Verified |
+|------|---------------|------------------|----------------|----------------------------------------|-----------|
+| H11  | LVCMOS18      | J7               | 1              | 1.8 V reference pin                    | ✅ |
+| D36  | UTIL_3V3      | J7               | 1              | 3.3 V CMOS reference voltage           | ✅ |
+| C39  | UTIL_3V3      | J7               | 1              | 3.3 V power supply for the memory module | ✅ |
+| C34  | GND      | J10               | 1,3              | Pinheader ground connector P1 and P2. | ✅ |
+| D35  | GND      | J3, J4, J5               | 1,3              | External GND connector and GND for lvl shifter VREF_A | ✅ |
+| D35  | GND      | J3, J4, J5               | 1,3              | External GND connector and GND for lvl shifter VREF_A and VREF_B | ✅ |
+
+| Pin | I/O Standard | Mapping Component | Component Pin | Description                              | Verified |
+|------|--------------|------------------|----------------|------------------------------------------|-----------|
+| H8   | LVCMOS18     | IC1, IC2         | DIR            | Data line direction control              | ✅ |
+| H10  | LVCMOS18     | IC3–IC6          | DIR            | Address and control line direction control | ✅ |
+| H7   | LVCMOS18     | IC1–IC6          | OE             | Output enable control                    | ✅ |
 

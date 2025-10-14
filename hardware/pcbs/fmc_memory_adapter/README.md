@@ -130,3 +130,44 @@ This section presents the different pinout descriptions based on the components 
 | H10  | LVCMOS18     | IC3–IC6          | DIR            | Address and control line direction control | ✅ |
 | H7   | LVCMOS18     | IC1–IC6          | OE             | Output enable control                    | ✅ |
 
+
+#### Dual Transceiver (IC1)
+
+| Pin | I/O Standard | Mapping Component | Component Pin | Description                              | Verified |
+|------|--------------|------------------|----------------|------------------------------------------|-----------|
+| B1  | VCC REF     |   P1  |   PD14/D0          | Data Line  D0 | ✅ |
+| B2  | VCC REF     |   P1  |   PD15/D1          | Data Line D1 | ✅ |
+| B3  | VCC REF     |   P2  |   PD0/D2          | Data Line D2 | ✅ |
+| B4  | VCC REF     |   P2  |   PD1/D3          | Data Line D3 | ✅ |
+| B5  | VCC REF     |   P1  |   PE7/D4          | Data Line D4 | ✅ |
+| B6  | VCC REF     |   P1  |   PE8/D5          | Data Line D5 | ✅ |
+| B7  | VCC REF     |   P1  |   PE9/D6          | Data Line D6 | ✅ |
+| B8  | VCC REF     |   P1  |   PE10/D7          | Data Line D7 | ✅ |
+
+#### Dual Transceiver (IC2)
+
+| Pin | I/O Standard | Mapping Component | Component Pin | Description                              | Verified |
+|------|--------------|------------------|----------------|------------------------------------------|-----------|
+| B1  | VCC REF     |   P1  |   PE11/D8          | Data Line  D8 | ✅ |
+| B2  | VCC REF     |   P1  |   PE12/D9          | Data Line  D9 | ✅ |
+| B3  | VCC REF     |   P1  |   PE13/D10          | Data Line  D10 | ✅ |
+| B4  | VCC REF     |   P1  |   PE14/D11          | Data Line  D11 | ✅ |
+| B5  | VCC REF     |   P1  |   PE15/D12          | Data Line  D12 | ✅ |
+| B6  | VCC REF     |   P1  |   PD8/D13          | Data Line  D13 | ✅ |
+| B7  | VCC REF     |   P1  |   PD9/D14          | Data Line  D14 | ✅ |
+| B8  | VCC REF     |   P1  |   PD10/D15          | Data Line  D15 | ✅ |
+
+
+#### Dual Transceiver (IC4)
+
+| Pin | I/O Standard | Mapping Component | Component Pin | Description                              | Verified |
+|------|--------------|------------------|----------------|------------------------------------------|-----------|
+| B1  | VCC REF     |   P2  |   PF0/A0          | Address Line A0 | ✅ |
+| B2  | VCC REF     |   P2  |   PF1/A1          | Address Line A1 | ✅ |
+| B3  | VCC REF     |   P2  |   PF2/A2          | Address Line A2 | ✅ |
+| B4  | VCC REF     |   P2  |   PF3/A3          | Address Line A3 | ✅ |
+| B5  | VCC REF     |   P2  |   PF4/A4          | Address Line A4 | ✅ |
+| B6  | VCC REF     |   P2  |   PF5/A5          | Address Line A5 | ✅ |
+| B7  | VCC REF     |   P1  |   PF12/A6          | Address Line A6 | ✅ |
+| B8  | VCC REF     |   P1  |   PF13/A7          | Address Line A7 | ✅ |
+

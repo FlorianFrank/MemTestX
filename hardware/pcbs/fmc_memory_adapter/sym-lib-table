@@ -1,0 +1,9 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "STM32F429_Pinheader_right")(type "KiCad")(uri "${KIPRJMOD}/footprints/adapter_stm32_right/STM32F429_Pinheader_right.kicad_sym")(options "")(descr ""))
+  (lib (name "VITA57_1")(type "KiCad")(uri "${KIPRJMOD}/footprints/samtec_vita57_1_fmc/VITA57_1.kicad_sym")(options "")(descr ""))
+  (lib (name "SN74AVC8T245PWG4")(type "KiCad")(uri "${KIPRJMOD}/footprints/samtec_vita57_1_fmc/SN74AVC8T245PWG4/KiCad/SN74AVC8T245PWG4.kicad_sym")(options "")(descr ""))
+  (lib (name "STM32F429_Pinheader_left")(type "KiCad")(uri "${KIPRJMOD}/footprints/adapter_stm32_left/STM32F429_Pinheader_left.kicad_sym")(options "")(descr ""))
+  (lib (name "ASP-134488-02")(type "KiCad")(uri "${KIPRJMOD}/footprints/samtec_vita57_1_fmc/EDA_KICAD/ASP-134488-02.kicad_sym")(options "")(descr ""))
+  (lib (name "C0805C104K5RAC7411")(type "KiCad")(uri "${KIPRJMOD}/footprints/capacitor_c0805c104k5rac7411/C0805C104K5RAC7411.kicad_sym")(options "")(descr ""))
+)

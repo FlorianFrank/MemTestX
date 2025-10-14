@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP C0805C104K5RAC7411
+D Cap Ceramic 0.1uF 50V X7R 10% Pad SMD 0805 125C T/R
+K
+F https://www.mouser.com/datasheet/2/212/KEM_C1002_X7R_SMD-1102033.pdf
+$ENDCMP
+#
+#End Doc Library

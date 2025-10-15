@@ -117,7 +117,7 @@ This section presents the different pinout descriptions based on the components 
 
 | Pin  | I/O Standard | Mapping Component | Component Pin | Description                               | Verified |
 |------|---------------|------------------|----------------|------------------------------------------|----------|
-| H11  | LVCMOS18      | J7               | 1              | 1.8 V reference pin                      | ✅       |
+| H11  | LVCMOS18      | E39              | 1              | 1.8 V reference pin (VADJ)               | ✅       |
 | D36  | UTIL_3V3      | J7               | 1              | 3.3 V CMOS reference voltage             | ✅       |
 | C39  | UTIL_3V3      | J7               | 1              | 3.3 V power supply for the memory module | ✅       |
 | C34  | GND      | J10               | 1,3              | Pinheader ground connector P1 and P2.      | ✅       |
@@ -227,3 +227,53 @@ The DIR and Output Enable (OE) lines are controlled by the FPGA. An additional p
 | B6  | VCC REF     |   P2               |   PG13              | General Purpose Pin | ✅       |
 | B7  | VCC REF     |   P2               |   PG15              | General Purpose Pin | ✅       |
 | B8  | VCC REF     |   P2               |   PB4               | General Purpose Pin | ✅       |
+
+##### Power Connector (J7)
+
+The power connector is located at the top left of the board and is labeled J2. It is connected to the output of the power rail at Pin **E39 (VADJ)**.
+The other two power connectors provide power for the CMOS 3.3 V supply and the memory module, and are connected to the UTIL3V3 pins.
+To establish the connection between the MPSoC’s power supply, the memory module, and the transceivers, use jumpers to connect the appropriate pins, as shown in the figure below:
+
+<div style="text-align: center;"> <img src="doc/figures/power_connector.png" style="width: 60%;" alt="Power Connector"> </div>
+
+If you prefer to use an external power supply, remove the jumpers and connect the supply directly to the appropriate pin header. Ensure that the external power supply shares a common ground with the board to prevent potential damage.
+
+##### Ground Connectors (J1 - J5, J11)
+
+For debugging purposes, the ground connections are split across multiple pins, which can be configured in the same way as the power supply. The J1–J5 headers allow individual ground connections to be disconnected as needed.
+Placing jumpers on the Shared Ground pad enables multiple ground domains to be connected together, and also allows the Geographical Address (GA) pins to be tied to ground.
+An additional pin header is provided to connect external measurement equipment or power supplies to a common ground reference.
+
+<div style="text-align: center;"> <img src="doc/figures
+/gnd_connector.png" style="width: 60%;" alt="GND Connector"> </div>
+
+##### PCI-E VADJ Extension Board connector
+
+This connector provides additional pins for potential extension boards, enabling voltage negotiation via the PMBus or other functionalities. It offers a PCI-E x1 slot with the following pin assignments:
+
+| Pin  | Signal Name         | Direction | Component Pin | Description                                                                                  | Verified |
+|------|----------------------|------------|----------------|----------------------------------------------------------------------------------------------|-----------|
+| H2   | **PRSNT_M2C_L**      | Input      | B1             | **Module Present Signal** — Indicates that a mezzanine card is attached to the carrier board. This signal is **active low**. | ✅ |
+| C34  | **GA[0]**            | Input      | B2             | **Geographical Address 0** — Defines the module’s address for identification or I²C addressing. | ✅ |
+| D35  | **GA[1]**            | Input      | B3             | **Geographical Address 1** — Defines the module’s address for identification or I²C addressing. | ✅ |
+| C30  | **FMC_HPC0_IIC_SCL** | Input      | B4             | **PMBus/I²C Clock Line** — Connects to the EEPROM SCL signal. | ✅ |
+| C31  | **FMC_HPC0_IIC_SDA** | Input      | B5             | **PMBus/I²C Data Line** — Connects to the EEPROM SDA signal. | ✅ |
+| C31  | **UTIL_3V3_10A**     | Power      | B6             | **3.3 V Utility Power Supply** — Provides power to low-voltage circuits. | ✅ |
+| D31  | **VREF_A_M2C**       | Input      | B7             | **Voltage Reference (Analog)** — Reference voltage for the LA (Low-Speed Analog) bank. | ✅ |
+| H31  | **FMC_HPC0_LA28_P**  | I/O        | B8             | **General-Purpose Signal (Positive)** — LVCMOS18-compatible line. | ✅ |
+| H31  | **FMC_HPC0_LA28_N**  | I/O        | B9             | **General-Purpose Signal (Negative)** — LVCMOS18-compatible line. | ✅ |
+| D6,D7| **GND**              | Power      | B10            | **Ground** — Common system ground reference. | ✅ |
+| D6,D7| **GND**              | Power      | B11            | **Ground** — Common system ground reference. | ✅ |
+| H29  | **FMC_HPC0_LA24_N**  | I/O        | B12            | **General-Purpose Signal** — LVCMOS18-compatible line. | ✅ |
+| H11  | **GND**              | Power      | B13            | **Ground** — Common system ground reference. | ✅ |
+| F40  | **VADJ**             | Power      | B14            | **Adjustable Voltage Rail (VADJ)** — Supplies voltage for FMC I/O levels. | ✅ |
+| G3   | **CLK1_M2C_N**       | Input      | B15            | **Clock Input (Negative)** — Differential clock from the carrier board. | ✅ |
+| G2   | **CLK1_M2C_P**       | Input      | B16            | **Clock Input (Positive)** — Differential clock from the carrier board. | ✅ |
+| H5   | **H5CLK1_M2C_N**     | Input      | B17            | **Secondary Clock (Negative)** — Differential clock line. | ✅ |
+| H4   | **H5CLK1_M2C_P**     | Input      | B18            | **Secondary Clock (Positive)** — Differential clock line. | ✅ |
+
+
+
+> Currently, no such extension board is designed. This interface is reserved for future debugging and expansion purposes.
+
+

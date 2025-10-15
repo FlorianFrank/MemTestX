@@ -81,7 +81,7 @@ This section presents the different pinout descriptions based on the components 
 | D21  | LVCMOS18    | IC4             | A4            | Address Line A3  |    ✅    |
 | D23  | LVCMOS18    | IC4             | A5            | Address Line A4  |    ✅    |
 | D24  | LVCMOS18    | IC4             | A6            | Address Line A5  |    ✅    |
-| D26  | LVCMOS18    | IC4             | A7            | Address Line A5  |    ✅    |
+| D26  | LVCMOS18    | IC4             | A7            | Address Line A6  |    ✅    |
 | D27  | LVCMOS18    | IC4             | A8            | Address Line A7  |    ✅    |
 
 | Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Verified |
@@ -121,7 +121,6 @@ This section presents the different pinout descriptions based on the components 
 | D36  | UTIL_3V3      | J7               | 1              | 3.3 V CMOS reference voltage             | ✅       |
 | C39  | UTIL_3V3      | J7               | 1              | 3.3 V power supply for the memory module | ✅       |
 | C34  | GND      | J10               | 1,3              | Pinheader ground connector P1 and P2.      | ✅       |
-| D35  | GND      | J3, J4, J5               | 1,3              | External GND connector and GND for lvl shifter VREF_A | ✅ |
 | D35  | GND      | J3, J4, J5               | 1,3              | External GND connector and GND for lvl shifter VREF_A and VREF_B | ✅ |
 
 | Pin | I/O Standard | Mapping Component | Component Pin | Description                                 | Verified  |
@@ -130,6 +129,14 @@ This section presents the different pinout descriptions based on the components 
 | H10  | LVCMOS18     | IC3–IC6          | DIR            | Address and control line direction control | ✅        |
 | H7   | LVCMOS18     | IC1–IC6          | OE             | Output enable control                      | ✅        |
 
+
+#### Controlling the power supply
+
+The ANSI VITA 57.1 board supports the selection of differnt power rails (1.2V, 1.5V and 1.8V) which can be selected by a FMC adapter board.The regulation of the voltages is done on the ZCU using a Analog devices MAX15301 Voltage regulator internally, which ofers a PMBus interface, which is configurable via the PMBus connector of connector J84. All ne
+
+Another method of setting the power rail is throughthe the ZCU USB UART interface (See (https://adaptivesupport.amd.com/s/article/62178?language=en_US)[https://adaptivesupport.amd.com/s/article/62178?language=en_US]). 
+
+> ⚠️ Note we do not implement the detection and power negotiation according to the VITA 57.1 standard. We just se the powerrail to 1.8 V which is the default setting of the ZCU102. This functionallity can be implemed through an extension adapter which must be connected to PCB connector J6.
 
 #### Dual Transceivers
 

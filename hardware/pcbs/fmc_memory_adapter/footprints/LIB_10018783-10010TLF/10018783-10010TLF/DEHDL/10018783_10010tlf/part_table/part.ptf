@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART '10018783_10010TLF'
+CLASS = IO
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "ARROW_PART_NUMBER", "ARROW_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Amphenol Communications Solutions", "10018783-10010TLF" (!) = "", "1001878310010TLF", "Other", "", "", "", "", "PCI Express<sup></sup> GEN 3 Card Edge, Storage and Server Connector, Vertical, Through Hole, x1, 36 Positions, 1.00mm (0.039in) Pitch", "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10018783.pdf", "11.25 mm"
+END_PART
+
+END.

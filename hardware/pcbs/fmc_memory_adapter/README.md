@@ -33,7 +33,7 @@ Additionally, the mechanical supports are 3D-printed and should be installed at 
 ### Components Description
 
 The design uses the components listed by their schematic symbols.  
->Prices are based on 2025 data from common distributors, including Mouser and DigiKey or Reichelt.
+>Prices are based on 2025 data from common distributors, including Mouser and DigiKey or Reichelt. Prices are declared without shipping.
 
 
 | Ref.      | Type                        | Manufacturer      | Component Number     | Description                             | Unit Price | Qty | Total Price | Verified |
@@ -50,6 +50,8 @@ The design uses the components listed by their schematic symbols.
 | - | Voltage/Ground Selectors | MPE | 149-1-002-F0-XS | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 14 | 1.40 € | ✅ |
 | Ref. | Description              | Manufacturer | Part Number         | Details                                                    
 | J6   | Extension Board Socket   | Amphenol      | 10018783-10010TLF   | PCIe connector (36 positions, 1.00 mm pitch) for extension cards supporting board detection and voltage rail PMBus interface | €0.70       | 11   | €0.70 | ✅ |
+| Distance Spacers M3   | ECON         | D3X08I5MT      | M3 8 mm spacers to connect the mechanical support                 | 0.11 € | 2   | 0.22 €      |
+| Screws M3 Thread      | APM HEXSEAL  | RM3X8MM-2701   | M3 × 0.5 screws to secure the mechanical support                  | 0.45 € | 2   | 0.90 €      |
 
 The board was manufactured as a four-layer PCB with a standard HASL finish (TG150), leaded configuration, 2 mm thickness, 4 mil/4 mil track spacing, and a minimum hole size of 0.2 mm. A batch of five pieces was priced at approximately 130 €, including shipping, from [PCBgogo](https://www.pcbgogo.com).
 

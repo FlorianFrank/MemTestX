@@ -20,6 +20,10 @@ The pin headers on the left side are used to connect different reference voltage
 
 An additional connector is provided to supply a reference voltage to the FMC adapter’s VADJ_SENSE pin. This allows the VADJ_FMC power rail voltage to be selected using a resistor voltage divider.
 
+### Used Tools
+
+The board was designed with [KiCAD](https://www.kicad.org/download/) PCB Editor Version 8.0.7. 
+
 ### Components Description
 
 The design uses the components listed by their schematic symbols.  
@@ -33,10 +37,18 @@ The design uses the components listed by their schematic symbols.
 | C1 - C12  | Capacitors                  | KEMET             | C0805C104K5RAC7411 | 0.1 µF, 50 V DC, decoupling capacitors for bus transceivers (VCCA/VCCB inputs) | 0.10 €     | 12  | 1.20 €      | ✅       |
 | P1, P2    | Pin Headers 2×32            | MPE               | 087-2-064-0-S-XS0-1260 | 2×32 straight pin headers, 2.54 mm pitch, for connecting the memory module | 1.10 €     | 2   | 2.20 €      | ✅       |
 | J7        | Pin Headers Power Supply     | Würth Elektronik  | 61300621121        | 2×3 straight pin headers, 2.54 mm pitch, to access the power supply connector | 0.32 €     | 1   | 0.32 €      | ✅       |
-| J10       | Pin Headers Ground Selectors | Würth Elektronik  | 61301621121        | 2×8 straight pin headers, 2.54 mm pitch, to access ground connections | 0.81 €     | 1   | 0.81 €      | ✅       |
-| J1 - J5   | Pin Headers Ground Selectors | Amphenol Commercial Products | G800NA306018EU | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 €     | 5   | 0.45 €      | ✅       |
+| J11       | Pin Headers Ground Selectors | Würth Elektronik  | 61031421121        | 2×7 straight pin headers, 2.54 mm pitch, to access ground connections | 0.81 €     | 1   | 1.62 €      | ✅       |
+| J5   | Pin Headers External Ground | Amphenol Commercial Products | 61300411121 | 1×4 straight pin headers, 2.54 mm pitch, for external ground connectors | 0.15 €     | 1   | 0.15 €      | ✅       |
+| J1 - J4   | Pin Headers Ground Selectors | Amphenol Commercial Products | G800NA306018EU | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 €     | 4   | 0.36 €      | ✅       |
 | J9        | Debug Pin Header             | Würth Elektronik  | 61300311121        | 1×3 straight pin headers, 2.54 mm pitch, for debug pins | 0.10 €     | 1   | 0.10 €      | ✅       |
 | - | Voltage/Ground Selectors | MPE | 149-1-002-F0-XS | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 16 | 1.60 € | ✅ |
+
+
+
+| J6 | Extension Board Socket | Amphenol | 10018783-10010TLF
+ | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 16 | 1.60 € | ✅ |
+
+
 
 
 The board was manufactured as a four-layer PCB with a standard HASL finish (TG150), leaded configuration, 2 mm thickness, 4 mil/4 mil track spacing, and a minimum hole size of 0.2 mm. A batch of five pieces was priced at approximately 130 €, including shipping, from [PCBgogo](https://www.pcbgogo.com).
@@ -274,6 +286,27 @@ This connector provides additional pins for potential extension boards, enabling
 
 > ⚠️ Currently, no such extension board is designed. This interface is reserved for future debugging and expansion purposes.
 
+### Exporting the PCB for Production
+
+To prepare the PCB for production in **KiCad**, follow these steps:
+
+1. Open the menu:  
+   **File → Fabrication Outputs → Gerbers (.gbr)**
+
+2. Include all required layers:  
+   - Copper layers (Top and Bottom)  
+   - Paste layers  
+   - Silkscreen layers  
+   - Solder mask layers  
+   - Edge cuts  
+
+3. Generate the **Drill Files** and **plot** all outputs into a dedicated folder.
+
+4. **Compress (ZIP)** all generated files in that folder.
+
+5. **Upload** the ZIP archive to your PCB manufacturer’s platform for fabrication.
+
+
 ### Assemble the Board
 
 To assemble the board, solder all components according to their footprints. All components can be soldered using a standard soldering iron; however, the FMC interface requires the use of an SMD soldering station.
@@ -298,3 +331,8 @@ In the initial version, the dual-supply bus transceivers were mounted on separat
 <div style="text-align: center;"> <img src="doc/figures/board_rev_1.png" style="width: 80%;" alt="First Revision Board"> </div>
 
 In the second revision, all connections and external wiring were fully integrated into the PCB. Additional design improvements, such as the inclusion of a dedicated ground plane, were implemented to enhance signal integrity and EMC stability.
+
+### Measurements
+
+A complete evaluation of the adapter board was performed while connected to the FPGA.  
+All measurement data and test results are available in the `/hardware/fpga_design` directory.

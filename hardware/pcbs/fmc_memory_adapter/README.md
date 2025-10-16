@@ -1,5 +1,7 @@
 # FMC Memory Adapter PCB
 
+>This board enables easy evaluation and interfacing of FRAM, MRAM, and ReRAM memory modules with the AMD ZCU102 FPGA via a standard FMC connector.
+
 This folder contains all the design and manufacturing files for a Printed Circuit Board (PCB) adapter that enables interfacing various FRAM, MRAM, and ReRAM memory modules with the [AMD Zynq UltraScale+™ MPSoC ZCU102 Evaluation Kit](https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-u1-zcu102-g.html). 
 
 The board is designed to connect to the FPGA Mezzanine Card (FMC) J5 connector on the ZCU102. It acts as a level-shifting bridge, converting the board’s output power rails (1.2 V, 1.5 V, or 1.8 V) to a standard CMOS 3.3 V logic level.
@@ -20,9 +22,13 @@ The pin headers on the left side are used to connect different reference voltage
 
 An additional connector is provided to supply a reference voltage to the FMC adapter’s VADJ_SENSE pin. This allows the VADJ_FMC power rail voltage to be selected using a resistor voltage divider.
 
-### Used Tools
+### Prerequesites
 
-The board was designed with [KiCAD](https://www.kicad.org/download/) PCB Editor Version 8.0.7. 
+The board was designed with [KiCAD](https://www.kicad.org/download/) PCB Editor Version 8.0.7. Make sure its installed on your system. 
+
+For PCB assembly, standard soldering tools can be used. However, soldering the FMC connector requires an SMD soldering station.
+
+Additionally, the mechanical supports are 3D-printed and should be installed at the designated mounting points to ensure proper board stability.
 
 ### Components Description
 
@@ -41,19 +47,49 @@ The design uses the components listed by their schematic symbols.
 | J5   | Pin Headers External Ground | Amphenol Commercial Products | 61300411121 | 1×4 straight pin headers, 2.54 mm pitch, for external ground connectors | 0.15 €     | 1   | 0.15 €      | ✅       |
 | J1 - J4   | Pin Headers Ground Selectors | Amphenol Commercial Products | G800NA306018EU | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 €     | 4   | 0.36 €      | ✅       |
 | J9        | Debug Pin Header             | Würth Elektronik  | 61300311121        | 1×3 straight pin headers, 2.54 mm pitch, for debug pins | 0.10 €     | 1   | 0.10 €      | ✅       |
-| - | Voltage/Ground Selectors | MPE | 149-1-002-F0-XS | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 16 | 1.60 € | ✅ |
-
-
-
-| J6 | Extension Board Socket | Amphenol | 10018783-10010TLF
- | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 16 | 1.60 € | ✅ |
-
-
-
+| - | Voltage/Ground Selectors | MPE | 149-1-002-F0-XS | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 14 | 1.40 € | ✅ |
+| Ref. | Description              | Manufacturer | Part Number         | Details                                                    
+| J6   | Extension Board Socket   | Amphenol      | 10018783-10010TLF   | PCIe connector (36 positions, 1.00 mm pitch) for extension cards supporting board detection and voltage rail PMBus interface | €0.70       | 11   | €0.70 | ✅ |
 
 The board was manufactured as a four-layer PCB with a standard HASL finish (TG150), leaded configuration, 2 mm thickness, 4 mil/4 mil track spacing, and a minimum hole size of 0.2 mm. A batch of five pieces was priced at approximately 130 €, including shipping, from [PCBgogo](https://www.pcbgogo.com).
 
 The total cost to manufacture the complete PCB was approximately **177 €**, excluding the cost of additional materials required for soldering.
+
+
+### Exporting the PCB for Production
+
+To prepare the PCB for production in **KiCad**, follow these steps:
+
+1. Open the menu:  
+   **File → Fabrication Outputs → Gerbers (.gbr)**
+
+2. Include all required layers:  
+   - Copper layers (Top and Bottom)  
+   - Paste layers  
+   - Silkscreen layers  
+   - Solder mask layers  
+   - Edge cuts  
+
+3. Generate the **Drill Files** and **plot** all outputs into a dedicated folder.
+
+4. **Compress (ZIP)** all generated files in that folder.
+
+5. **Upload** the ZIP archive to your PCB manufacturer’s platform for fabrication.
+
+### Assemble the Board
+
+To assemble the board, solder all components according to their footprints. All components can be soldered using a standard soldering iron; however, the FMC interface requires the use of an SMD soldering station.
+
+> ⚠️ **Important:** Ensure that all pin headers and the PCIe interface are soldered on the front side of the board, while the FMC interface must be soldered on the back side. You can find `Front` and `Back` markers printed on the PCB for guidance.
+
+#### Mechanical Support
+
+To maintain proper alignment and mechanical stability, dedicated board supports are provided.
+The corresponding STL file for 3D printing is available in the `mechanical_support` directory.
+
+Install the supports at the H1 and H2 mounting holes. An M2 spacer is inserted into each support and fixed in place using a screw from the top side of the board.
+
+<div style="text-align: center;"> <img src="doc/figures/mechanical_support.png" style="width: 40%;" alt="Power Connector"> </div>
 
 ### Pinout Description
 
@@ -285,42 +321,6 @@ This connector provides additional pins for potential extension boards, enabling
 | H4   | **H5CLK1_M2C_P**     | Input      | B18            | **Secondary Clock (Positive)** — Differential clock line. | ✅ |
 
 > ⚠️ Currently, no such extension board is designed. This interface is reserved for future debugging and expansion purposes.
-
-### Exporting the PCB for Production
-
-To prepare the PCB for production in **KiCad**, follow these steps:
-
-1. Open the menu:  
-   **File → Fabrication Outputs → Gerbers (.gbr)**
-
-2. Include all required layers:  
-   - Copper layers (Top and Bottom)  
-   - Paste layers  
-   - Silkscreen layers  
-   - Solder mask layers  
-   - Edge cuts  
-
-3. Generate the **Drill Files** and **plot** all outputs into a dedicated folder.
-
-4. **Compress (ZIP)** all generated files in that folder.
-
-5. **Upload** the ZIP archive to your PCB manufacturer’s platform for fabrication.
-
-
-### Assemble the Board
-
-To assemble the board, solder all components according to their footprints. All components can be soldered using a standard soldering iron; however, the FMC interface requires the use of an SMD soldering station.
-
-> ⚠️ **Important:** Ensure that all pin headers and the PCIe interface are soldered on the front side of the board, while the FMC interface must be soldered on the back side. You can find `Front` and `Back` markers printed on the PCB for guidance.
-
-<div style="text-align: center;"> <img src="doc/figures/mechanical_support.png" style="width: 40%;" alt="Power Connector"> </div>
-
-#### Mechanical Support
-
-To maintain proper alignment and mechanical stability, dedicated board supports are provided.
-The corresponding STL file for 3D printing is available in the `mechanical_support` directory.
-
-Install the supports at the H1 and H2 mounting holes. An M2 spacer is inserted into each support and fixed in place using a screw from the top side of the board.
 
 ### Testing & Revision History
 

@@ -15,13 +15,6 @@ At this stage, the design is only compatible with the **AMD Xilinx ZCU102 Evalua
   <img src="doc/figures/block_design_fpga_evaluator.svg" style="width: 100%;" alt="FPGA Block design">
 </div>
 
-
-### Prerequesites
-
-The implementation is currently supported only in **Vivado 2022.2** due to dependencies on specific IP core versions, such as the Clocking Wizard and the Zynq UltraScale+ MPSoC IP core.  
-However, compatibility with other Vivado versions can be achieved by modifying the `main_block_design.tcl` file and replacing unsupported IP cores with versions supported by the used Vivado version. This approach has been verified to work with **Vivado 2023.2**.
-
-
 ### Modules
 
 As shown in the block design above, the implementation consists of several custom modules, which are briefly described below:
@@ -42,5 +35,47 @@ As shown in the block design above, the implementation consists of several custo
 - **Memory Reader:** Dedicated module for reading data to the memory module. It implements an SRAM-compatible interface, with all timing parameters adjustable in 2.5 ns increments.
 
 - **Auxiliary Modules:** Additional supporting modules, such as reset handlers and AXI interconnect components, are included to ensure proper operation and communication between the main modules.
+
+
+
+### Prerequesites
+
+The implementation is currently supported only in **Vivado 2022.2** due to dependencies on specific IP core versions, such as the Clocking Wizard and the Zynq UltraScale+ MPSoC IP core.  
+However, compatibility with other Vivado versions can be achieved by modifying the `main_block_design.tcl` file and replacing unsupported IP cores with versions supported by the used Vivado version. This approach has been verified to work with **Vivado 2023.2**.
+
+> ⚠️ Ensure you have the appropriate license to generate bitstreams for the ZCU102, as this requires **Vivado ML Enterprise Edition**.
+
+### Setting up the project. 
+
+To simplify project setup, we provide several scripts in the `scripts` folder.  
+To create the project, simply run `./create_project.sh`.  
+
+This script sources `create_project.tcl`, which generates a new project named `memory_evaluator` within the `fpga_implementation` directory. It automatically creates all necessary folders, adds all source files, builds the block design, and imports all required IP cores and constraints.
+
+```bash
+❯ ./create_project.sh
+**************************************
+********** Memory Evaluator **********
+**************************************
+
+Start Creating Project ...
+INFO: Creating new project...
+
+****** Vivado v2022.1 (64-bit)
+  **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+  **** IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source tcl/create_project.tcl
+```
+
+At the end of the script, you will be asked:  
+`Open Project in Vivado GUI? [y/N]` — selecting `y` will open the project directly in Vivado.
+
+> ⚠️ This script has been tested only on **Ubuntu 22.04** with **Vivado 2022.2**.  
+> To use a different Vivado version, either adjust the `VIVADO_PATH` variable in the script or run
+> `<path_to_your_installation>/vivado -mode batch -source tcl/create_project.tcl` directly.
+
+
 
 

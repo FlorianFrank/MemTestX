@@ -45,7 +45,7 @@ However, compatibility with other Vivado versions can be achieved by modifying t
 
 > ⚠️ Ensure you have the appropriate license to generate bitstreams for the ZCU102, as this requires **Vivado ML Enterprise Edition**.
 
-### Setting up the project. 
+### Setting up the Project
 
 To simplify project setup, we provide several scripts in the `scripts` folder.  
 To create the project, simply run `./create_project.sh`.  
@@ -77,5 +77,20 @@ At the end of the script, you will be asked:
 > `<path_to_your_installation>/vivado -mode batch -source tcl/create_project.tcl` directly.
 
 
+### Generate the Bitstream
+
+You can generate the bitstream directly within Vivado by following these steps:
+
+1. Generate the Block Design.  
+2. Generate the Bitstream.  
+3. Export the bitstream:  
+   - Go to **File → Export → Hardware**,  
+   - Select **Include Bitstream**, and  
+   - Choose a location to save the exported hardware.
+
+### Simulation
 
 
+<div style="text-align: center;">
+  <img src="doc/figures/simulation.png" style="width: 100%;" alt="FPGA Block design">
+</div>

@@ -55,7 +55,7 @@ The design uses the components listed by their schematic symbols.
 
 The board was manufactured as a four-layer PCB with a standard HASL finish (TG150), leaded configuration, 2 mm thickness, 4 mil/4 mil track spacing, and a minimum hole size of 0.2 mm. A batch of five pieces was priced at approximately 130 €, including shipping, from [PCBgogo](https://www.pcbgogo.com).
 
-The total cost to manufacture the complete PCB was approximately **177 €**, excluding the cost of additional materials required for soldering.
+The total cost to manufacture the complete PCB was approximately **179 €**, with an additional **49 €** required for the components. This estimate excludes the cost of extra materials needed for soldering and assembly.
 
 
 ### Exporting the PCB for Production

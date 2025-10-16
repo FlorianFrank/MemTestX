@@ -288,3 +288,13 @@ To maintain proper alignment and mechanical stability, dedicated board supports 
 The corresponding STL file for 3D printing is available in the `mechanical_support` directory.
 
 Install the supports at the H1 and H2 mounting holes. An M2 spacer is inserted into each support and fixed in place using a screw from the top side of the board.
+
+### Testing & Revision History
+
+The board provided in this folder represents the second revision of the design.
+The first revision was developed as a simple breakout board, intended primarily for testing the various FPGA pins and interface connections.
+In the initial version, the dual-supply bus transceivers were mounted on separate breakout adapters to allow independent evaluation. Power and ground connections, including decoupling capacitors, were implemented using additional breakout boards. The memory module was connected using standard Dupont cables, and the setup was used to validate operation with a ROHM MR48V256CTAZAARL FRAM memory.
+
+<div style="text-align: center;"> <img src="doc/figures/board_rev_1.png" style="width: 80%;" alt="First Revision Board"> </div>
+
+In the second revision, all connections and external wiring were fully integrated into the PCB. Additional design improvements, such as the inclusion of a dedicated ground plane, were implemented to enhance signal integrity and EMC stability.

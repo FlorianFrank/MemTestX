@@ -272,8 +272,19 @@ This connector provides additional pins for potential extension boards, enabling
 | H5   | **H5CLK1_M2C_N**     | Input      | B17            | **Secondary Clock (Negative)** — Differential clock line. | ✅ |
 | H4   | **H5CLK1_M2C_P**     | Input      | B18            | **Secondary Clock (Positive)** — Differential clock line. | ✅ |
 
+> ⚠️ Currently, no such extension board is designed. This interface is reserved for future debugging and expansion purposes.
 
+### Assemble the Board
 
-> Currently, no such extension board is designed. This interface is reserved for future debugging and expansion purposes.
+To assemble the board, solder all components according to their footprints. All components can be soldered using a standard soldering iron; however, the FMC interface requires the use of an SMD soldering station.
 
+> ⚠️ **Important:** Ensure that all pin headers and the PCIe interface are soldered on the front side of the board, while the FMC interface must be soldered on the back side. You can find `Front` and `Back` markers printed on the PCB for guidance.
 
+<div style="text-align: center;"> <img src="doc/figures/mechanical_support.png" style="width: 40%;" alt="Power Connector"> </div>
+
+#### Mechanical Support
+
+To maintain proper alignment and mechanical stability, dedicated board supports are provided.
+The corresponding STL file for 3D printing is available in the `mechanical_support` directory.
+
+Install the supports at the H1 and H2 mounting holes. An M2 spacer is inserted into each support and fixed in place using a screw from the top side of the board.

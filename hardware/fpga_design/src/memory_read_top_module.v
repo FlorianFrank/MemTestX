@@ -1,15 +1,31 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Company: University of Passau – Chair of Computer Engineering
+// Engineer: Florian Frank
+// 
+// Create Date: 03/12/2024 02:14:09 PM
+// Design Name: memory_read_top_module.v
+// Module Name: memory_read_top_module
+// Project Name: memory_evaluator
+// Target Device: Xilinx ZCU102
+// Tool Version: Vivado 2022.2
+// 
+// Description: 
+// Top-level module for reading data from memory using a microcontroller-compatible
+// SRAM protocol. The module manages read operations, handles timing parameters,
+// and provides synchronization between a management module and the memory controller.
+// It uses a state machine to trigger read operations, wait for completion, and
+// notify the management controller when a read is finished. The module supports
+// configurable address and data bus widths, clock frequencies, and timing parameters.
+// 
+// Revision History:
+// Rev. 0.01 - File Created
+//
+//////////////////////////////////////////////////////////////////////////////////
+
 `timescale 1ns / 1ps
 
 `include "state_machine_definitions.vh"
 
-//% \addtogroup memctr Memory Controller
-//% @brief Contains all modules which are responsible to read and write from the memory module.
-//% @{
-
-//% @brief This module is responsible to read from an Rohm FRAM memory module.
-//% It sets the OE, WE, CS as well as the address and datalines accordingly. 
-//% @author Florian Frank
-//% @copyright University of Passau - Chair of Computer Engineering
 module memory_read_top_module #(
     //% Frequency of the clock driving the management module. (used for synchronization purposes)
     parameter integer FREQ_CLK1=100,

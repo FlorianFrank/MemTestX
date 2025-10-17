@@ -1,14 +1,29 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Company: University of Passau – Chair of Computer Engineering
+// Engineer: Florian Frank
+// 
+// Design Name: read_sram_protocol.v
+// Module Name: read_sram_protocol
+// Project Name: memory_evaluator
+// Target Device: Xilinx ZCU102
+// Tool Version: Vivado 2022.2
+// 
+// Description: 
+// Reads data from SRAM using a microcontroller-compatible protocol. The module
+// uses a state machine to control CE/OE signals, read data, and indicate when
+// the operation is finished. Supports configurable address/data widths, timing,
+// and clock synchronization.
+//
+// Revision History:
+// Rev. 0.01 - File Created
+//
+//////////////////////////////////////////////////////////////////////////////////
+
+
 `timescale 1ns / 1ps
 `include "state_machine_definitions.vh"
 
-//% \addtogroup memctr Memory Controller
-//% @{
 
-
-//% @brief This module is responsible to set the timing of the cs and 
-//% It sets the OE, WE, CS as well as the address and datalines accordingly. 
-//% @author Florian Frank
-//% @copyright University of Passau - Chair of Computer Engineering
 module read_sram_protocol #(
     //% Clock frequency which drives this module (is required to calculate the right timing)
     parameter integer CLK_FREQUENCY=400,

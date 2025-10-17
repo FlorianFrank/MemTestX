@@ -1,12 +1,29 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Company: University of Passau – Chair of Computer Engineering
+// Engineer: Florian Frank
+// 
+// Design Name: memory_write_top_module.v
+// Module Name: memory_write_top_module
+// Project Name: memory_evaluator
+// Target Device: Xilinx ZCU102
+// Tool Version: Vivado 2022.2
+// 
+// Description: 
+// Top-level module for writing data to memory using a SRAM-compatible
+// protocol. This module manages write operations, handles timing parameters,
+// and ensures proper synchronization between the control logic and the memory.
+// The internal state machine sequences through initialization, signal activation, 
+// data setup, and completion stages. It supports continuous writes, configurable 
+// address and data bus widths, and timing parameters for address setup, data setup, 
+// pulse widths, and access times.
+//
+// Revision History:
+// Rev. 0.01 - File Created
+//
+//////////////////////////////////////////////////////////////////////////////////
+
 `timescale 1ns / 1ps
 
-//% \addtogroup memctr Memory Controller
-//% @{
-
-//% @brief This module is responsible for writing to a Rohm FRAM memory module.
-//% It sets the OE, WE, CS, as well as the address and data lines accordingly. 
-//% @author Florian Frank
-//% @copyright University of Passau - Chair of Computer Engineering
 module memory_write_top_module #(
     parameter integer FREQ_CLK1 = 100,
     parameter integer FREQ_CLK2 = 400,

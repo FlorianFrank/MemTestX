@@ -1,8 +1,3 @@
-`define TIMING_PARAMETER_WIDTH              16
-`define HAMMERING_ITERATION_BIT_WIDTH       16
-`define HAMMERING_DISTANCE_BIT_WIDTH        16
-`define NR_STATES                           10
-
 //////////////////////////////////////////////////////////////////////////////////
 // Company: University of Passau – Chair of Computer Engineering
 // Engineer: Florian Frank
@@ -27,6 +22,11 @@
 // Rev. 0.01 - File Created
 //
 //////////////////////////////////////////////////////////////////////////////////
+
+`define TIMING_PARAMETER_WIDTH              16
+`define HAMMERING_ITERATION_BIT_WIDTH       16
+`define HAMMERING_DISTANCE_BIT_WIDTH        16
+`define NR_STATES                           10
 
 
 module puf_execution_controller#(

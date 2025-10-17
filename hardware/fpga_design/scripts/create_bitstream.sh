@@ -33,11 +33,10 @@ if [ ! -x "$VIVADO_PATH" ]; then
     exit 1
 fi
 
-if [ ! -x "$BUILD_DIR/$PROJECT_FILE" ]; then
+if [ ! -f "$BUILD_DIR/$PROJECT_FILE" ]; then
     echo "ERROR: Project file $BUILD_DIR/$PROJECT_FILE not found"
     exit 1
 fi
 
 echo "INFO: Open project: $BUILD_DIR/$PROJECT_FILE"
-
 "$VIVADO_PATH" -mode batch -source "$TCL_SCRIPT" 2>&1 | colorize

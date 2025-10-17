@@ -29,7 +29,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module puf_exection_controller#(
+module puf_execution_controller#(
     parameter integer GENERAL_DATA_SIZE = 16,
     parameter integer GENERAL_ADDRESS_SIZE = 32,
     parameter integer MEMORY_MODULE_ADDRESS_SIZE = 15,
@@ -62,7 +62,7 @@ module puf_exection_controller#(
     output reg start_read, // Trigger start memory read module
     output reg start_write, // Trigger start memory write module
     output reg rw_select, // Select either read or write direction, required by the multiplexer 0 indicates writing 1 indicates reading
-    output reg write_continously, // Write full memory space at once until done is returned by the memory controller, otherwise write address by address.
+    output reg write_continuously, // Write full memory space at once until done is returned by the memory controller, otherwise write address by address.
 
     input wire axi_master_done, // Indicates that data was successfully transmitted via the AXI interface
     input wire axi_active, // AXI is currently active and no further requirests can be scheduled
@@ -184,7 +184,7 @@ module puf_exection_controller#(
 
     assign output_address = output_address_tmp_ctr; 
     //assign max_address = MAX_ADDRESS;
-  //  assign address_write = (write_continously == 1'b1) ? 15'h0 : output_address_tmp[MEMORY_MODULE_ADDRESS_SIZE-1:0];
+  //  assign address_write = (write_continuously == 1'b1) ? 15'h0 : output_address_tmp[MEMORY_MODULE_ADDRESS_SIZE-1:0];
     assign output_data = ~output_address_tmp_ctr;
     
     always @ (posedge axi_master_done) begin 
@@ -193,7 +193,7 @@ module puf_exection_controller#(
 `else
     assign output_address = output_address_tmp; 
     //assign max_address = MAX_ADDRESS;
-  //  assign address_write = (write_continously == 1'b1) ? 15'h0 : output_address_tmp[MEMORY_MODULE_ADDRESS_SIZE-1:0];
+  //  assign address_write = (write_continuously == 1'b1) ? 15'h0 : output_address_tmp[MEMORY_MODULE_ADDRESS_SIZE-1:0];
     assign output_data = output_data_tmp;
 `endif     
     reg test_done = 0;
@@ -210,7 +210,7 @@ module puf_exection_controller#(
         value_write <= 8'h55;
         address_read <= 15'h0;
         
-        write_continously <= 1'h1;
+        write_continuously <= 1'h1;
         ceDriven <= 1'h1;
         tnext <= 16'd5;
         tStart <= 16'h0;
@@ -243,7 +243,7 @@ module puf_exection_controller#(
         
         
         rw_select <= 0;
-        write_continously <= 1'b1;
+        write_continuously <= 1'b1;
         value_write <= init_value[7:0];
         if(write_active) begin
             start_write <= 0;
@@ -277,7 +277,7 @@ module puf_exection_controller#(
         end else begin
             timing_ctr <= 0;
             rw_select <= 0;
-            write_continously <= 1'b1;
+            write_continuously <= 1'b1;
             value_write <= test_value[7:0];
             if(write_active) begin
                 start_write <= 0;
@@ -306,7 +306,7 @@ task startRowHammering;
 
                 // Reset timing counter and configure for writing
                 rw_select <= 1'b0; // Set read/write selection to write mode
-                write_continously <= 1'b1;
+                write_continuously <= 1'b1;
                 value_write <= test_value[7:0];
 
                 // Handle write operation based on active write state
@@ -352,7 +352,7 @@ task startRowHammering;
                     lock_hammering_iteration <= 1'h1;
                 end                
                 rw_select <= 1'b0; // Set read/write selection to write mode
-                write_continously <= 1'b1;
+                write_continuously <= 1'b1;
                 value_write <= test_value[7:0];
 
                 // Handle write operation based on active write state

@@ -23,9 +23,7 @@ generate_target all [get_files "${build_dir}/${project_name}.srcs/sources_1/bd/$
 
 # Synthesis
 puts "INFO: Launch Synthesis"
-if {![info exists synth_1]} { 
-    create_run synth_1 -flow {SYNTHESIS} 
-}
+create_run synth_1 -flow {SYNTHESIS} 
 launch_runs synth_1
 wait_on_run synth_1
 file mkdir -p $build_dir/checkpoints
@@ -48,9 +46,7 @@ report_timing_summary -file $build_dir/export/post_place_timing_summary.rpt
 
 # Implementation
 puts "INFO: Run Implementation and bitstream generation"
-if {![info exists impl_1]} {
-    create_run impl_1 -flow {IMPLEMENTATION}
-}
+create_run impl_1 -flow {IMPLEMENTATION}
 launch_runs impl_1 -to_step write_bitstream
 wait_on_run impl_1
 

@@ -91,7 +91,7 @@ if {[file exists $bd_file]} {
   set bd_hdl_wrapper "${project_dir}/src/${bd_name}_wrapper.v"
   if {![file exists $bd_hdl_wrapper]} {
       puts "INFO: Creating HDL wrapper for block design: $bd_name"
-      create_bd_wrapper -force -file $bd_hdl_wrapper -bd_name $bd_name
+      make_wrapper -files [get_files ${project_name}.srcs/sources_1/bd/$bd_name/$bd_name.bd] -top
   } else {
       puts "INFO: HDL wrapper already exists: $bd_hdl_wrapper"
   }

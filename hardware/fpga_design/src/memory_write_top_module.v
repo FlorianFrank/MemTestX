@@ -56,7 +56,7 @@ module memory_write_top_module #(
     input wire[ADDRESS_BUS_SIZE-1:0] max_address,
 
     //% Wire indicating whether the data was written.
-    input wire write_continously,
+    input wire write_continuously,
     input wire ceDriven,
     input wire [CLOCK_CONFIG_WIDTH-1:0] tnext,
     input wire [CLOCK_CONFIG_WIDTH-1:0] tStart, // Delay before start
@@ -217,7 +217,7 @@ module memory_write_top_module #(
                                 ce <= 1;
                                 counter2 <= 0;
                                 counter <= 0;
-                                if ((~write_continously && clock_buff_ctr < DATA_BUS_SIZE / DATA_BUS_SIZE_OUT) || (write_continously && address_tmp < max_address))
+                                if ((~write_continuously && clock_buff_ctr < DATA_BUS_SIZE / DATA_BUS_SIZE_OUT) || (write_continuously && address_tmp < max_address))
                                     state_reg <= NEXT_ROUND;
                                 else 
                                     state_reg <= FINISH;
@@ -231,7 +231,7 @@ module memory_write_top_module #(
                                 we <= 1;
                                 counter2 <= 0;
                                 counter <= 0;
-                                if ((~write_continously && clock_buff_ctr < DATA_BUS_SIZE / DATA_BUS_SIZE_OUT) || (write_continously && address_tmp < max_address))
+                                if ((~write_continuously && clock_buff_ctr < DATA_BUS_SIZE / DATA_BUS_SIZE_OUT) || (write_continuously && address_tmp < max_address))
                                     state_reg <= NEXT_ROUND;
                                 else 
                                     state_reg <= FINISH;

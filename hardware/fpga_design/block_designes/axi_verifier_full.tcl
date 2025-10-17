@@ -313,7 +313,7 @@ proc create_root_design { parentCell } {
   set axi_vip_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vip:1.1 axi_vip_0 ]
   set_property -dict [ list \
    CONFIG.ADDR_WIDTH {32} \
-   CONFIG.ARUSER_WIDTH {0} \
+   CONFIG.ARUSER_WIDTH {1} \
    CONFIG.AWUSER_WIDTH {0} \
    CONFIG.BUSER_WIDTH {0} \
    CONFIG.DATA_WIDTH {32} \
@@ -544,7 +544,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net puf_exection_control_0_upgraded_ipi_toed [get_bd_pins memory_read_top_modu_0/toed] [get_bd_pins puf_exection_control_0_upgraded_ipi/toed]
   connect_bd_net -net puf_exection_control_0_upgraded_ipi_tprc [get_bd_pins memory_read_top_modu_0/tprc] [get_bd_pins puf_exection_control_0_upgraded_ipi/tprc]
   connect_bd_net -net puf_exection_control_0_value_write [get_bd_pins memory_write_top_mod_0/value_write] [get_bd_pins puf_exection_control_0_upgraded_ipi/value_write]
-  connect_bd_net -net puf_exection_control_0_write_continously [get_bd_pins memory_write_top_mod_0/write_continously] [get_bd_pins puf_exection_control_0_upgraded_ipi/write_continously]
+  connect_bd_net -net puf_exection_control_0_write_continuously [get_bd_pins memory_write_top_mod_0/write_continuously] [get_bd_pins puf_exection_control_0_upgraded_ipi/write_continuously]
   connect_bd_net -net reset_1 [get_bd_ports reset] [get_bd_pins clk_wiz_0/reset]
   connect_bd_net -net rst_ps8_0_96M_peripheral_aresetn [get_bd_ports aresetn] [get_bd_pins axi_smc/aresetn] [get_bd_pins axi_vip_0/aresetn] [get_bd_pins axi_vip_1/aresetn] [get_bd_pins ps8_0_axi_periph/ARESETN] [get_bd_pins ps8_0_axi_periph/M00_ARESETN] [get_bd_pins ps8_0_axi_periph/S00_ARESETN] [get_bd_pins ps_pl_interface_0/axi_light_master_aresetn] [get_bd_pins ps_pl_interface_0/axi_light_slave_aresetn]
   connect_bd_net -net test_switch_0_1 [get_bd_ports simulate_test_button] [get_bd_pins puf_exection_control_0_upgraded_ipi/simulate_test_button]

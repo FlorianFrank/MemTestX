@@ -10,13 +10,13 @@ RESET="\e[0m"
 # Function to colorize output
 colorize() {
     while IFS= read -r line; do
-        if [[ "$line" == *"ERROR"* ]]; then
+        if [[ "$line" == *"ERROR:"* ]]; then
             echo -e "${RED}${line}${RESET}"
-        elif [[ "$line" == *"CRITICAL"* ]]; then
+        elif [[ "$line" == *"CRITICAL:"* ]]; then
             echo -e "${ORANGE}${line}${RESET}"
-        elif [[ "$line" == *"WARNING"* ]]; then
+        elif [[ "$line" == *"WARNING:"* ]]; then
             echo -e "${YELLOW}${line}${RESET}"
-        elif [[ "$line" == *"INFO"* ]]; then
+        elif [[ "$line" == *"INFO:"* ]]; then
             echo -e "${BLUE}${line}${RESET}"
         else
             echo "$line"

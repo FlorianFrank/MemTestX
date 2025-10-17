@@ -22,6 +22,7 @@ colorize() {
             echo "$line"
         fi
     done
+}
 
 echo "**************************************"
 echo "********** Memory Evaluator **********"

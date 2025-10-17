@@ -5,10 +5,13 @@ set block_design_name "main_block_design"
 puts "INFO: Open Project ${build_dir}/${project_name}.xpr"
 open_project "${build_dir}/${project_name}.xpr"
 
-puts "INFO: Define block design"
-current_bd_design [get_bd_designs "${block_design_name}"]
+puts "INFO: Open block design"
+open_bd_design "${build_dir}/${project_name}.srcs/sources_1/bd/${block_design_name}/${block_design_name}.bd"
+
+puts "INFO: Set top module and update compile order"
 set_property top "${block_design_name}_wrapper" [current_fileset]
 update_compile_order -fileset sources_1
+
 
 puts "INFO: Generate Block Design"
 generate_target all [get_files "${build_dir}/${project_name}.srcs/sources_1/bd/${block_design_name}/${block_design_name}.bd"]

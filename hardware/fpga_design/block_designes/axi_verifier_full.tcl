@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# memory_read_top_module, memory_write_top_module, multiplexer, puf_exection_controller
+# memory_read_top_module, memory_write_top_module, multiplexer, puf_execution_controller
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -164,7 +164,7 @@ if { $bCheckModules == 1 } {
 memory_read_top_module\
 memory_write_top_module\
 multiplexer\
-puf_exection_controller\
+puf_execution_controller\
 "
 
    set list_mods_missing ""
@@ -425,7 +425,7 @@ proc create_root_design { parentCell } {
  ] $ps_pl_interface_0
 
   # Create instance: puf_exection_control_0_upgraded_ipi, and set properties
-  set block_name puf_exection_controller
+  set block_name puf_execution_controller
   set block_cell_name puf_exection_control_0_upgraded_ipi
   if { [catch {set puf_exection_control_0_upgraded_ipi [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
      catch {common::send_gid_msg -ssname BD::TCL -id 2095 -severity "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
@@ -452,7 +452,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net Net [get_bd_ports dlines] [get_bd_pins util_ds_buf_0/IOBUF_IO_IO]
   connect_bd_net -net Net1 [get_bd_ports rw_select] [get_bd_pins multiplexer_0/rw_select_in] [get_bd_pins puf_exection_control_0_upgraded_ipi/rw_select] [get_bd_pins util_ds_buf_0/IOBUF_IO_T]
   connect_bd_net -net axi_test_wire_1 [get_bd_ports axi_test_wire]
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins memory_read_top_modu_0/clk2] [get_bd_pins memory_write_top_mod_0/clk] [get_bd_pins multiplexer_0/clk]
+  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins memory_read_top_modu_0/clk2] [get_bd_pins memory_write_top_mod_0/clk] 
   connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_ports clk] [get_bd_pins axi_smc/aclk] [get_bd_pins axi_vip_0/aclk] [get_bd_pins axi_vip_1/aclk] [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins memory_read_top_modu_0/clk1] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins ps_pl_interface_0/axi_light_master_aclk] [get_bd_pins ps_pl_interface_0/axi_light_slave_aclk] [get_bd_pins puf_exection_control_0_upgraded_ipi/clk]
   connect_bd_net -net clk_wiz_0_locked [get_bd_ports locked] [get_bd_pins clk_wiz_0/locked] [get_bd_pins puf_exection_control_0_upgraded_ipi/locked]
   connect_bd_net -net disable_axi_switch_0_1 [get_bd_ports disable_axi_switch] [get_bd_pins puf_exection_control_0_upgraded_ipi/disable_axi_switch]

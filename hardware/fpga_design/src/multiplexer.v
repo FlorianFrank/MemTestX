@@ -1,22 +1,25 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: University of Passau – Chair of Computer Engineering
+// Engineer: Florian Frank
 // 
 // Create Date: 03/12/2024 02:14:09 PM
-// Design Name: 
+// Design Name: multiplexer.v
 // Module Name: multiplexer
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
+// Project Name: memory_evaluator
+// Target Device: Xilinx ZCU102
+// Tool Version: Vivado 2022.2
+// 
 // Description: 
+// Implements the control logic for bidirectional data lines and multiplexes 
+// access to the shared address and control lines. Additionally, it manages 
+// the dual-supply bus transceivers based on the current operation mode 
+// (read or write), ensuring correct signal direction and voltage-level 
+// interfacing between the FPGA and external memory.
 // 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+// Revision History:
+// Rev. 0.01 - File Created
+//
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -24,7 +27,6 @@ module multiplexer#(
     parameter integer ALINES_SIZE = 15,
     parameter integer DLINES_SIZE = 8
 )(
-    input wire clk,
     input wire[ALINES_SIZE-1:0] alines_write,
     input wire[ALINES_SIZE-1:0] alines_read,
     input wire[DLINES_SIZE-1:0] dlines_in,
@@ -65,7 +67,7 @@ module multiplexer#(
     assign ce = !rw_select_in ? ce_write : ce_read;
     assign we = !rw_select_in ? we_write : we_read;
 
-    // Handle the bidirectional port correctly: assign dlines based on rw_select_in
+    // Handle the bidirectional data port correctly by assigning dlines based on the current read/write mode.
     assign dlines = (!rw_select_in) ? dlines_in : {DLINES_SIZE{1'hz}};
     assign dlines_out = (rw_select_in) ? dlines : {DLINES_SIZE{1'h1}};
 endmodule

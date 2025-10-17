@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# multiplexer, memory_read_top_module, memory_write_top_module, puf_exection_controller, reset_handler
+# multiplexer, memory_read_top_module, memory_write_top_module, puf_execution_controller, reset_handler
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -165,7 +165,7 @@ if { $bCheckModules == 1 } {
 multiplexer\
 memory_read_top_module\
 memory_write_top_module\
-puf_exection_controller\
+puf_execution_controller\
 reset_handler\
 "
 
@@ -1106,7 +1106,7 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
  ] $ps_pl_interface
 
   # Create instance: puf_controller, and set properties
-  set block_name puf_exection_controller
+  set block_name puf_execution_controller
   set block_cell_name puf_controller
   if { [catch {set puf_controller [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
      catch {common::send_gid_msg -ssname BD::TCL -id 2095 -severity "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
@@ -1145,7 +1145,7 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   # Create port connections
   connect_bd_net -net Net [get_bd_ports dlines] [get_bd_pins in_out_mux/dlines]
   connect_bd_net -net Net1 [get_bd_pins in_out_mux/rw_select_in] [get_bd_pins puf_controller/rw_select]
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_wizzard/clk_out1] [get_bd_pins ila_0/clk] [get_bd_pins in_out_mux/clk] [get_bd_pins memory_reader/clk2] [get_bd_pins memory_writer/clk] [get_bd_pins reset_handler/clk_400_mhz]
+  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_wizzard/clk_out1] [get_bd_pins ila_0/clk] [get_bd_pins memory_reader/clk2] [get_bd_pins memory_writer/clk] [get_bd_pins reset_handler/clk_400_mhz]
   connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_pins axi_master_interconnect/aclk] [get_bd_pins axi_slave_interconnect/ACLK] [get_bd_pins axi_slave_interconnect/M00_ACLK] [get_bd_pins axi_slave_interconnect/S00_ACLK] [get_bd_pins axi_slave_interconnect/S01_ACLK] [get_bd_pins clk_wizzard/clk_in1] [get_bd_pins memory_reader/clk1] [get_bd_pins mpsoc/maxihpm0_fpd_aclk] [get_bd_pins mpsoc/maxihpm1_fpd_aclk] [get_bd_pins mpsoc/pl_clk0] [get_bd_pins mpsoc/saxihpc0_fpd_aclk] [get_bd_pins processor_reset/slowest_sync_clk] [get_bd_pins ps_pl_interface/axi_light_master_aclk] [get_bd_pins ps_pl_interface/axi_light_slave_aclk] [get_bd_pins puf_controller/clk] [get_bd_pins reset_handler/clk]
   connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wizzard/locked] [get_bd_pins puf_controller/locked]
   connect_bd_net -net disable_axi_switch_0_1 [get_bd_ports disable_axi_switch] [get_bd_pins puf_controller/disable_axi_switch]
@@ -1219,7 +1219,7 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   connect_bd_net -net ps_pl_interface_0_toedDefault [get_bd_pins ps_pl_interface/toedDefault] [get_bd_pins puf_controller/toedDefault]
   connect_bd_net -net ps_pl_interface_0_tprcAdjusted [get_bd_pins ila_0/probe7] [get_bd_pins ps_pl_interface/tprcAdjusted] [get_bd_pins puf_controller/tprcAdjusted]
   connect_bd_net -net ps_pl_interface_0_tprcDefault [get_bd_pins ps_pl_interface/tprcDefault] [get_bd_pins puf_controller/tprcDefault]
-  connect_bd_net -net ps_pl_interface_0_transmission_active [get_bd_pins ps_pl_interface/transmission_active] [get_bd_pins puf_controller/axi_transmissin_active]
+  connect_bd_net -net ps_pl_interface_0_transmission_active [get_bd_pins ps_pl_interface/transmission_active] [get_bd_pins puf_controller/axi_transmission_active]
   connect_bd_net -net ps_pl_interface_0_twaitAfterInit [get_bd_pins ps_pl_interface/tWaitAfterInit] [get_bd_pins puf_controller/tWaitAfterInit]
   connect_bd_net -net ps_pl_trigger_0_output_data [get_bd_pins ps_pl_interface/input_data] [get_bd_pins puf_controller/output_data]
   connect_bd_net -net ps_pl_trigger_0_value_to_write [get_bd_pins ps_pl_interface/input_address] [get_bd_pins puf_controller/output_address]
@@ -1245,7 +1245,7 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   connect_bd_net -net puf_exection_control_0_tpwd [get_bd_pins memory_writer/tpwd] [get_bd_pins puf_controller/tpwd]
   connect_bd_net -net puf_exection_control_0_trigger_axi_master_start [get_bd_pins ps_pl_interface/axi_light_master_init_axi_txn] [get_bd_pins puf_controller/trigger_axi_master_start]
   connect_bd_net -net puf_exection_control_0_value_write [get_bd_pins memory_writer/value_write] [get_bd_pins puf_controller/value_write]
-  connect_bd_net -net puf_exection_control_0_write_continously [get_bd_pins memory_writer/write_continously] [get_bd_pins puf_controller/write_continously]
+  connect_bd_net -net puf_exection_control_0_write_continuously [get_bd_pins memory_writer/write_continuously] [get_bd_pins puf_controller/write_continuously]
   connect_bd_net -net reset_handler_0_reset [get_bd_pins ps_pl_interface/reset_out] [get_bd_pins reset_handler/reset2_active_high]
   connect_bd_net -net reset_handler_0_reset_active_high [get_bd_pins clk_wizzard/reset] [get_bd_pins memory_reader/reset] [get_bd_pins puf_controller/set_back] [get_bd_pins reset_handler/reset_active_high]
   connect_bd_net -net reset_handler_0_reset_active_high_400_mhz [get_bd_pins memory_writer/set_back] [get_bd_pins reset_handler/reset_active_high_400_mhz]

@@ -34,13 +34,9 @@ if {[llength [get_runs synth_1]] == 0} {
 launch_runs synth_1
 wait_on_run synth_1
 
-# Create checkpoints directory
-file mkdir -p "${build_dir}/checkpoints"
-write_checkpoint -force "${build_dir}/checkpoints/post_synth.dcp"
-
 puts "INFO: Load synthesis run"
 open_run synth_1
-
+write_checkpoint -force "${build_dir}/checkpoints/post_synth.dcp"
 
 # Optimization
 puts "INFO: Optimize design"

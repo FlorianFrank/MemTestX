@@ -59,7 +59,6 @@ This script sources `create_project.tcl`, which generates a new project named `m
 **************************************
 
 Start Creating Project ...
-INFO: Creating new project...
 
 ****** Vivado v2022.1 (64-bit)
   **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
@@ -88,9 +87,30 @@ You can generate the bitstream directly within Vivado by following these steps:
    - Select **Include Bitstream**, and  
    - Choose a location to save the exported hardware.
 
+Additionally, we also provide a `*.tcl`script in order to build the firmware from command line. 
+
+To do this just run 
+```bash
+❯ ./build_project.sh
+
+Start Building Project...
+
+... 
+
+Bitstream Generated -> export to exports folder.
+```
+
 ### Simulation
 
+Simulation files all start with `tb_<file_name>` and can be found under the simulation tab within the project. When selecting `tb_axi_full` as top module the whole FPGA design got simulated, as showin in the subsequent figure:
 
 <div style="text-align: center;">
   <img src="doc/figures/simulation.png" style="width: 100%;" alt="FPGA Block design">
 </div>
+
+It includes a simulation of the AXI bus, allowing testing of the custom AXI module, data transmission, and parameter parsing.  
+The AXI bus communication is shown in Figure 1) Following this, several configuration parameters—such as the PUF type, address space, and initialization data—can be observed.  
+Next, the operation of the memory controller is demonstrated:  
+Step (2) shows the initialization of the memory cells with `0x00` for the address range 0–9.  
+Afterward, row hammering is performed with a hammering width of three addresses and three iterations. This results in hammering addresses `[0–2]` three times, skipping `[3–5]`, and hammering `[6–9]` three times.  
+Finally, step (4) shows the readout of the affected cells in between.

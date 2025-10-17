@@ -1,15 +1,27 @@
 #!/bin/bash
 
 # Color definitions
-RED="\033[1;31m"
-YELLOW="\033[1;33m"
-BLUE="\033[1;34m"
-RESET="\033[0m"
+RED="\e[1;31m"
+YELLOW="\e[1;33m"
+ORANGE="\e[1;33m" 
+BLUE="\e[1;34m"
+RESET="\e[0m"
 
-# Helper functions for colored messages
-info()    { echo -e "${BLUE}INFO: $1${RESET}"; }
-warn()    { echo -e "${YELLOW}WARNING: $1${RESET}"; }
-error()   { echo -e "${RED}ERROR: $1${RESET}"; }
+# Function to colorize output
+colorize() {
+    while IFS= read -r line; do
+        if [[ "$line" == *"ERROR"* ]]; then
+            echo -e "${RED}${line}${RESET}"
+        elif [[ "$line" == *"CRITICAL"* ]]; then
+            echo -e "${ORANGE}${line}${RESET}"
+        elif [[ "$line" == *"WARNING"* ]]; then
+            echo -e "${YELLOW}${line}${RESET}"
+        elif [[ "$line" == *"INFO"* ]]; then
+            echo -e "${BLUE}${line}${RESET}"
+        else
+            echo "$line"
+        fi
+    done
 
 echo "**************************************"
 echo "********** Memory Evaluator **********"
@@ -33,15 +45,13 @@ if [ -d "$BUILD_DIR" ]; then
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "INFO: Creating new project..."
-        "$VIVADO_PATH" -mode batch -source "$TCL_SCRIPT" 2>&1 | \
-        sed -E "s/(ERROR.*)/${RED}\1${RESET}/; s/(WARNING.*)/${YELLOW}\1${RESET}/; s/(INFO.*)/${BLUE}\1${RESET}/"
+        "$VIVADO_PATH" -mode batch -source "$TCL_SCRIPT" 2>&1 | colorize
     else
         echo "INFO: Using existing project. Skipping creation."
     fi
 else
     echo "INFO: Creating new project..."
-    "$VIVADO_PATH" -mode batch -source "$TCL_SCRIPT" 2>&1 | \
-        sed -E "s/(ERROR.*)/${RED}\1${RESET}/; s/(WARNING.*)/${YELLOW}\1${RESET}/; s/(INFO.*)/${BLUE}\1${RESET}/"
+    "$VIVADO_PATH" -mode batch -source "$TCL_SCRIPT" 2>&1 | colorize
 fi
 
 read -p "Open Project in Vivado GUI? [y/N] " -n 1 -r

@@ -1,0 +1,3 @@
+[submodule "software/MemScope"]
+	path = software/memory_evaluator_stm32f429
+	url = https://github.com/FlorianFrank/MemScope.git

@@ -21,9 +21,8 @@ if [ -d "$BUILD_DIR" ]; then
     read -p "Would you like to recreate the project? [y/N] " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo "INFO: Opening existing project in Vivado GUI..."
-        "$VIVADO_PATH" "$BUILD_DIR/$PROJECT_FILE"
-        exit 0
+        echo "INFO: Creating new project..."
+        "$VIVADO_PATH" -mode batch -source "$TCL_SCRIPT"
     else
         echo "INFO: Using existing project. Skipping creation."
     fi

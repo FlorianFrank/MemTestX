@@ -103,3 +103,7 @@ if {[file exists $bd_file]} {
   puts "WARNING: Block design file not found: $bd_file"
 }
 
+puts "INFO: Enable constraints"
+set_property is_enabled true [get_files "${project_dir}/constraints/constraints.xdc"]
+set_property USED_IN_SYNTHESIS true [get_files "${project_dir}/constraints/constraints.xdc"]
+set_property USED_IN_IMPLEMENTATION true [get_files "${project_dir}/constraints/constraints.xdc"]

@@ -84,8 +84,22 @@ if {[file exists $constraints_file]} {
     puts "WARNING: Constraint file not found: $constraints_file"
 }
 
-# Load block design
 if {[file exists $bd_file]} {
   source $bd_file
+
+  # Create HDL wrapper
+  set bd_hdl_wrapper "${project_dir}/src/${bd_name}_wrapper.v"
+  if {![file exists $bd_hdl_wrapper]} {
+      puts "INFO: Creating HDL wrapper for block design: $bd_name"
+      create_bd_wrapper -force -file $bd_hdl_wrapper -bd_name $bd_name
+  } else {
+      puts "INFO: HDL wrapper already exists: $bd_hdl_wrapper"
+  }
+
+  # Set top module of the project
+  set_property top $bd_name"_wrapper" [current_fileset]
+  puts "INFO: Top module set to ${bd_name}_wrapper"
+} else {
+  puts "WARNING: Block design file not found: $bd_file"
 }
 

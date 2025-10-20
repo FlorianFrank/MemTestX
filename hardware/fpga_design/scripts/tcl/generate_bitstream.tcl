@@ -51,4 +51,8 @@ report_timing_summary -file $build_dir/export/post_place_timing_summary.rpt
 route_design
 write_bitstream -force "${build_dir}/export/${project_name}.bit"
 
+puts "INFO: Export Hardware Platform ready to import in Vitis"
+write_hw_platform -fixed -include_bit -force -file "${build_dir}/export/${project_name}.xsa"
+
+
 puts "INFO: Bitstream generated"

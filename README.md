@@ -53,16 +53,47 @@ A detailed list of all dependencies can be found in the respective component fol
 To produce the PCB, navigate to `hardware/pcbs/fmc_memory_adapter`, open the project in **KiCad**, export the Gerber files, and upload them to your preferred PCB manufacturer.  
 The required components are listed in the **bill_of_material** folder.
 
-To implement the fpga design we provide tcl and shell scripts to create the project and generate the hardware platform including the bitstream.  
-To do this go to `hardware/fpga_design/scripts`and run 
+To implement the FPGA design, TCL and shell scripts are provided to create the project and generate the hardware platform, including the bitstream.  
+Navigate to `hardware/fpga_design/scripts` and run:
 
 ```bash
 ./create_project.sh
+``` 
+This command creates the project in `hardware/fpga_design/memory_evaluator`.
+Next, open the Vivado GUI from the script or simply run:
+ 
+ ```
+ > ./generate_bitstream.sh
+ ```
+
+ within the scripts folder. The resulting files, including the bitstream, will be available in `hardware/fpga_design/memory_evaluator/export`.
+
+
+### Software
+
+To build the PS firmware, a CMake-based build process with a predefined toolchain file is provided in `software/ps_software`.  
+Simply run:
+
+```bash
+./build.sh
 ```
 
- to create the project in `hardware/fpga_design/memory_evaluator`. Next open the Vivado GUI from the sript or simply run 
- 
- ```./generate_bitstream
+This command creates a build folder, compiles the firmware using the previously exported hardware platform, and generates the `memory_evaluator.elf` file.
+The resulting ELF file can then be flashed onto the FPGA using Vitis. 
+
+To run the scheduler, navigate to `software/experiment_scheduler` and install the required dependencies:
+
+```bash
+./install_dependencies.sh
+```
+
+Then, start the test scheduler using:
+
+```bash
+> ./start_scheduler.sh
+```
+
+A detailed guide on defining experiments, configuring hardware instances, and all available settings can be found in the `software/experiment_scheduler` folder.
 
 ## Contact
 

@@ -63,7 +63,7 @@ This command creates the project in `hardware/fpga_design/memory_evaluator`.
 Next, open the Vivado GUI from the script or simply run:
  
  ```
- > ./generate_bitstream.sh
+ ./generate_bitstream.sh
  ```
 
  within the scripts folder. The resulting files, including the bitstream, will be available in `hardware/fpga_design/memory_evaluator/export`.
@@ -90,7 +90,7 @@ To run the scheduler, navigate to `software/experiment_scheduler` and install th
 Then, start the test scheduler using:
 
 ```bash
-> ./start_scheduler.sh
+./start_scheduler.sh
 ```
 
 A detailed guide on defining experiments, configuring hardware instances, and all available settings can be found in the `software/experiment_scheduler` folder.

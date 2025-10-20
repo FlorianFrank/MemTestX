@@ -5,7 +5,6 @@ set block_design_name "main_block_design"
 file mkdir "$build_dir/export"
 file mkdir "$build_dir/checkpoints"
 
-
 puts "INFO: Open Project ${build_dir}/${project_name}.xpr"
 open_project "${build_dir}/${project_name}.xpr"
 
@@ -23,39 +22,33 @@ generate_target all [get_files "${build_dir}/${project_name}.srcs/sources_1/bd/$
 
 # Synthesis
 puts "INFO: Launch Synthesis"
-
-if {[llength [get_runs synth_1]] == 0} {
-    create_run synth_1 -flow {SYNTHESIS}
+if {[llength [get_runs synth_1]] > 0} {
+    puts "INFO: Synthesis run 'synth_1' already exists. Resetting run..."
+    reset_run synth_1
 } else {
-    puts "INFO: Synthesis run 'synth_1' already exists. Using existing run."
+    puts "INFO: Creating synthesis run 'synth_1'"
+    create_run synth_1 -flow {SYNTHESIS}
 }
 
 # Launch synthesis
 launch_runs synth_1
 wait_on_run synth_1
-
-puts "INFO: Load synthesis run"
 open_run synth_1
+puts "INFO: Load synthesis run"
 write_checkpoint -force "${build_dir}/checkpoints/post_synth.dcp"
 
 # Optimization
+open_checkpoint "${build_dir}/checkpoints/post_synth.dcp"
 puts "INFO: Optimize design"
 opt_design
-
 report_methodology -file $build_dir/export/post_opt_methodology.rpt
 
+place_design
 phys_opt_design
-write_checkpoint -force $build_dir/checkpoints/post_place
+write_checkpoint -force "${build_dir}/checkpoints/post_place.dcp"
 report_timing_summary -file $build_dir/export/post_place_timing_summary.rpt
 
-# Implementation
-puts "INFO: Run Implementation and bitstream generation"
-if {[llength [get_runs impl_1]] == 0} {
-    create_run impl_1 -flow {IMPLEMENTATION}
-} else {
-    puts "INFO: Implementation run 'impl_1' already exists. Using existing run."
-}
-launch_runs impl_1 -to_step write_bitstream
-wait_on_run impl_1
+route_design
+write_bitstream -force "${build_dir}/export/${project_name}.bit"
 
 puts "INFO: Bitstream generated"

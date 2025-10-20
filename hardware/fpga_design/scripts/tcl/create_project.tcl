@@ -91,13 +91,14 @@ if {[file exists $bd_file]} {
   set bd_hdl_wrapper "${project_dir}/src/${bd_name}_wrapper.v"
   if {![file exists $bd_hdl_wrapper]} {
       puts "INFO: Creating HDL wrapper for block design: $bd_name"
-      make_wrapper -files [get_files ${project_name}.srcs/sources_1/bd/$bd_name/$bd_name.bd] -top
+      make_wrapper -files [get_files ${project_dir}/${project_name}.srcs/sources_1/bd/${bd_name}/${bd_name}.bd] -top
+      add_files -norecurse ${project_dir}/${project_name}.gen/sources_1/bd/${bd_name}/hdl/${bd_name}_wrapper.v
   } else {
       puts "INFO: HDL wrapper already exists: $bd_hdl_wrapper"
   }
 
   # Set top module of the project
-  set_property top $bd_name"_wrapper" [current_fileset]
+  set_property top ${bd_name}_wrapper [current_fileset]
   puts "INFO: Top module set to ${bd_name}_wrapper"
 } else {
   puts "WARNING: Block design file not found: $bd_file"

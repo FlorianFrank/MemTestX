@@ -33,3 +33,37 @@ The **software** folder contains:
 - **Microcontroller-Based Setup:**  
   An implementation running on an STM32F429 microcontroller with an integrated memory controller, capable of executing the same set of experiments as the ZCU102. However, this setup is constrained by the significantly lower clock frequency of its memory controller (120 MHz compared to 400 MHz on the FPGA). Communication with the test scheduler is established via a UART interface.
 
+## Quick Setup
+
+The following provides the basic information to setup the memory evaluator. 
+
+### Prerequisites
+
+To build the PCB, **KiCad version 6** is required.  
+To build the FPGA design and PS firmware, **Xilinx Vivado 2022.2** with **Vitis** must be installed.  
+Note that generating the bitstream for the **ZCU102** requires the **Vivado ML Enterprise Edition**.  
+
+The scheduler requires **Python 3**.  
+
+A detailed list of all dependencies can be found in the respective component folders.
+
+
+### Hardware setup
+
+To produce the PCB, navigate to `hardware/pcbs/fmc_memory_adapter`, open the project in **KiCad**, export the Gerber files, and upload them to your preferred PCB manufacturer.  
+The required components are listed in the **bill_of_material** folder.
+
+To implement the fpga design we provide tcl and shell scripts to create the project and generate the hardware platform including the bitstream.  
+To do this go to `hardware/fpga_design/scripts`and run 
+
+```bash
+./create_project.sh
+```
+
+ to create the project in `hardware/fpga_design/memory_evaluator`. Next open the Vivado GUI from the sript or simply run 
+ 
+ ```./generate_bitstream
+
+## Contact
+
+If you encounter any issues or errors, please open an issue on this page or contact me at:  **florian.frank(at)uni-passau.de**

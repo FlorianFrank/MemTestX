@@ -1,15 +1,19 @@
-# A Reconfigurable Hardware Infrastructure for Evaluating Novel PUFs on Non-Volatile Memories
+# Memory PUF Evaluation Setup
 
-This repository provides the hardware and software resources accompanying the paper submitted to *Elsevier HardwareX*.
+This repository contains all components required for an extensive evaluation of memory-based PUFs, with a focus on emerging memory technologies such as FRAM, MRAM, and ReRAM. The setup is built around a Xilinx ZCU102 FPGA and is designed to interface with any memory device featuring an SRAM-compatible parallel interface.
 
-It includes all necessary design files, code, and documentation for evaluating physically unclonable functions (PUFs) on non-volatile memories using a reconfigurable hardware platform.
+The various components included in this repository are illustrated in the following figure:
 
-## Repository Contents
+<div style="text-align: center;"> <img src="doc/figures/overview_setup.svg" style="width: 100%;" alt="FPGA Block Design"> </div>
 
-- **`fmc_memory_adapter/`**  
-  Contains all relevant files for the custom FMC-compatible PCB that interfaces memory modules with the Xilinx Ultrascale ZCU102 evaluation board. This folder includes:
-  - **PCB design files** (schematics, layout)
-  - **Footprints and symbols**
-  - **Gerber files** for manufacturing
-  - **Bill of Materials (BoM)**
-  - **3D-printable accessories**, such as mechanical supports
+The components are divided into **hardware** and **software** categories, following the structure of this repository.  
+
+### Hardware
+
+The **hardware** folder contains:  
+
+- **FMC Adapter PCB Layout:**  
+  A PCB adapter designed to interface various memory modules with the ZCU102 through its FMC connector. It supports memories with up to 24 address lines and 16 data lines and bridges the logic voltage level differences between the ZCU102 and the connected memory modules. Additionally, it provides options for connecting external power supplies and includes debugging interfaces. The design prioritizes signal integrity and minimizes glitches and noise.
+
+- **FPGA Design:**  
+  Contains the FPGA design implementing a custom SRAM memory controller with all timing parameters adjustable at runtime. It supports several types of experiments, including row hammering as well as read and write latency variations. Timing parameters can be tuned with a granularity of 2.5 nanoseconds. The design also includes an AXI interface for communication with the ZCU102’s processing system.

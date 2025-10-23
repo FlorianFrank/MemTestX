@@ -4,6 +4,10 @@
  * @author Florian Frank
  * @affiliation University of Passau - Chair of Computer Engineering
  */
+ 
+
+	
+
 
 #include "config/app_config.h"
 #include "irq_handler.h" // deInitializeIRQHandler
@@ -12,6 +16,11 @@
 #include "ip_handler.h"
 
 #include "board_support/platform.h" // init_platform, cleanup_platform
+#include "sleep.h"
+
+extern void sleep(uint32_t seconds) {
+    sleep_A53(seconds);
+}
 
 
 /** Handle holding the network configuration. */
@@ -25,6 +34,7 @@ int startNetworkConfig();
 void print(const char *msg) {
     xil_printf("%s", msg); // Redirects to standard output
 }
+
 
 int main() {
 

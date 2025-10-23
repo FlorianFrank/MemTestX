@@ -1,0 +1,52 @@
+{
+  "puf_type": "rowHammering",
+  "init_value": 21845,
+  "puf_value": 43690,
+  "start_addr": 0,
+  "stop_addr": 10000,
+  "ce_driven": true,
+
+  "tWaitAfterInit": 18,
+  "tNextRead":  100000,
+
+
+  "tStartDefault": 3,
+  "tNextWriteDefault": 4,
+  "tACDefault": 5,
+  "tASDefault": 6,
+  "tAHDefault": 7,
+  "tPWDDefault": 8,
+  "tDSDefault": 9,
+  "tDHDefault": 10,
+
+  "tStartAdjusted": 4,
+  "tNextWriteAdjusted": 5,
+  "tACAdjusted": 6,
+  "tASAdjusted": 7,
+  "tAHAdjusted": 8,
+  "tPWDAdjusted": 9,
+  "tDSAdjusted": 10,
+  "tDHAdjusted": 11,
+
+  "ceDrivenRead": true,
+  "tStartReadDefault": 10,
+  "tASReadDefault": 9,
+  "tAHReadDefault": 8,
+  "tOEDDefault": 7,
+  "tPRCDefault": 6,
+  "tCEOEEnableDefault": 5,
+  "tCEOEDisableDefault": 4,
+
+  "tStartReadAdjusted": 11,
+  "tASReadAdjusted": 10,
+  "tAHReadAdjusted": 9,
+  "tOEDAdjusted": 8,
+  "tPRCAdjusted": 7,
+  "tCEOEEnableAdjusted": 6,
+  "tCEOEDisableAdjusted": 5,
+
+
+  "tWaitBetweenHammering": 9,
+  "hammeringIterations": 3,
+  "hammeringDistance": 2
+}

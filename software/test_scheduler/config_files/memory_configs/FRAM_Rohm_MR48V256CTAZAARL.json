@@ -1,0 +1,13 @@
+{
+  "name": "FRAM_Rohm_MR48V256C",
+  "manufacturer": "LAPIS Semiconductor",
+  "model": "MR48V256C",
+  "technology": "FRAM",
+  "interface_type": "parallel",
+  "address_width": 15,
+  "data_width": 8,
+  "min_addr": 0,
+  "voltage": 3,
+  "current": 0.2,
+  "max_addr": 32767
+}

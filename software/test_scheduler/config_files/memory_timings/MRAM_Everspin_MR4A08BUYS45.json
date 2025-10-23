@@ -1,0 +1,24 @@
+{
+  "name": "MRAM_Everspin_MR4A08BUYS45",
+  "ceDrivenWrite": true,
+  "ceDrivenRead": true,
+
+  "tWaitAfterInit": 18,
+  "tNextRead":  100000,
+  "tStartWrite": 3,
+  "tNextWrite": 4,
+  "tACWrite": 5,
+  "tASWrite": 6,
+  "tAHWrite": 7,
+  "tPWDWrite": 8,
+  "tDSWrite": 9,
+  "tDHWrite": 10,
+  "tStartRead": 10,
+  "tASRead": 9,
+  "tAHRead": 8,
+  "tOEDRead": 7,
+  "tPRCRead": 6,
+  "tCEOEEnableRead": 5,
+  "tCEOEDisableRead": 4,
+  "comment": "Nothing to report"
+}

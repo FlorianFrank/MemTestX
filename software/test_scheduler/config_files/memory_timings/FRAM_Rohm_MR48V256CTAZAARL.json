@@ -1,0 +1,24 @@
+{
+  "name": "FRAM_Rohm_MR48V256C",
+  "ceDrivenWrite": true,
+  "ceDrivenRead": true,
+
+  "tWaitAfterInit": 18,
+  "tNextRead":  1000,
+  "tStartWrite": 3,
+  "tNextWrite": 100,
+  "tACWrite": 0,
+  "tASWrite": 0,
+  "tAHWrite": 7,
+  "tPWDWrite": 8,
+  "tDSWrite": 30,
+  "tDHWrite": 0,
+  "tStartRead": 10,
+  "tASRead": 9,
+  "tAHRead": 8,
+  "tOEDRead": 7,
+  "tPRCRead": 30,
+  "tCEOEEnableRe12ad": 0,
+  "tCEOEDisableRead": 0,
+  "comment": "Nothing to report"
+}

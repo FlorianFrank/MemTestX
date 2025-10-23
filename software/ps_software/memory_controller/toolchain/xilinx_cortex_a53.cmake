@@ -22,7 +22,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING "" FORCE)
 
 # Specify linker flags if necessary (e.g., for standalone/baremetal apps)
 set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/src/lscript.ld") # Modify this path as needed
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,-T ${LINKER_SCRIPT} -L${PLATFORM_DIR}/export/main_block_design_wrapper/sw/main_block_design_wrapper/standalone_psu_cortexa53_0/bsplib/lib -Wl,--start-group,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group" CACHE STRING "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,-T ${LINKER_SCRIPT} -L${PLATFORM_DIR}/export/memory_evaluator/sw/memory_evaluator/standalone_psu_cortexa53_0/bsplib/lib -Wl,--start-group,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group" CACHE STRING "" FORCE)
 
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)

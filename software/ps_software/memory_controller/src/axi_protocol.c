@@ -152,7 +152,7 @@ void createAXISegments(const PUFConfiguration *pufConfig) {
     }
 
     for (int i = 0; i < maxBursts; i++) {
-        Xil_Out32(XPAR_PS_PL_INTERFACE_0_AXI_LIGHT_SLAVE_BASEADDR + i * 0x04, segmentList[i]);
+        Xil_Out32(XPAR_PS_PL_INTERFACE_AXI_LIGHT_SLAVE_BASEADDR + i * 0x04, segmentList[i]);
         printVerilogTBConfig(i*0x04, segmentList[i]);
     }
 }

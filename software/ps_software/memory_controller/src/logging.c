@@ -27,10 +27,10 @@ int initialize_logging(log_lvl lvl) {
     global_log_lvl = lvl;
 
     log_buffer = malloc(LOG_BUFFER_LEN * LOG_BUFFER_LEN_ADD * sizeof(char));
-    if (log_buffer == NULL) {
-        log_message(LOG_ERROR, __FILE__, __LINE__, "malloc returned NULL!");
-        return -1;
-    }
+//    if (log_buffer == NULL) {
+  //      log_message(LOG_ERROR, __FILE__, __LINE__, "malloc returned NULL!");
+    //    return -1;
+//    }
 
     return 0;
 }

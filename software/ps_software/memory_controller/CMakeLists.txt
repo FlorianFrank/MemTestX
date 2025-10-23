@@ -31,3 +31,5 @@ target_link_directories(${EXEC_NAME} PUBLIC
         ${PLATFORM_DIR}/export/memory_evaluator/sw/memory_evaluator/standalone_psu_cortexa53_0/bsplib/lib)
 
 target_link_libraries(${EXEC_NAME} PUBLIC xil lwip4 gcc c)
+
+install(TARGETS memory_evaluator.elf DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/out)

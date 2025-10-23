@@ -48,6 +48,8 @@ The scheduler requires **Python 3**.
 A detailed list of all dependencies can be found in the respective component folders.
 
 
+<div style="text-align: center;"> <img src="doc/figures/build_pipeline.svg" style="width: 100%;" alt="FPGA Block Design"> </div>
+
 ### Hardware setup
 
 To produce the PCB, navigate to `hardware/pcbs/fmc_memory_adapter`, open the project in **KiCad**, export the Gerber files, and upload them to your preferred PCB manufacturer.  

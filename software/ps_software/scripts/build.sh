@@ -4,7 +4,7 @@ echo "***************************************"
 echo "********** Build PS Firmware **********"
 echo "***************************************"
 
-BUILD_DIR="./build"
+BUILD_DIR="../memory_controller/build"
 
  if [ ! -x "$BUILD_DIR" ]; then
    echo "Create build dir: $BUILD_DIR"
@@ -16,6 +16,7 @@ BUILD_DIR="./build"
  fi
 
  pushd $BUILD_DIR
-  cmake ../memory_controller
+  cmake ..
   make
+  make install
  popd

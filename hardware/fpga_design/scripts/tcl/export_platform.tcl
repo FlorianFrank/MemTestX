@@ -31,7 +31,6 @@ domain create \
 
 platform write
 
-
 platform active "${project_name}"
 puts "INFO: Activate Domains"
 domain active {zynqmp_fsbl}

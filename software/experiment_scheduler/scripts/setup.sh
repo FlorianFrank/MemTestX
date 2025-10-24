@@ -42,6 +42,13 @@ if [ ! -d "../.venv" ]; then
 fi
   source .venv/bin/activate
   pip3 install -r requirements.txt
+
+
+  if [ ! -d "output_results" ]; then
+    echo "Create test results folder"
+    mkdir -p output_results
+  fi
+
   python3 main.py -init_db_scheme
 
 popd || exit

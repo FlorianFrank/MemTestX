@@ -30,6 +30,23 @@ def test_type_to_str(test_type: TestType) -> str:
         return "voltageWrite"
 
 
+def string_to_test_type(test_str: str) -> TestType:
+    if test_str == "reliable":
+        return TestType.RELIABLE
+    elif test_str == "writeLatency":
+        return TestType.WRITE_LATENCY
+    elif test_str == "readLatency":
+        return TestType.READ_LATENCY
+    elif test_str == "rowHammering":
+        return TestType.ROW_HAMMERING
+    elif test_str == "voltageRead":
+        return TestType.VOLTAGE_READ
+    elif test_str == "voltageWrite":
+        return TestType.VOLTAGE_WRITE
+    else:
+        raise TypeError(f"Undefined test type {test_str}")
+
+
 class TestState(Enum):
     INACTIVE = 0x00
     WAITING_FOR_RESPONSE = 0x01
@@ -53,6 +70,17 @@ class TestTemplate:
     end_ts: float
     memory_type_name: str
     comment: str
+
+    def __str__(self):
+        param_preview = ', '.join(f"{k}={v}" for k, v in self.parameters.items())
+        return (
+            f"TestTemplate("
+            f"type={self.type.name}, "
+            f"memory_type='{self.memory_type_name}', "
+            f"params={{ {param_preview} }}, "
+            f"start_ts={self.start_ts}, end_ts={self.end_ts}, "
+            f"comment='{self.comment[:50]}{'...' if len(self.comment) > 50 else ''}')"
+        )
 
 
 @dataclass

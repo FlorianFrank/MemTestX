@@ -40,9 +40,12 @@ def select_network_interface_and_setup_scheduler(platform: str):
         srv_ip_addr = NetworkHandler.detect_network_interface_with_suffix("132.231.14")
         logger.info(f"Detected server ip: {srv_ip_addr} -> Setup Network")
         comm_interface = Setup.setup_network(ip_address=srv_ip_addr, port_send=PORT_SEND, port_recv=PORT_RECV)
-    elif platform == "STM32F429":
+    elif platform == "STM32F429-DISC1":
         serial_ports = SerialHandler.find_usbmodem_ports()
         logger.info(f"Detected serial ports {serial_ports} -> select first from list")
+        if len(serial_ports) == 0:
+            logger.error("Error could not detect any serial port! -> Exit program")
+            exit(1)
         comm_interface = SerialHandler(serial_ports[0], DEFAULT_BAUDRATE)
 
     return TestScheduler(test_queue=None, time_between_tests_in_ms=200, server_ip=zync_ip_configuration,
@@ -62,9 +65,12 @@ if __name__ == "__main__":
         logger.info(f"Database scheme created")
     else:
         config_file = None
+        refresh_memories = False
         for arg in sys.argv[1:]:
             if '-config_file' in arg:
                 config_file = arg.split('=')[1]
+            if '-refresh_memories' in arg:
+                refresh_memories = True
         if not config_file:
             logger.error("No config file provided (specify with -config_file)")
             exit(1)
@@ -81,8 +87,8 @@ if __name__ == "__main__":
 
         db_handler = DBHandler(DB_NAME)
         db_handler.initialize()
-
-        add_all_memory_instances_to_db(db_handler, logger)
+        if refresh_memories:
+            add_all_memory_instances_to_db(db_handler, logger)
 
         zync_ip_config = IPConfig(ip=IP_SUFFIX, port=PORT_SEND)
         time.sleep(4)

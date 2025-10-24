@@ -1,0 +1,43 @@
+
+test_collection:
+    platform: "STM32F429-DISC1"
+    memory_type: MRAM_Everspin_MR4A08BCMA35
+    memory_instance: "MrE35.3"
+    iterations: 10
+
+    experiments:
+      - experiment:
+          type: reliable
+          parameters:
+            init_value: 0x55
+            puf_value: 0xAA
+          comment: "CE is aligned with WE at the first flank while CE has an offset of 8.8 ns at the second flank. STM32 was configured with PLL = 120 Hz."
+
+      - experiment:
+          type: voltageRead
+          parameters:
+            init_value: 0xAA
+            puf_value: 0x55
+            voltage_change:
+              range_start: 3.3
+              range_end: 1.5
+              step_size: 0.1
+          comment: "Voltage using level shifter which also controls WE, CE1, CE2 and OE"
+
+      - experiment:
+          type: reliable
+          parameters:
+            init_value: 0x55
+            puf_value: 0xAA
+          comment: "CE is aligned with WE at the first flank while CE has an offset of 8.8 ns at the second flank. STM32 was configured with PLL = 120 Hz."
+
+      - experiment:
+          type: voltageWrite
+          parameters:
+            init_value: 0xAA
+            puf_value: 0x55
+            voltage_change:
+              range_start: 3.3
+              range_end: 1.5
+              step_size: 0.1
+          comment: "Voltage using level shifter which also controls WE, CE1, CE2 and OE"

@@ -49,6 +49,6 @@ fi
     mkdir -p output_results
   fi
 
-  python3 main.py -init_db_scheme
+  python3 main.py -init_db_scheme -refresh_memories
 
 popd || exit

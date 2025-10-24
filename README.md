@@ -43,59 +43,81 @@ To build the PCB, **KiCad version 6** is required.
 To build the FPGA design and PS firmware, **Xilinx Vivado 2022.2** with **Vitis** must be installed.  
 Note that generating the bitstream for the **ZCU102** requires the **Vivado ML Enterprise Edition**.  
 
-The scheduler requires **Python 3**.  
+The scheduler requires **Python 3.10**.  
 
 A detailed list of all dependencies can be found in the respective component folders.
 
-
-<div style="text-align: center;"> <img src="doc/figures/build_pipeline.svg" style="width: 100%;" alt="FPGA Block Design"> </div>
-
-### Hardware setup
+### PCB Production
 
 To produce the PCB, navigate to `hardware/pcbs/fmc_memory_adapter`, open the project in **KiCad**, export the Gerber files, and upload them to your preferred PCB manufacturer.  
 The required components are listed in the **bill_of_material** folder.
 
-To implement the FPGA design, TCL and shell scripts are provided to create the project and generate the hardware platform, including the bitstream.  
-Navigate to `hardware/fpga_design/scripts` and run:
+### MPSoC Setup
+
+To set up the FPGA and the corresponding firmware on the processing system, we provide a script that automates all required steps.  
+Simply run the following commands:
 
 ```bash
-./create_project.sh
-``` 
-This command creates the project in `hardware/fpga_design/memory_evaluator`.
-Next, open the Vivado GUI from the script or simply run:
- 
- ```
- ./generate_bitstream.sh
- ```
-
- within the scripts folder. The resulting files, including the bitstream, will be available in `hardware/fpga_design/memory_evaluator/export`.
-
-
-### Software
-
-To build the PS firmware, a CMake-based build process with a predefined toolchain file is provided in `software/ps_software`.  
-Simply run:
-
-```bash
-./build.sh
+cd scripts
+./setup_and_run_environment.sh
 ```
 
-This command creates a build folder, compiles the firmware using the previously exported hardware platform, and generates the `memory_evaluator.elf` file.
-The resulting ELF file can then be flashed onto the FPGA using Vitis. 
+This script performs the steps illustrated in the following diagram:
 
-To run the scheduler, navigate to `software/experiment_scheduler` and install the required dependencies:
+<div style="text-align: center;"> <img src="doc/figures/build_pipeline.svg" style="width: 100%;" alt="FPGA Block Design"> </div>
+
+> ⚠️ This script has been verified only on **Ubuntu 22.10**, with **Vivado** installed in `/opt/Xilinx`.  
+> To run it in a different environment, adjustments to the `VIVADO_PATH` variable or direct execution of the `.tcl` scripts may be necessary.
+
+
+Furthermore, as shown in the figure above, the `./setup_and_run_environment.sh` script directly invokes several other scripts displayed at the bottom.  
+These scripts can also be executed directly.  
+Additional information about each script can be found in the respective folders containing them.
+
+### Microcontroller-based Setup
+
+To compile the microcontroller-based setup located in `software/memory_evaluator_stm32f429`, we provide a Docker-based build process.  
+This approach eliminates the need to install the full toolchain on your local machine.  
+
+First, build the Docker image by running:
 
 ```bash
-./install_dependencies.sh
+cd software/memory_evaluator_stm32f429
+docker build -t stm32f429-build .
 ```
 
-Then, start the test scheduler using:
+Then, compile the program by executing:
 
 ```bash
-./start_scheduler.sh
+././compile_fw_docker.sh
 ```
 
-A detailed guide on defining experiments, configuring hardware instances, and all available settings can be found in the `software/experiment_scheduler` folder.
+This command will start the Docker container, compile the firmware, and copy the resulting `MemoryController.elf` into the `software/memory_evaluator_stm32f429/bin` folder.
+
+To flash the device, OpenOCD integrated within the CLion IDE was used. For more details, refer to the [`README.md`](/software/memory_evaluator_stm32f429/README.md) file.
+
+
+### Run the scheduler
+
+
+All necessary dependencies for the scheduler can be installed by running:
+
+```bash
+cd software/experiment_scheduler/scripts
+./setup.sh
+```
+
+To start the scheduler, simply execute:
+
+
+```bash
+cd software/experiment_scheduler/scripts
+./run.sh <test_specification>.yaml
+```
+
+More information about the test specification format can be found in the scheduler’s README file.
+
+
 
 ## Contact
 

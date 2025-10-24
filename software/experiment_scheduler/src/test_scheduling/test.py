@@ -1,18 +1,13 @@
 from __future__ import annotations
 
 import logging
-import math
 import threading
 import time
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import List
 
 from config import Config
 from result import Result
-
-
-# from py_climate_chamber_lib import ClimateChamberControl  # TODO: Fix climate chamber control lib import
 
 
 class TestStatus(Enum):
@@ -52,7 +47,7 @@ class Test(ABC):
         self.__climate_chamber: None #ClimateChamberControl | None = None
         self._progess_callback = None
 
-        logging.set_log_level(log_level)
+        #logging.set_log_level(log_level)
 
         self.thread: threading.Thread | None = None
         if multithread:
@@ -82,16 +77,17 @@ class Test(ABC):
         :return: None
         """
         self.init()
-     #   try:
+        #   try:
         if self.repeated:
             while self.stop_condition:
                 self.run()
         else:
             self.run()
         self.done()
-   #     except Exception as e:
+
+    #     except Exception as e:
     #        self.status = TestStatus.FAILED
-     #       raise e
+    #       raise e
 
     @abstractmethod
     def init(self) -> None:
@@ -148,8 +144,6 @@ class Test(ABC):
         """
         pass
 
-
-
     def set_climate_chamber_values(self, temperature: float, humidity: float) -> None:
         """
         Sets the temperature and humidity of the climate chamber. Can be only executed after a successful setup of the
@@ -161,13 +155,13 @@ class Test(ABC):
         """
         if temperature is not None:
             pass
-            #self.__climate_chamber.set_target_temperature(temperature)
+          #  self.__climate_chamber.set_target_temperature(temperature)
         if humidity is not None:
             pass
-            #self.__climate_chamber.set_target_humidity(humidity)
+         #   self.__climate_chamber.set_target_humidity(humidity)
         #self.__climate_chamber.start_execution()
 
-        self.__wait_for_climate_chamber(temperature, humidity)
+        #self.__wait_for_climate_chamber(temperature, humidity)
 
     def __wait_for_climate_chamber(self, temperature: float, humidity: float) -> None:
         """
@@ -178,15 +172,17 @@ class Test(ABC):
         :param humidity: The humidity to be reached.
         :return: None
         """
+
         def temperature_reached():
             pass
-       #     return math.isclose(self.__climate_chamber.get_current_temperature(), temperature, abs_tol=0.5) \
+
+        #     return math.isclose(self.__climate_chamber.get_current_temperature(), temperature, abs_tol=0.5) \
         #        or temperature is None
 
         def humidity_reached():
             pass
-             # return math.isclose(self.__climate_chamber.get_current_humidity(), humidity, abs_tol=0.5) \
-             #   or humidity is None
+            # return math.isclose(self.__climate_chamber.get_current_humidity(), humidity, abs_tol=0.5) \
+            #   or humidity is None
 
         while not temperature_reached() or not humidity_reached():
             print(f'Waiting for climate chamber to get to the target values')

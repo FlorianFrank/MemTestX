@@ -4,9 +4,7 @@ from asyncio.log import logger
 
 from db_handler import DBHandler
 from definitions import Command
-from memory_instance_handler import add_all_memory_instances_to_db
 from network_handler import NetworkHandler, IPConfig
-from serial_handler import SerialHandler, DEFAULT_BAUDRATE
 from setup import Setup
 from test_defines import TestTemplate, TestType
 from test_scheduler import TestScheduler, Test

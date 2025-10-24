@@ -33,22 +33,22 @@ echo -e "*****    Building Test Scheduler     ****"
 echo -e "**************************************************\n"
 check_python_version
 
-
-
-pushd ..
-if [ ! -d "../.venv" ]; then
-  echo "Create new virtual environment in .venv"
-  python3 -m venv .venv
-fi
-  source .venv/bin/activate
-  pip3 install -r requirements.txt
-
-
-  if [ ! -d "output_results" ]; then
-    echo "Create test results folder"
-    mkdir -p output_results
+read -p "Running this script will recreate the database! Would you like to continue [y/N] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  pushd ..
+  if [ ! -d "../.venv" ]; then
+    echo "Create new virtual environment in .venv"
+    python3 -m venv .venv
   fi
+    source .venv/bin/activate
+    pip3 install -r requirements.txt
+    if [ ! -d "output_results" ]; then
+      echo "Create test results folder"
+      mkdir -p output_results
+    fi
 
-  python3 main.py -init_db_scheme -refresh_memories
+    python3 main.py -init_db_scheme -refresh_memories
 
-popd || exit
+  popd || exit
+fi

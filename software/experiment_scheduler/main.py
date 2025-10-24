@@ -62,7 +62,10 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1 and sys.argv[1] == '-init_db_scheme':
         db_handler = Setup.create_initial_db_scheme(DB_NAME, clear_db=True)
+        db_handler.initialize()
         logger.info(f"Database scheme created")
+        add_all_memory_instances_to_db(db_handler, logger)
+
     else:
         config_file = None
         refresh_memories = False

@@ -83,11 +83,11 @@ class TestConfigParser:
             with open(self._config_file, 'r') as config_file:
                 parsed_config = yaml.safe_load(config_file.read())
 
-                self._platform = parsed_config['testfixture']['platform']
-                iterations = parsed_config['testfixture']['iterations']
-                memory_type = parsed_config['testfixture']['memory_type']
-                memory_instance = parsed_config['testfixture']['memory_instance']
-                experiments = parsed_config['testfixture']['experiments']
+                self._platform = parsed_config['test_collection']['platform']
+                iterations = parsed_config['test_collection']['iterations']
+                memory_type = parsed_config['test_collection']['memory_type']
+                memory_instance = parsed_config['test_collection']['memory_instance']
+                experiments = parsed_config['test_collection']['experiments']
 
                 for iteration in range(iterations):
                     for experiment in experiments:

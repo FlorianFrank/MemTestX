@@ -122,12 +122,44 @@ Further examples on how to define writeLatency or voltage variation tests are pr
 ## Setup
 
 Similar to the other components of this project, we provide scripts to set up the system and run the implementation.  
-To create a virtual Python environment, install all dependencies, and initialize the database — including storing all memory class and instance definitions found in the `config_files` directory — simply run the following commands:
+To create a virtual Python environment, install all dependencies, and initialize the database (including storing all memory class and instance definitions found in the `config_files` directory) simply run the following commands:
+
+> ️️ ⚠️ Make sure >= Python3.10 is installed on your system.
 
 ```bash
 cd scripts
 ./setup.sh
 ```
 
+## Execute the Program
 
+In order to start the scheduler run the following script:
 
+```bash
+cd scripts
+./run.sh <Experiment Script>
+```
+e.g. 
+
+```bash
+./run.sh samples/sample_experiment_write_latency_fram_lapis.yaml
+```
+
+You can also run the python application directly by calling
+
+```bash
+python3 main.sh -config_file=samples/sample_experiment_write_latency_fram_lapis.yaml
+```
+
+This script accepts the following command-line parameters:
+
+- **-config_file=<config_file.yaml>**  
+  Specifies the test configuration file to be used.
+
+- **-init_db_scheme**  
+  Creates a new database schema, parses all memory configurations found in the `config_files` folder, and inserts them into the database.  
+  > ⚠️ **Warning:** This option will drop (delete) the entire database before reinitialization.
+
+- **-refresh_memories**  
+  Adds new memory modules by parsing any files placed in the `config_files` folder.  
+  Only new modules and parameters not already present in the database will be added automatically.

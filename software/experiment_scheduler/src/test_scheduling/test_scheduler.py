@@ -159,7 +159,9 @@ class TestScheduler:
         logger.info(f'Send command {cmd}')
 
         self._test_range.lists[self._current_test_idx].state = TestState.WAITING_FOR_RESPONSE
-        self._test_range.lists[self._current_test_idx].measure_file.initialize()
+        if not self._test_range.lists[self._current_test_idx].measure_file.initialize():
+            logger.error("Abort Test")
+            return False
         self._test_range.lists[self._current_test_idx].measure_file.start_store_data_thread()
         self._db_handler.add_test_entry(self._test_range.lists[self._current_test_idx])
         time.sleep(0.1)

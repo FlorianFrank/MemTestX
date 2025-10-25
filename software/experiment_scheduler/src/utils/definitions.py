@@ -57,7 +57,7 @@ NETWORK_TIMEOUT_WRITE_FINISH = 10  # Timeout for write completion (in seconds)
 
 # Measurement File Parsing Configuration
 MEASURE_FILE_DELIMITER = ';'  # Delimiter used in measurement files
-MEASURE_FILE_QUOTE_CHAR = '\n'  # Quote character for measurement files
+MEASURE_FILE_QUOTE_CHAR = '"'  # Quote character for measurement files
 
 SCHEDULER_THREAD_TIMEOUT_IN_S = 10
 DEFAULT_PATH = 'output_results'

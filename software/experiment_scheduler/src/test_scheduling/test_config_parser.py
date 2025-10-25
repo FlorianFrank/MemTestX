@@ -98,3 +98,4 @@ class TestConfigParser:
 
         except Exception as err:
             logging.error(f"Could not parse config, returned with error {err}")
+            exit(1)

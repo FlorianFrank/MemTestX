@@ -531,7 +531,9 @@
       "GND": "GND",
       "Net-(IC1-VCCA)": "LVCMOS18",
       "Net-(IC1-VCCB_1)": "LVCMOS33",
-      "Net-(J11-Pin_3)": "GND"
+      "Net-(J11-Pin_3)": "GND",
+      "Net-(J11-Pin_5)": "GND",
+      "Net-(J11-Pin_7)": "GND"
     },
     "netclass_patterns": []
   },

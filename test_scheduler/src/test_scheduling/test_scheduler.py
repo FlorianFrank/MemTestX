@@ -131,7 +131,7 @@ class TestScheduler:
                 command_dict['tASReadAdjusted'] += value
             elif key == 'tAHRead':
                 command_dict['tAHReadAdjusted'] += value
-            elif key == 'tOED':
+            elif key == 'tOEDRead':
                 command_dict['tOEDAdjusted'] += value
             elif key == 'tPRC':
                 command_dict['tPRCAdjusted'] += value
@@ -143,7 +143,8 @@ class TestScheduler:
                 if key == 'tWaitBetweenHammering' or key == 'hammeringIterations' or key == 'hammeringDistance':
                     command_dict[key] = value
                 else:
-                    logger.error(f"Unknown PUF key parameter {key}")
+                    logger.error(f"Unknown PUF key parameter {key} -> Abort Experiment!")
+                    return False
 
         cmd = (json.dumps(command_dict).replace(', ', ",\n").
                replace('}', '\n}').

@@ -114,3 +114,6 @@ Next, the operation of the memory controller is demonstrated:
 Step (2) shows the initialization of the memory cells with `0x00` for the address range 0–9.  
 Afterward, row hammering is performed with a hammering width of three addresses and three iterations. This results in hammering addresses `[0–2]` three times, skipping `[3–5]`, and hammering `[6–9]` three times.  
 Finally, step (4) shows the readout of the affected cells in between.
+
+
+### 

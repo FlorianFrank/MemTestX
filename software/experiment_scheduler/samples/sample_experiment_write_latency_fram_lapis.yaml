@@ -1,0 +1,23 @@
+
+test_collection:
+    platform: "ZCU102"
+    memory_type: FRAM_Rohm_MR48V256C
+    memory_instance: FeLa2
+    iterations: 10
+
+    experiments:
+      - experiment:
+          type: reliable
+          parameters:
+            init_value: 0x55
+            puf_value: 0xAA
+
+      - experiment:
+          type: readLatency
+          parameters:
+            init_value: 0xAA
+            puf_value: 0x55
+            tOEDRead:
+              range_start: 75
+              range_end: 27.5
+              step_size: 2.5

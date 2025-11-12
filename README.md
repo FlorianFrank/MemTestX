@@ -35,7 +35,7 @@ The **software** folder contains:
   It also collects the resulting measurement data, stores it persistently, and keeps track of the experiments executed for each hardware instance.
 
 <center>
-<div style="text-align: center;"> <img src="doc/figures/experiment_scheduler.svg" style="width: 50%;" alt="FPGA Block Design"> </div>
+<img src="doc/figures/experiment_scheduler.svg" style="width: 50%;" alt="FPGA Block Design">
 </center>
 
 - **Microcontroller-Based Setup:**  

@@ -1,4 +1,4 @@
-# Memory PUF Evaluation Setup
+# Reconfigurable Hardware Platform for Characterizing Physical Unclonable Functions in Non-Volatile Memories
 
 This repository contains all components required for an extensive evaluation of memory-based PUFs, with a focus on emerging memory technologies such as FRAM, MRAM, and ReRAM. The setup is built around a Xilinx ZCU102 FPGA and is designed to interface with any memory device featuring an SRAM-compatible parallel interface.
 

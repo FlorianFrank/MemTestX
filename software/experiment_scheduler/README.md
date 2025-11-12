@@ -1,8 +1,11 @@
 # Experiment Scheduler
 
 Here you find a program capable of scheduling experiments either on the Xilinx ZCU102 or the STM32F429.  
-Furthermore, it allows the persistent storage of measurement data as CSV files and the storage of metadata in a 
-SQLite database.
+Furthermore, it allows the persistent storage of measurement data as CSV files and the storage of metadata in a SQLite database.
+
+<center>
+<img src="../../doc/figures/experiment_scheduler.svg" style="width: 100%;" alt="Experiment Scheduler">
+</center>
 
 Overall, this implementation provides the following functionality:
 

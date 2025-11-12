@@ -17,7 +17,7 @@ The **hardware** folder contains:
 
 <center>
 <p align="center" width="100%">
-<div style="text-align: center;"> <img src="doc/figures/pcb_adapter_board.png" style="width: 50%;" alt="FPGA Block Design"> </div>
+<img src="doc/figures/pcb_adapter_board.png" style="width: 50%;" alt="FPGA Block Design">
 </p>
 
 - **FPGA Design:**  

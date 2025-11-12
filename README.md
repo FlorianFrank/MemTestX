@@ -15,6 +15,9 @@ The **hardware** folder contains:
 - **FMC Adapter PCB Layout:**  
   A PCB adapter designed to interface various memory modules with the ZCU102 through its FMC connector. It supports memories with up to 24 address lines and 16 data lines and bridges the logic voltage level differences between the ZCU102 and the connected memory modules. Additionally, it provides options for connecting external power supplies and includes debugging interfaces. The design prioritizes signal integrity and minimizes glitches and noise.
 
+
+<div style="text-align: center;"> <img src="doc/figures/pcb_adapter_board.png" style="width: 100%;" alt="FPGA Block Design"> </div>
+
 - **FPGA Design:**  
   Contains the FPGA design implementing a custom SRAM memory controller with all timing parameters adjustable at runtime. It supports several types of experiments, including row hammering as well as read and write latency variations. Timing parameters can be tuned with a granularity of 2.5 nanoseconds. The design also includes an AXI interface for communication with the ZCU102’s processing system.
 

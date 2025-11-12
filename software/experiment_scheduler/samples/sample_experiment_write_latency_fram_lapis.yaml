@@ -1,0 +1,25 @@
+
+test_collection:
+    platform: "Ultrascale ZCU102"
+    memory_type: FRAM_Rohm_MR48V256C
+    memory_instance: FeLa2
+    iterations: 10
+
+    experiments:
+      - experiment:
+          type: reliable
+          parameters:
+            init_value: 0x55
+            puf_value: 0xAA
+          comment: "CE is aligned with WE at the first flank while CE has an offset of 8.8 ns at the second flank. STM32 was configured with PLL = 120 Hz."
+
+      - experiment:
+          type: readLatency
+          parameters:
+            init_value: 0xAA
+            puf_value: 0x55
+            tOEDRead:
+              range_start: 75
+              range_end: 27.5
+              step_size: 2.5
+          comment: "Configures with CE, OE and WE of equal length on a ZCU102 using level shifters Data lines are connected via J3 Pin. Using Ultrascale+ in steps of 2.5 ns"

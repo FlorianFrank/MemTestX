@@ -2,25 +2,25 @@
 
 >This board enables easy evaluation and interfacing of FRAM, MRAM, and ReRAM memory modules with the AMD ZCU102 FPGA via a standard FMC connector.
 
-This folder contains all the design and manufacturing files for a Printed Circuit Board (PCB) adapter that enables interfacing various FRAM, MRAM, and ReRAM memory modules with the [AMD Zynq UltraScale+™ MPSoC ZCU102 Evaluation Kit](https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-u1-zcu102-g.html). 
+This folder contains all the design and manufacturing files for a PCB adapter that enables interfacing various FRAM, MRAM, and ReRAM memory modules with the [AMD Zynq UltraScale+™ MPSoC ZCU102 Evaluation Kit](https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-u1-zcu102-g.html). 
 
 The board is designed to connect to the FPGA Mezzanine Card (FMC) J5 connector on the ZCU102. It acts as a level-shifting bridge, converting the board’s output power rails (1.2 V, 1.5 V, or 1.8 V) to a standard CMOS 3.3 V logic level.
 
 The PCB design is shown in the following figure:
 
 <div style="text-align: center;">
-  <img src="doc/figures/fmc_memory_adapter-brd.svg" style="width: 100%;" alt="FMC Memory Adapter Board">
+  <img src="doc/figures/fmc_memory_adapter.svg" style="width: 100%;" alt="FMC Memory Adapter Board">
 </div>
 
 The board uses an ANSI/VITA 57.1 compatible FMC adapter, shown at the bottom, and routes the logical signals, e.g., for the memory address bus, data bus, and control signals, to the two horizontal pin headers, which are compatible with the pinout of an STM32F429 (which served as the first evaluation platform).
 
 To support different voltage levels and enable testing with various voltages, level shifters are used. They convert the input reference voltage (e.g., 1.8 V) into the voltage levels required by the memory module (e.g., CMOS 3.3 V). In this way, the power supply of the memory module can be decoupled, allowing tests with different reference voltages using external power supplies.
 
-The board is constructed as a four-layer PCB, with the wires implementing logical levels primarily routed on the first two layers. These wires have equal line lengths to avoid potential glitches. The third layer is connected to ground, enhancing the board’s electromagnetic compatibility. On the backside, all ground connections and the power supply are routed using 0.8 mm traces.
+The board is constructed as a four-layer PCB, with the wires implementing high speed logical wires primarily routed on the first and third layer, and a ground plane in between. These wires have equal line lengths to avoid potential glitches. On the backside, all ground connections and the power supply are routed using 0.8 mm traces.
 
-The pin headers on the left side are used to connect different reference voltages and ground connections, as described later in the pinout description. The pin header in the middle is used for debugging purposes, allowing the output signals provided by the ZCU102 to be probed.
+The left-side pin headers connect different reference voltages. Central headers provide debug and ground connections, as described in the pinout section. 
 
-An additional connector is provided to supply a reference voltage to the FMC adapter’s VADJ_SENSE pin. This allows the VADJ_FMC power rail voltage to be selected using a resistor voltage divider.
+An additional PCIe ×1 interface is provided for debugging purposes. It also allows a future adapter card to implement the VADJ PMBus functionality or other extended features.
 
 ### Prerequesites
 
@@ -45,13 +45,12 @@ The design uses the components listed by their schematic symbols.
 | J7        | Pin Headers Power Supply     | Würth Elektronik  | 61300621121        | 2×3 straight pin headers, 2.54 mm pitch, to access the power supply connector | 0.32 €     | 1   | 0.32 €      | ✅       |
 | J11       | Pin Headers Ground Selectors | Würth Elektronik  | 61031421121        | 2×7 straight pin headers, 2.54 mm pitch, to access ground connections | 0.81 €     | 1   | 1.62 €      | ✅       |
 | J5   | Pin Headers External Ground | Amphenol Commercial Products | 61300411121 | 1×4 straight pin headers, 2.54 mm pitch, for external ground connectors | 0.15 €     | 1   | 0.15 €      | ✅       |
-| J1 - J4   | Pin Headers Ground Selectors | Amphenol Commercial Products | G800NA306018EU | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 €     | 4   | 0.36 €      | ✅       |
+| J1   | Pin Headers Ground Selectors | Amphenol Commercial Products | G800NA306018EU | 1×2 straight pin headers, 2.54 mm pitch, for single ground connectors | 0.09 €     | 1   | 0.09 €      | ✅       |
 | J9        | Debug Pin Header             | Würth Elektronik  | 61300311121        | 1×3 straight pin headers, 2.54 mm pitch, for debug pins | 0.10 €     | 1   | 0.10 €      | ✅       |
-| - | Voltage/Ground Selectors | MPE | 149-1-002-F0-XS | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 14 | 1.40 € | ✅ |
-| Ref. | Description              | Manufacturer | Part Number         | Details                                                    
+| - | Voltage/Ground Selectors | MPE | 149-1-002-F0-XS | 2.54 mm jumper used to disconnect or select ground and voltage lines | 0.10 € | 8 | 0.80 € | ✅ |                                               
 | J6   | Extension Board Socket   | Amphenol      | 10018783-10010TLF   | PCIe connector (36 positions, 1.00 mm pitch) for extension cards supporting board detection and voltage rail PMBus interface | €0.70       | 11   | €0.70 | ✅ |
-| Distance Spacers M3   | ECON         | D3X08I5MT      | M3 8 mm spacers to connect the mechanical support                 | 0.11 € | 2   | 0.22 €      |
-| Screws M3 Thread      | APM HEXSEAL  | RM3X8MM-2701   | M3 × 0.5 screws to secure the mechanical support                  | 0.45 € | 2   | 0.90 €      |
+| H1, H2 |Distance Spacers M3   | ECON         | D3X08I5MT      | M3 8 mm spacers to connect the mechanical support                 | 0.11 € | 2   | 0.22 €      | ✅ |
+| H1, H2 | Screws M3 Thread      | APM HEXSEAL  | RM3X8MM-2701   | M3 × 0.5 screws to secure the mechanical support                  | 0.45 € | 2   | 0.90 €      | ✅ |
 
 The board was manufactured as a four-layer PCB with a standard HASL finish (TG150), leaded configuration, 2 mm thickness, 4 mil/4 mil track spacing, and a minimum hole size of 0.2 mm. A batch of five pieces was priced at approximately 130 €, including shipping, from [PCBgogo](https://www.pcbgogo.com).
 
@@ -101,69 +100,71 @@ This section presents the different pinout descriptions based on the components 
 
 > ⚠️ Verify that the pinout matches the constraints defined in your FPGA hardware design constraints file.
 
-| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Verified |
-|------|-------------|-----------------|---------------|------------------|----------|
-| C10  | LVCMOS18    | IC1             | A1            |  Data Line D0    |    ✅    |
-| C11  | LVCMOS18    | IC1             | A2            |  Data Line D1    |    ✅    |
-| C14  | LVCMOS18    | IC1             | A3            |  Data Line D2    |    ✅    |
-| C15  | LVCMOS18    | IC1             | A4            |  Data Line D3    |    ✅    |
-| C18  | LVCMOS18    | IC1             | A5            |  Data Line D4    |    ✅    |
-| C19  | LVCMOS18    | IC1             | A6            |  Data Line D5    |    ✅    |
-| C22  | LVCMOS18    | IC1             | A7            |  Data Line D6    |    ✅    |
-| C23  | LVCMOS18    | IC1             | A8            |  Data Line D7    |    ✅    |
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Line Length | Vias | Verfied  |
+|------|-------------|-----------------|---------------|------------------|-------------|----------|------|
+| C10  | LVCMOS18    | IC1             | A1            |  Data Line D0    |  200mm  | 0        | ✅    |
+| C11  | LVCMOS18    | IC1             | A2            |  Data Line D1    |  200mm  | 0        | ✅    |
+| C14  | LVCMOS18    | IC1             | A3            |  Data Line D2    |  200mm  | 0        | ✅    |
+| C15  | LVCMOS18    | IC1             | A4            |  Data Line D3    |  200mm  | 0        | ✅    |
+| C18  | LVCMOS18    | IC1             | A5            |  Data Line D4    |  200mm  | 0        | ✅    |
+| C19  | LVCMOS18    | IC1             | A6            |  Data Line D5    |  200mm  | 0        | ✅    |
+| C22  | LVCMOS18    | IC1             | A7            |  Data Line D6    |  200mm  | 0        | ✅    |
+| C23  | LVCMOS18    | IC1             | A8            |  Data Line D7    |  200mm  | 0        | ✅    |
 
-| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Verfied  |
-|------|-------------|-----------------|---------------|------------------|----------|
-| C26  | LVCMOS18    | IC2             | A1            | Data Line D8     |    ✅    |
-| C27  | LVCMOS18    | IC2             | A2            | Data Line D9     |    ✅    |
-| D8   | LVCMOS18    | IC2             | A3            | Data Line D10    |    ✅    |
-| D9   | LVCMOS18    | IC2             | A4            | Data Line D11    |    ✅    |
-| D11  | LVCMOS18    | IC2             | A5            | Data Line D12    |    ✅    |
-| D12  | LVCMOS18    | IC2             | A6            | Data Line D13    |    ✅    |
-| D14  | LVCMOS18    | IC2             | A7            | Data Line D14    |    ✅    |
-| D15  | LVCMOS18    | IC2             | A8            | Data Line D15    |    ✅    |
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Line Length | Vias | Verfied  |
+|------|-------------|-----------------|---------------|------------------|-------------|----------|------|
+| C26  | LVCMOS18    | IC2             | A1            | Data Line D8     |  199.99 mm  | 0        | ✅    |
+| C27  | LVCMOS18    | IC2             | A2            | Data Line D9     |  200 mm     | 0        | ✅    |
+| D8   | LVCMOS18    | IC2             | A3            | Data Line D10    |  200 mm     | 0        | ✅    |
+| D9   | LVCMOS18    | IC2             | A4            | Data Line D11    |  200 mm     | 0        | ✅    |
+| D11  | LVCMOS18    | IC2             | A5            | Data Line D12    |  200 mm     | 0        | ✅    |
+| D12  | LVCMOS18    | IC2             | A6            | Data Line D13    |  200 mm     | 0        | ✅    |
+| D14  | LVCMOS18    | IC2             | A7            | Data Line D14    |  200 mm     | 1        | ✅    |
+| D15  | LVCMOS18    | IC2             | A8            | Data Line D15    |  200 mm     | 1        | ✅    |
 
-| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Verfied  |
-|------|-------------|-----------------|---------------|------------------|----------|
-| D17  | LVCMOS18    | IC4             | A1            | Address Line A0  |    ✅    |
-| D18  | LVCMOS18    | IC4             | A2            | Address Line A1  |    ✅    |
-| D20  | LVCMOS18    | IC4             | A3            | Address Line A2  |    ✅    |
-| D21  | LVCMOS18    | IC4             | A4            | Address Line A3  |    ✅    |
-| D23  | LVCMOS18    | IC4             | A5            | Address Line A4  |    ✅    |
-| D24  | LVCMOS18    | IC4             | A6            | Address Line A5  |    ✅    |
-| D26  | LVCMOS18    | IC4             | A7            | Address Line A6  |    ✅    |
-| D27  | LVCMOS18    | IC4             | A8            | Address Line A7  |    ✅    |
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Line Length | Vias | Verfied  |
+|------|-------------|-----------------|---------------|------------------|-------------|----------|------|
+| D17  | LVCMOS18    | IC4             | A1            | Address Line A0  |  199.97 mm  | 0        | ✅    |
+| D18  | LVCMOS18    | IC4             | A2            | Address Line A1  |  200 mm     | 0        | ✅    |
+| D20  | LVCMOS18    | IC4             | A3            | Address Line A2  |  200 mm     | 0        | ✅    |
+| D21  | LVCMOS18    | IC4             | A4            | Address Line A3  |  200 mm     | 0        | ✅    |
+| D23  | LVCMOS18    | IC4             | A5            | Address Line A4  |  200 mm     | 0        | ✅    |
+| D24  | LVCMOS18    | IC4             | A6            | Address Line A5  |  200 mm     | 0        | ✅    |
+| D26  | LVCMOS18    | IC4             | A7            | Address Line A6  |  200 mm     | 0        | ✅    |
+| D27  | LVCMOS18    | IC4             | A8            | Address Line A7  |  200 mm     | 0        | ✅    |
 
-| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Verified |
-|------|-------------|-----------------|---------------|------------------|----------|
-| G6   | LVCMOS18    | IC5             | A1            | Address Line A8  |    ✅    |
-| G7   | LVCMOS18    | IC5             | A2            | Address Line A9  |    ✅    |
-| G9   | LVCMOS18    | IC5             | A3            | Address Line A10 |    ✅    |
-| G10  | LVCMOS18    | IC5             | A4            | Address Line A11 |    ✅    |
-| G12  | LVCMOS18    | IC5             | A5            | Address Line A12 |    ✅    |
-| G13  | LVCMOS18    | IC5             | A6            | Address Line A13 |    ✅    |
-| G15  | LVCMOS18    | IC5             | A7            | Address Line A14 |    ✅    |
-| G16  | LVCMOS18    | IC5             | A8            | Address Line A15 |    ✅    |
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description   | Line Length | Vias | Verfied  |
+|------|-------------|-----------------|---------------|------------------|-------------|----------|------|
+| G6   | LVCMOS18    | IC5             | A1            | Address Line A8  |  200 mm     | 0        | ✅    |
+| G7   | LVCMOS18    | IC5             | A2            | Address Line A9  |  200 mm     | 0        | ✅    |
+| G9   | LVCMOS18    | IC5             | A3            | Address Line A10 |  200 mm     | 0        | ✅    |
+| G10  | LVCMOS18    | IC5             | A4            | Address Line A11 |  200 mm     | 0        | ✅    |
+| G12  | LVCMOS18    | IC5             | A5            | Address Line A12 |  200 mm     | 0        | ✅    |
+| G13  | LVCMOS18    | IC5             | A6            | Address Line A13 |  200 mm     | 0        | ✅    |
+| G15  | LVCMOS18    | IC5             | A7            | Address Line A14 |  200 mm     | 0        | ✅    |
+| G16  | LVCMOS18    | IC5             | A8            | Address Line A15 |  200 mm     | 0        | ✅    |
 
-| Pin  | I/O Standard | Mapping Component | Component Pin | Description      | Verified |
-|------|-------------|-----------------|---------------|---------------------|----------|
-| G18  | LVCMOS18    | IC6             | A1            | Address Line A16    |    ✅    |
-| G19  | LVCMOS18    | IC6             | A2            | Address Line A17    |    ✅    |
-| G21  | LVCMOS18    | IC6             | A3            | Address Line A18    |    ✅    |
-| G22  | LVCMOS18    | IC6             | A4            | Address Line A19    |    ✅    |
-| G24  | LVCMOS18    | IC6             | A5            | Address Line A20    |    ✅    |
-| G25  | LVCMOS18    | IC6             | A6            | General Purpose Pin |    ✅    |
-| G27  | LVCMOS18    | IC6             | A7            | General Purpose Pin |    ✅    |
-| G28  | LVCMOS18    | IC6             | A8            | General Purpose Pin |    ✅    |
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description      | Line Length | Vias | Verfied  |
+|------|-------------|-----------------|---------------|---------------------|-------------|----------|------|
+| G18  | LVCMOS18    | IC6             | A1            | Address Line A16    |  200 mm     | 0        | ✅    |
+| G19  | LVCMOS18    | IC6             | A2            | Address Line A17    |  200 mm     | 0        | ✅    |
+| G21  | LVCMOS18    | IC6             | A3            | Address Line A18    |  200 mm     | 0        | ✅    |
+| G22  | LVCMOS18    | IC6             | A4            | Address Line A19    |  199.99 mm  | 0        | ✅    |
+| G24  | LVCMOS18    | IC6             | A5            | Address Line A20    |  199.67 mm  | 0        | ✅    |
+| G25  | LVCMOS18    | IC6             | A6            | General Purpose Pin |  200 mm     | 0        | ✅    |
+| G27  | LVCMOS18    | IC6             | A7            | General Purpose Pin |  200 mm     | 0        | ✅    |
+| G28  | LVCMOS18    | IC6             | A8            | General Purpose Pin |  200 mm     | 0        | ✅    |
 
-| Pin  | I/O Standard | Mapping Component | Component Pin | Description         | Verified |
-|------|-------------|-----------------|---------------|------------------------|----------|
-| G30  | LVCMOS18    | IC3             | A1            | Output Enable !OE      |    ✅    |
-| G31  | LVCMOS18    | IC3             | A2            | Write Enable !WE       |    ✅    |
-| G33  | LVCMOS18    | IC3             | A3            | Chip Enable !CE        |    ✅    |
-| G34  | LVCMOS18    | IC3             | A4            | Lower Byte Select !LB  |    ✅    |
-| G36  | LVCMOS18    | IC3             | A5            | Upper Byte Select !UB  |    ✅    |
-| G37  | LVCMOS18    | IC3             | A6            | Sleep Pin !ZZ          |    ✅    |
+| Pin  | I/O Standard | Mapping Component | Component Pin | Description         | Line Length | Vias | Verfied  |
+|------|-------------|-----------------|---------------|------------------------|-------------|----------|------|
+| G30  | LVCMOS18    | IC3             | A1            | Output Enable !OE      |  200 mm     | 0        | ✅    |
+| G31  | LVCMOS18    | IC3             | A2            | Write Enable !WE       |  200 mm     | 0        | ✅    |
+| G33  | LVCMOS18    | IC3             | A3            | Chip Enable !CE        |  200 mm     | 0        | ✅    |
+| G34  | LVCMOS18    | IC3             | A4            | Lower Byte Select !LB  |  200 mm     | 0        | ✅    |
+| G36  | LVCMOS18    | IC3             | A5            | Upper Byte Select !UB  |  200 mm     | 0        | ✅    |
+| G37  | LVCMOS18    | IC3             | A6            | Sleep Pin !ZZ          |  200 mm     | 0        | ✅    |
+| x    |     x       | IC3             | A7            |         NC             |   x      | 0           | ✅    |
+| x    |     x       | IC3             | A8            |         NC             |   x      | 0           | ✅    |
 
 | Pin  | I/O Standard | Mapping Component | Component Pin | Description                               | Verified |
 |------|---------------|------------------|----------------|------------------------------------------|----------|
@@ -293,9 +294,6 @@ If you prefer to use an external power supply, remove the jumpers and connect th
 For debugging purposes, the ground connections are split across multiple pins, which can be configured in the same way as the power supply. The J1–J5 headers allow individual ground connections to be disconnected as needed.
 Placing jumpers on the Shared Ground pad enables multiple ground domains to be connected together, and also allows the Geographical Address (GA) pins to be tied to ground.
 An additional pin header is provided to connect external measurement equipment or power supplies to a common ground reference.
-
-<div style="text-align: center;"> <img src="doc/figures
-/gnd_connector.png" style="width: 60%;" alt="GND Connector"> </div>
 
 ##### PCI-E VADJ Extension Board connector
 

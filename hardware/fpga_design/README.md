@@ -50,7 +50,7 @@ However, compatibility with other Vivado versions can be achieved by modifying t
 To simplify project setup, we provide several scripts in the `scripts` folder.  
 To create the project, simply run `./create_project.sh`.  
 
-This script sources `create_project.tcl`, which generates a new project named `memory_evaluator` within the `fpga_implementation` directory. It automatically creates all necessary folders, adds all source files, builds the block design, and imports all required IP cores and constraints.
+This script sources `create_project.tcl`, which generates a new project named `memory_evaluator` within the `fpga_implementation` directory. It automatically creates all necessary folders, adds all source files, builds the block design, and imports all required IP cores and constraints. It generates the HDL wrapper and sets the top module. After the project has been created, vivado can be created directly from a dialog as shown below:
 
 ```bash
 ❯ ./create_project.sh
@@ -66,10 +66,9 @@ Start Creating Project ...
     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 
 source tcl/create_project.tcl
+...
+Open Project in Vivado GUI? [y/N]
 ```
-
-At the end of the script, you will be asked:  
-`Open Project in Vivado GUI? [y/N]` — selecting `y` will open the project directly in Vivado.
 
 > ⚠️ This script has been tested only on **Ubuntu 22.04** with **Vivado 2022.2**.  
 > To use a different Vivado version, either adjust the `VIVADO_PATH` variable in the script or run
@@ -78,27 +77,68 @@ At the end of the script, you will be asked:
 
 ### Generate the Bitstream
 
+
+There are two ways to generate the bitstream:
+
+1. **Using the Vivado GUI**  
+   Run the bitstream generation process directly within the Vivado graphical interface by following these steps: 
+
+   1. Generate the Block Design.  
+   2. Generate the Bitstream.  
+   3. Export the bitstream:  
+      - Go to **File → Export → Hardware**,  
+      - Select **Include Bitstream**, and  
+      - Choose a location to save the exported hardware.
+
+
+
+2. **Using the Command Line**  
+   Execute the provided script to generate the bitstream from the command line:
+
+    ```bash
+    ./generate_bitstream.sh
+    INFO: Open project: ../memory_evaluator/memory_evaluator.xpr
+
+    ****** Vivado v2022.1 (64-bit)
+      **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+      **** IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+        ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+    source tcl/generate_bitstream.tcl
+    # set build_dir "../memory_evaluator"
+    # set project_name "memory_evaluator"
+    # set block_design_name "main_block_design"
+    # file mkdir "$build_dir/export"
+    # file mkdir "$build_dir/checkpoints"
+    # puts "INFO: Open Project ${build_dir}/${project_name}.xpr"
+    INFO: Open Project ../memory_evaluator/memory_evaluator.xpr
+
+    INFO: Bitstream generated
+    INFO: [Common 17-206] Exiting Vivado at Mon Oct 20 13:04:24 2025...
+    ```
+
+    This script automates the complete hardware build process, including:
+
+    - **Synthesis**
+    - **Optimization**
+    - **Placement**
+    - **Routing**
+    - **Bitstream generation**
+
+    The resulting **bitstream** is stored in the `export/` folder within the `memory_evaluator` project.  
+    This directory also contains **timing** and **methodology reports**.
+
+    A dedicated `checkpoints/` folder stores design checkpoints for:
+    - Post-synthesis
+    - Post-placement
+
+
+
+#### Generate Bitstream within Vivado GUI
+
 You can generate the bitstream directly within Vivado by following these steps:
 
-1. Generate the Block Design.  
-2. Generate the Bitstream.  
-3. Export the bitstream:  
-   - Go to **File → Export → Hardware**,  
-   - Select **Include Bitstream**, and  
-   - Choose a location to save the exported hardware.
 
-Additionally, we also provide a `*.tcl`script in order to build the firmware from command line. 
-
-To do this just run 
-```bash
-❯ ./build_project.sh
-
-Start Building Project...
-
-... 
-
-Bitstream Generated -> export to exports folder.
-```
 
 ### Simulation
 

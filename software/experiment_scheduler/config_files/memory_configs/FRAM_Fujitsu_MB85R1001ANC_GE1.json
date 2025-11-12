@@ -1,0 +1,13 @@
+{
+  "name": "FRAM_Fujitsu_MB85R1001ANC_GE1",
+  "manufacturer": "Fujitsu",
+  "model": "FM22L16-55-TG",
+  "technology": "FRAM",
+  "interface_type": "parallel",
+  "address_width": 17,
+  "data_width": 8,
+  "min_addr": 0,
+  "voltage": 3,
+  "current": 0.2,
+  "max_addr": 131071
+}

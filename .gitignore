@@ -32,3 +32,5 @@ fp-info-cache
 .DS_Store
 *.jou
 *.vivado_pid*
+.ven
+*.db

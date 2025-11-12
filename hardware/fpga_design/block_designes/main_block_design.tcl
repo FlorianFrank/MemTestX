@@ -259,6 +259,11 @@ proc create_root_design { parentCell } {
  ] $axi_slave_interconnect
 
   # Create instance: clk_wizzard, and set properties
+  # CONFIG.MMCM_CLKFBOUT_MULT_F {16.000} \
+  # CONFIG.MMCM_CLKIN2_PERIOD {10.0} \
+  # CONFIG.MMCM_CLKOUT0_DIVIDE_F {4.000} \
+  # CONFIG.MMCM_CLKOUT1_DIVIDE {1} \
+
   set clk_wizzard [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wizzard ]
   set_property -dict [ list \
    CONFIG.CLKOUT1_DRIVES {Buffer} \
@@ -278,10 +283,6 @@ proc create_root_design { parentCell } {
    CONFIG.CLKOUT7_DRIVES {Buffer} \
    CONFIG.JITTER_SEL {Min_O_Jitter} \
    CONFIG.MMCM_BANDWIDTH {HIGH} \
-   CONFIG.MMCM_CLKFBOUT_MULT_F {16.000} \
-   CONFIG.MMCM_CLKIN2_PERIOD {10.0} \
-   CONFIG.MMCM_CLKOUT0_DIVIDE_F {4.000} \
-   CONFIG.MMCM_CLKOUT1_DIVIDE {1} \
    CONFIG.MMCM_DIVCLK_DIVIDE {1} \
    CONFIG.NUM_OUT_CLKS {2} \
    CONFIG.OPTIMIZE_CLOCKING_STRUCTURE_EN {true} \

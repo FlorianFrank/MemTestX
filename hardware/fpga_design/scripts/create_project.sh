@@ -28,7 +28,6 @@ echo "**************************************"
 echo "********** Memory Evaluator **********"
 echo "**************************************"
 echo ""
-echo "Start Creating Project ..."
 
 BUILD_DIR="../memory_evaluator"
 PROJECT_FILE="memory_evaluator.xpr"

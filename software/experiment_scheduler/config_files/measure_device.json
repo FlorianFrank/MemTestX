@@ -1,0 +1,7 @@
+{
+  "ip_addr_power_supply": "132.231.14.109",
+  "port_power_supply": 5025,
+  "timeout_power_supply": 5,
+  "max_deviation_volts": 0.01,
+  "max_deviation_current": 0.001
+}

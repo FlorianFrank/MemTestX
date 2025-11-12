@@ -1,0 +1,6 @@
+[submodule "software/MemScope"]
+	path = software/memory_evaluator_stm32f429
+	url = https://github.com/FlorianFrank/MemScope.git
+[submodule "software/experiment_scheduler/src/py_instrument_control_lib"]
+	path = software/experiment_scheduler/src/py_instrument_control_lib
+	url = https://github.com/AlexanderBraml/py_instrument_control_lib.git

@@ -1,0 +1,13 @@
+{
+  "name": "MRAM_Everspin_MR4A08BCMA35",
+  "manufacturer": "Everspin",
+  "model": "MR4A08BCMA35",
+  "technology": "MRAM",
+  "interface_type": "parallel",
+  "address_width": 21,
+  "data_width": 8,
+  "min_addr": 0,
+  "voltage": 3,
+  "current": 0.2,
+  "max_addr": 2097151
+}

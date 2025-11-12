@@ -134,8 +134,7 @@ If you encounter any issues or errors, please open an issue on this page or cont
 ## Release Notes
 ---
 
+See the [changelog](CHANGELOG.md) for changes between versions.
 
-<center>
 <img src="doc/figures/up_logo.png" style="width: 50%;" alt="Uni Passau Logo">
-</center>
 

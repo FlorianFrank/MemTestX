@@ -1,4 +1,10 @@
-# Reconfigurable Hardware Platform for Characterizing Physical Unclonable Functions in Non-Volatile Memories
+# Memory PUF Evaluation Setup
+This work is based on the publication *Reconfigurable Hardware Platform for Characterizing Physical Unclonable Functions in Non-Volatile Memories*, which is currently under review:
+
+> **Abstract:**  
+> Physical Unclonable Functions (PUFs) are widely recognized for deriving strong cryptographic keys from inherent manufacturing variations in hardware.  
+> A popular class of PUFs is extracted from memory modules already integrated into computing systems, offering a cost-efficient method for generating strong cryptographic keys. Various techniques exist for extracting PUF responses from such memory modules, including repeated row activation and exploitation of charge leakage effects (known as row hammering), variations in supply voltage, intentional violations of memory timing specifications, as well as the use of random startup values and data retention characteristics. To perform such experiments—especially on novel non-volatile memory modules—a dedicated measurement ecosystem is required, which is presented in this work. The proposed setup uses a custom PCB to connect different types of memories to reconfigurable hardware. An optimized hardware design was developed and deployed on the reconfigurable hardware, enabling the execution of PUF experiments on various memory modules. The system allows for dynamic adjustment of timing specifications and voltage levels, even during experiment execution. Finally, a program is provided that schedules the experiments, retrieves the results, and enables persistent storage and evaluation methods.
+
 
 This repository contains all components required for an extensive evaluation of memory-based PUFs, with a focus on emerging memory technologies such as FRAM, MRAM, and ReRAM. The setup is built around a Xilinx ZCU102 FPGA and is designed to interface with any memory device featuring an SRAM-compatible parallel interface.
 

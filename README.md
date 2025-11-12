@@ -130,3 +130,12 @@ More information about the test specification format can be found in the schedul
 ## Contact
 
 If you encounter any issues or errors, please open an issue on this page or contact me at:  **florian.frank(at)uni-passau.de**
+
+## Release Notes
+---
+
+
+<center>
+<img src="doc/figures/up_logo.png" style="width: 50%;" alt="Uni Passau Logo">
+</center>
+

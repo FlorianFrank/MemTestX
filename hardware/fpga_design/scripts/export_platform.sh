@@ -51,6 +51,7 @@ echo "INFO: Export platform: $BUILD_DIR/$PROJECT_FILE"
 read -p "Copy Platform to PS Software project? [y/N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-echo "cp -r ${PLATFORM_DIR} ${PS_SOFTWARE_DIR}"
+  mkdir -p ${PS_SOFTWARE_DIR}
+  echo "cp -r ${PLATFORM_DIR} ${PS_SOFTWARE_DIR}"
   cp -r ${PLATFORM_DIR} ${PS_SOFTWARE_DIR}
 fi

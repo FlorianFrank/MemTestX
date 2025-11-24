@@ -11,7 +11,10 @@ set project_name "memory_evaluator"
 set project_dir "../memory_evaluator"
 set part_name "xczu9eg-ffvb1156-2-e"
 set bd_name "main_block_design"
+set bd_verification_name "axi_verifier_full"
+set tb_top_file "tb_axi_full"
 set bd_file "../block_designes/${bd_name}.tcl"
+set bd_verification_file "../block_designes/${bd_verification_name}.tcl"
 set log_dir "../logs"
 
 
@@ -37,12 +40,10 @@ file mkdir $bd_file_dir
 file mkdir $log_dir
 file mkdir $constraints_file_dir
 
-# Copy all source, sim files  and block designes (TODO use files directly)
 file copy -force ../src $src_file_dir
 file copy -force ../sim $sim_file_dir
 file copy -force ../block_designes $bd_file_dir
 file copy -force ../constraints/constraints.xdc $constraints_file_dir/
-
 
 
 proc get_verilog_files {dir} {
@@ -63,8 +64,15 @@ proc get_verilog_files {dir} {
 set verilog_files [get_verilog_files $src_file_dir]
 foreach file $verilog_files {
     puts "INFO: Adding Verilog source: $file"
-    add_files -norecurse $file
+    add_files -fileset sources_1 -norecurse $file
 }
+
+set simulation_files [get_verilog_files $sim_file_dir]
+foreach file $simulation_files {
+    puts "INFO: Adding Verilog simulation files: $file"
+    add_files -fileset sim_1 -norecurse $file
+}
+
 
 update_compile_order -fileset sources_1
 
@@ -86,18 +94,35 @@ if {[file exists $constraints_file]} {
 
 if {[file exists $bd_file]} {
   source $bd_file
+}
 
-  # Create HDL wrapper
-  set bd_hdl_wrapper "${project_dir}/src/${bd_name}_wrapper.v"
-  if {![file exists $bd_hdl_wrapper]} {
-      puts "INFO: Creating HDL wrapper for block design: $bd_name"
-      make_wrapper -files [get_files ${project_dir}/${project_name}.srcs/sources_1/bd/${bd_name}/${bd_name}.bd] -top
-      add_files -norecurse ${project_dir}/${project_name}.gen/sources_1/bd/${bd_name}/hdl/${bd_name}_wrapper.v
-  } else {
-      puts "INFO: HDL wrapper already exists: $bd_hdl_wrapper"
-  }
+proc create_hdl_wrapper {block_design_name} {
+    global project_dir project_name
+
+    # Path where the wrapper should be copied
+    set bd_hdl_wrapper "${project_dir}/src/${block_design_name}_wrapper.v"
+
+    # Path where Vivado generates the wrapper
+    set gen_wrapper "${project_dir}/${project_name}.gen/sources_1/bd/${block_design_name}/hdl/${block_design_name}_wrapper.v"
+
+    if {![file exists $bd_hdl_wrapper]} {
+        puts "INFO: Creating HDL wrapper for block design: $block_design_name"
+        make_wrapper -files [get_files "${project_dir}/${project_name}.srcs/sources_1/bd/${block_design_name}/${block_design_name}.bd"] -top
+
+        # Copy wrapper to src folder
+        file copy -force $gen_wrapper $bd_hdl_wrapper
+    } else {
+        puts "INFO: HDL wrapper already exists: $bd_hdl_wrapper"
+    }
+
+    add_files -norecurse $bd_hdl_wrapper
+}
+
+create_hdl_wrapper $bd_name
+
 
   # Set top module of the project
+  if {[file exists $bd_file]} {
   set_property top ${bd_name}_wrapper [current_fileset]
   puts "INFO: Top module set to ${bd_name}_wrapper"
 } else {
@@ -108,3 +133,18 @@ puts "INFO: Enable constraints"
 set_property is_enabled true [get_files "${project_dir}/constraints/constraints.xdc"]
 set_property USED_IN_SYNTHESIS true [get_files "${project_dir}/constraints/constraints.xdc"]
 set_property USED_IN_IMPLEMENTATION true [get_files "${project_dir}/constraints/constraints.xdc"]
+
+
+
+puts "INFO: Setup Block Design for AXI Verification"
+
+
+if {[file exists $bd_verification_file]} {
+  source $bd_verification_file
+}
+
+create_hdl_wrapper $bd_verification_name
+
+set_property top ${tb_top_file} [get_filesets sim_1]
+set_property top_lib xil_defaultlib [get_filesets sim_1]
+update_compile_order -fileset sim_1

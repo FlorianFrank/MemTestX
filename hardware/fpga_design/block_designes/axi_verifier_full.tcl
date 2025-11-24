@@ -229,6 +229,8 @@ proc create_root_design { parentCell } {
   # Create interface ports
 
   # Create ports
+  set clkin [ create_bd_port -dir I -type clk -freq_hz 100000000 clkin ]
+
   set address_read [ create_bd_port -dir O -from 14 -to 0 address_read ]
   set address_write [ create_bd_port -dir O -from 14 -to 0 address_write ]
   set alines [ create_bd_port -dir O -from 14 -to 0 alines ]
@@ -362,7 +364,7 @@ proc create_root_design { parentCell } {
    CONFIG.OPTIMIZE_CLOCKING_STRUCTURE_EN {true} \
    CONFIG.PRIM_IN_FREQ {100} \
    CONFIG.PRIM_SOURCE {Single_ended_clock_capable_pin} \
-   CONFIG.RESET_BOARD_INTERFACE {reset} \
+   CONFIG.RESET_BOARD_INTERFACE {Custom} \
    CONFIG.SECONDARY_SOURCE {Single_ended_clock_capable_pin} \
    CONFIG.USE_BOARD_FLOW {true} \
    CONFIG.USE_INCLK_SWITCHOVER {false} \

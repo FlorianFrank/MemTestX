@@ -21,7 +21,6 @@ fp-info-cache
 
 *.cmp
 
-*.xml
 *.csv
 *.tsv
 

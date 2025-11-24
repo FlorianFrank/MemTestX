@@ -229,8 +229,6 @@ proc create_root_design { parentCell } {
   # Create interface ports
 
   # Create ports
-  set clkin [ create_bd_port -dir I -type clk -freq_hz 100000000 clkin ]
-
   set address_read [ create_bd_port -dir O -from 14 -to 0 address_read ]
   set address_write [ create_bd_port -dir O -from 14 -to 0 address_write ]
   set alines [ create_bd_port -dir O -from 14 -to 0 alines ]

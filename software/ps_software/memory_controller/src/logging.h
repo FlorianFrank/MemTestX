@@ -28,6 +28,6 @@ void deinitialize_logging();
 void log_message(log_lvl lvl, char* fileName, int lineNr, char *msg, ...);
 
 void ip_to_str(const ip_addr_t *ip, char* retStr);
-void ip_settings_to_str(network_config *config, char* retStr);
+void ip_settings_to_str(network_config *config, char* retStr, size_t retStrSize);
 
 #endif // _LOGGING_

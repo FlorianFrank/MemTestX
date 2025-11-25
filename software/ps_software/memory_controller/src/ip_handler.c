@@ -660,8 +660,8 @@ int startDHCPService(network_config *config) {
     config->netmask.addr = config->echo_netif->netmask.addr;
 
     char ipSettingsBuf[512];
-    ip_settings_to_str(config, ipSettingsBuf);
-    log_message(LOG_INFO, _FILE_NAME_, __LINE__, "Set IP settings %s ", ipSettingsBuf);
+    ip_settings_to_str(config, ipSettingsBuf, sizeof(ipSettingsBuf));
+    log_message(LOG_INFO, _FILE_NAME_, __LINE__, "Set IP settings \n%s", ipSettingsBuf);
     return 0;
 }
 

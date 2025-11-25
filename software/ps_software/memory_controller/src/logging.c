@@ -124,8 +124,8 @@ void ip_to_str(const ip_addr_t *ip, char* retStr) {
  * @param config Pointer to the network configuration structure.
  * @param retStr Buffer to store the resulting string.
  */
-void ip_settings_to_str(network_config *config, char* retStr) {
-    char tmpBuffIP[18]; // max length of an IPV4 address or mask e.g. 192.168.178.125
+void ip_settings_to_str(network_config *config, char* retStr, size_t retStrSize) {
+    char tmpBuffIP[18];       // max length for IPv4
     char tmpBuffNetMask[18];
     char tmpBuffGw[18];
 
@@ -133,5 +133,6 @@ void ip_settings_to_str(network_config *config, char* retStr) {
     ip_to_str(&config->netmask, tmpBuffNetMask);
     ip_to_str(&config->gw, tmpBuffGw);
 
-    sprintf(retStr, "\nIP: %s Netmask: %s Gateway: %s\n", tmpBuffIP, tmpBuffNetMask, tmpBuffGw);
+snprintf(retStr, retStrSize, "IP: %-15s Netmask: %-15s Gateway: %-15s",
+         tmpBuffIP, tmpBuffNetMask, tmpBuffGw);
 }

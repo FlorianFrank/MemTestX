@@ -4,9 +4,6 @@
  * @author Florian Frank
  * @affiliation University of Passau - Chair of Computer Engineering
  */
- 
-
-	
 
 
 #include "config/app_config.h"
@@ -39,6 +36,11 @@ void print(const char *msg) {
 int main() {
 
     struct udp_pcb *pcb = NULL;
+    
+    printf("\n\n*****************************************\n");
+    printf("* Starting Memory Evaluator PS Firmware *\n");
+    printf("*****************************************\n\n\n");
+
     if (initialize() != 0)
         return logAndExitProgram();
 

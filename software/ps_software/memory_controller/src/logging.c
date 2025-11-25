@@ -11,6 +11,8 @@
 #include "malloc.h"
 #include <xil_printf.h>
 #include "ip_handler.h"
+#include "xil_io.h"    // For Xil_In32 etc if needed
+
 
 #include <time.h>
 
@@ -27,17 +29,41 @@ int initialize_logging(log_lvl lvl) {
     global_log_lvl = lvl;
 
     log_buffer = malloc(LOG_BUFFER_LEN * LOG_BUFFER_LEN_ADD * sizeof(char));
-//    if (log_buffer == NULL) {
-  //      log_message(LOG_ERROR, __FILE__, __LINE__, "malloc returned NULL!");
-    //    return -1;
-//    }
-
     return 0;
 }
 
-char* getCurrentTimeStamp(){
-    // TODO
-    return "00:00:00";
+#define CNTFRQ 100000000 // Use a 100 MHz clk
+
+
+/**
+ * @brief Reads the system timer and returns elapsed time in seconds.
+ *
+ * This function reads the CNTVCT_EL0 register (64-bit counter) and converts
+ * ticks to seconds using the counter frequency CNTFRQ.
+ *
+ * @return Elapsed time in seconds since system reset.
+ */
+static inline double get_system_time_seconds() {
+    uint64_t cntpct;
+    asm volatile("mrs %0, cntpct_el0" : "=r"(cntpct));
+    return ((double)cntpct) / CNTFRQ;
+}
+
+/**
+ * @brief Returns the current timestamp as a string in hh:mm:ss format.
+ *
+ * @return Pointer to a static buffer containing the formatted timestamp.
+ */
+char* getCurrentTimeStamp() {
+    static char buffer[16];  // hh:mm:ss
+    double t = get_system_time_seconds();
+
+    uint32_t hours   = ((uint32_t)t / 3600) % 24;
+    uint32_t minutes = ((uint32_t)t / 60) % 60;
+    uint32_t seconds = ((uint32_t)t) % 60;
+
+    snprintf(buffer, sizeof(buffer), "%02u:%02u:%02u", hours, minutes, seconds);
+    return buffer;
 }
 
 /*
@@ -77,7 +103,7 @@ void log_message(log_lvl lvl, char* fileName, int lineNr, char *msg, ...) {
     vsprintf(tmp_buffer, msg, args);
     va_end(args);
 
-    xil_printf("%d [%s:%d] %s: %s \r\n", getCurrentTimeStamp(), fileName, lineNr, getLogStr(lvl), tmp_buffer);
+    xil_printf("%s [%s:%d] %s: %s\r\n", getCurrentTimeStamp(), fileName, lineNr, getLogStr(lvl), tmp_buffer);
 }
 
 /**

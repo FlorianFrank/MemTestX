@@ -61,7 +61,7 @@ uint32_t maxAddr = 0;
 int initializeIRQHandler(struct udp_pcb *pcb) {
     log_message(LOG_INFO, _FILE_NAME_, __LINE__, "Start initialize IRQ Handler");
     pcb_buf = udp_new();
-    // TODO free in the end
+
     intr_ctrl = malloc(sizeof(XScuGic));
 
     intr_cfg = XScuGic_LookupConfig(INTC_DEVICE_ID);
@@ -97,9 +97,26 @@ int initializeIRQHandler(struct udp_pcb *pcb) {
     return XST_SUCCESS;
 }
 
-
 void deInitializeIRQHandler() {
-    // TODO to be implemented
+    log_message(LOG_INFO, _FILE_NAME_, __LINE__, "Start deinitializing IRQ Handler");
+
+    if (intr_ctrl != NULL) {
+        XScuGic_Disable(intr_ctrl, INTC_INTERRUPT_ID);
+        XScuGic_Disconnect(intr_ctrl, INTC_INTERRUPT_ID);
+
+        free(intr_ctrl);
+        intr_ctrl = NULL;
+
+        log_message(LOG_INFO, _FILE_NAME_, __LINE__, "IRQ Handler deinitialized successfully");
+    } else {
+        log_message(LOG_WARNING, _FILE_NAME_, __LINE__, "intr_ctrl is NULL, nothing to deinitialize");
+    }
+
+    if (pcb_buf != NULL) {
+        udp_remove(pcb_buf);
+        pcb_buf = NULL;
+        log_message(LOG_INFO, _FILE_NAME_, __LINE__, "PCB buffer freed");
+    }
 }
 
 /**
@@ -116,7 +133,7 @@ void enableInterrupt() {
 }
 
 bool getDestinationIP(ip_addr_t *dest_ip) {
-    if (!ipaddr_aton("132.231.14.93", dest_ip)) { // TODO save IP from which request was received
+    if (!ipaddr_aton(SERVER_IP_ADDRESS, dest_ip)) { // TODO save IP from which request was received
         log_message(LOG_ERROR, _FILE_NAME_, __LINE__, "ERROR WHILE CALLING IPADDR_ATON");
         return false;
     }

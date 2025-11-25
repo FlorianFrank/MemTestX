@@ -154,7 +154,6 @@
 `endif        
 	);
 	
-	// TODO may be removed!
 	wire[1:0] master_state_machine;
 	wire axi_light_master_error;
     wire activate_axi_master;

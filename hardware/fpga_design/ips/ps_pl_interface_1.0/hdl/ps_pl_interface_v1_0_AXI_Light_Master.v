@@ -385,8 +385,8 @@
         localparam STATE_WRITE_CHECKSUM  = 2'h3;
         
         // Write data generation    
-        
-        // TODO noch anpassen!!                                  
+
+		// Handle commands        
         always @(posedge M_AXI_ACLK)                                  
         begin                                                     
             // Set initial value to zero during reset or pulse
@@ -413,17 +413,12 @@
                 end                                            
                 
                  if(cmd_handler_cmd == IDN) begin
-                    // Handle different stages of write transaction
                     case (write_index)
-                        // Data stage: Set axi_wdata to a specific value
+                        // Put magic numbers for identification
                         STATE_WRITE_DATA: axi_wdata <= 32'h55555555;
-                        // Address stage: Set axi_wdata to the input address
                         STATE_WRITE_ADDRESS: axi_wdata <= 32'haaaaaaaa;  
-                        // Value stage: Set axi_wdata with proper formatting for input data
-                        STATE_WRITE_VALUE: axi_wdata <= 32'hbbbbbbbb;  
-                        // Checksum stage: Set axi_wdata to a specific value for checksum calculation
+                        STATE_WRITE_VALUE: axi_wdata <= 32'hbbbbbbbb;                          
                         STATE_WRITE_CHECKSUM: axi_wdata <= 32'hcccccccc;
-                        // Handle default case by setting axi_wdata to all zeros
                         default: axi_wdata <= 32'hdddddddd;
                     endcase
                 end        
@@ -435,13 +430,9 @@
                         STATE_WRITE_DATA: begin 
                             axi_wdata <= 32'hffffffff;
                         end
-                        // Address stage: Set axi_wdata to the input address
                         STATE_WRITE_ADDRESS: axi_wdata <= input_address;  
-                        // Value stage: Set axi_wdata with proper formatting for input data
                         STATE_WRITE_VALUE: axi_wdata <= {16'b0, input_data};  
-                        // Checksum stage: Set axi_wdata to a specific value for checksum calculation
                         STATE_WRITE_CHECKSUM: axi_wdata <= input_data + input_address;
-                        // Handle default case by setting axi_wdata to all zeros
                         default: axi_wdata <= 32'h00000000;
                     endcase
                 end        
@@ -584,7 +575,6 @@
 	  end                                                                               
 	  
 	  
-	  // TODO REMOVE AFTERWARDS
 	  assign write_index_out = write_index;
 	  
 	endmodule

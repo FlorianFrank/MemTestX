@@ -319,7 +319,8 @@ reg reset_tmp = 0;
                 end
 
                 if(received_data[7:0] == STOP_MEASUREMENT) begin
-                    // TODO
+                    // Not fully tested
+                    cmd <= received_data[7:0];
                 end
                 
                 if(received_data[7:0] == IDN) begin

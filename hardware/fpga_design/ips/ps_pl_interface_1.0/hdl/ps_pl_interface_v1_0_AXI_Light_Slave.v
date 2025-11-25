@@ -362,8 +362,8 @@
                 // output the read dada 
                 if (slv_reg_rden)
                 begin
-                    // TODO
-                    //axi_rdata <= reg_data_out;     // register read data TODO
+                    // Just magic numbers for test purposes. 
+                    // Data is transmitted via the AXI Master interface!
                     axi_rdata <= 32'h55aa55aa;
                 end
             end

@@ -389,7 +389,6 @@ int startUDPServer(struct udp_pcb *pcb){
         return -1;
     }
 
-    // TODO directly call receive or send
     /* Set the receive-callback for this connection */
     log_message(LOG_DEBUG, _FILE_NAME_, __LINE__, "Wait for messages to receive");
     udp_recv(pcb, udp_client_recv, NULL);

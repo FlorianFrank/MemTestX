@@ -28,7 +28,7 @@ def query_database(db_path, query: str, params: tuple = ()) -> List:
             conn.close()
 
 
-def get_reliability_test_configs(database_path="memories.db", mem_name: str = 'all') -> List:
+def get_reliability_test_configs(database_path="../memories.db", mem_name: str = 'all') -> List:
     """
     Retrieves reliability test configurations from the specified SQLite database, with an optional filter on memory type name.
 
@@ -81,7 +81,7 @@ def get_all_instances_of_type(memory_identifier: str):
     """
 
     query_res = query_database(
-        'memories.db',  # Database name
+        DATABASE_PATH,
         'SELECT mi.id FROM memory_instances as mi, memories as m WHERE m.name=? and m.id = mi.memory_type_id',
         # SQL query
         params=tuple([memory_identifier])  # Parameters to be used in the query (memory identifier)

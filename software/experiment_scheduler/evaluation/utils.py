@@ -1,13 +1,11 @@
 import csv
 import logging
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
+from pathlib import Path
+import pickle
 
-
-# ─────────────────────────────────────────────────────────────
-# 1. Generic Utility Functions
-# ─────────────────────────────────────────────────────────────
 
 def read_csv(file_path: str, delimiter: str = ';', quote_char: str = '\n') -> List[List[int]]:
     """
@@ -29,7 +27,7 @@ def read_csv(file_path: str, delimiter: str = ';', quote_char: str = '\n') -> Li
 
 
 def get_timing_zcu102(timing_param: int) -> str:
-    """ Maps ZCU102 clock cycles to STM32 timing values (in ns). """
+    """ Maps ZCU102 clock cycles to STM32 timing values (in ns). Measured using an oscilloscope! """
     timing_map = {
         0: '7.57', 1: '9.00', 2: '10.49', 3: '13.00', 4: '15.04', 5: '16.31',
         6: '19.02', 7: '21.20', 8: '23.49', 9: '26.89', 10: '29.14', 11: '31.76',
@@ -173,3 +171,38 @@ def create_panda_table(table_data_dict):
     pd.set_option('display.max_columns', None)  # Display all columns
 
     return df_write_latency
+
+
+def pickle_results(data_to_pickle: List, file_name: str, path: str = '../export/pickle') -> None:
+    """
+    Serialize a list of data and save it as a pickle file.
+
+    Args:
+        data_to_pickle (List): The data to serialize.
+        file_name (str): The name of the pickle file (without extension).
+        path (str, optional): Directory where the pickle file will be saved. Defaults to 'export/pickle'.
+
+    Returns:
+        None
+    """
+    with open(f"{path}/{file_name}.pickle", 'wb') as file:
+        pickle.dump(data_to_pickle, file)
+
+
+def load_data_if_pickled(file_name: str, path: str = '../export/pickle') -> Optional[List]:
+    """
+    Load a list from a pickle file if it exists.
+
+    Args:
+        file_name (str): The name of the pickle file (without extension).
+        path (str, optional): Directory where the pickle file is located. Defaults to 'export/pickle'.
+
+    Returns:
+        Optional[List]: The deserialized list if the file exists, otherwise None.
+    """
+    full_path = f"{path}/{file_name}.pickle"
+    file_check = Path(full_path)
+    if file_check.exists():
+        with open(full_path, 'rb') as file:
+            return pickle.load(file)
+    return None

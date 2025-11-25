@@ -1,12 +1,5 @@
 import pandas as pd
-#import tikzplotlib
 from matplotlib import pyplot as plt
-from matplotlib.legend import Legend
-from matplotlib.lines import Line2D
-
-Line2D._us_dashSeq    = property(lambda self: self._dash_pattern[1])
-Line2D._us_dashOffset = property(lambda self: self._dash_pattern[0])
-Legend._ncol = property(lambda self: self._ncols)
 
 
 def plot_platform_timing(config_file: str, board_name: str, board_frequency: int):
@@ -38,7 +31,6 @@ def plot_platform_timing(config_file: str, board_name: str, board_frequency: int
     step_size_ns = (1 / board_frequency) * 1000  # Convert clock period to nanoseconds
     step_line = [x * step_size_ns for x in reversed(range(1, len(cycles) + 1))]
     ax.plot(cycles, step_line, linestyle='dashed', color='grey', label=f"Step Size @ {board_frequency} MHz")
-    print(ce_mean)
 
     ax.set_xlabel('Data Setup Time in Clock Cycles', fontsize=12)
     ax.set_ylabel('Timing [ns]', fontsize=12)
@@ -49,5 +41,3 @@ def plot_platform_timing(config_file: str, board_name: str, board_frequency: int
 
     ax.grid(True)
     ax.legend()
-
-    #tikzplotlib.save(f"export/tex/timing_{board_name}.tex")

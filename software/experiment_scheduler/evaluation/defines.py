@@ -1,1 +1,1 @@
-DATABASE_PATH = 'memories.db'
+DATABASE_PATH = '../memories.db'

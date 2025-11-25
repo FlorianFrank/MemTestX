@@ -149,6 +149,15 @@ Simulation files all start with `tb_<file_name>` and can be found under the simu
 </div>
 
 It includes a simulation of the AXI bus, allowing testing of the custom AXI module, data transmission, and parameter parsing.  
+
+You can simply run this simulation via 
+
+```bash
+cd scripts
+./run_simulation.sh
+```
+
+
 The AXI bus communication is shown in Figure 1) Following this, several configuration parameters—such as the PUF type, address space, and initialization data—can be observed.  
 Next, the operation of the memory controller is demonstrated:  
 Step (2) shows the initialization of the memory cells with `0x00` for the address range 0–9.  

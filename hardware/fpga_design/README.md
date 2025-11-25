@@ -166,13 +166,10 @@ Finally, step (4) shows the readout of the affected cells in between.
 
 #### Generation of Simulation Samples
 
-In order to generate simulation samples, the puf experiments can be defined within the experiment scheduler which schedules the experiments to the ZCU102 like shown in the figure below. You can schedule an experiment and will find the configuration parameters within the experiment scheduler and on the UART interface of the MPSoC. You can simply copy the configuration in the black box and replace the configuration within `tb_axi_full.v` in order to run the currently scheduled experiment as simulation.
+To generate simulation samples, the PUF experiments can be configured within the experiment scheduler, which assigns the experiments to the ZCU102, as shown in the figure below. Each scheduled experimentand corresponding configuration parameters are displayed in the experiment scheduler and via the MPSoC’s UART interface. The configuration shown in the black box can be copied and inserted into the corresponding section of `tb_axi_full.v` to reproduce the currently scheduled experiment in simulation.
 
 <div style="text-align: center;">
   <img src="doc/figures/simulation_generation.png" style="width: 100%;" alt="FPGA Block design">
 </div>
 
 
-To generate simulation samples, the PUF experiments can be configured within the experiment scheduler, which assigns the experiments to the ZCU102, as shown in the figure below. Each scheduled experimentand corresponding configuration parameters are displayed in the experiment scheduler and via the MPSoC’s UART interface. The configuration shown in the black box can be copied and inserted into the corresponding section of `tb_axi_full.v` to reproduce the currently scheduled experiment in simulation.
-
-![Simulation generation workflow](doc/figures/simulation_generation.png)

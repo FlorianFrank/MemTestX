@@ -81,7 +81,7 @@ def calculate_hamming_weights_row_hammering(test: test_defines.TestType, memory_
         for index in range(len(next(iter(grouped_entries.values())))):
             for param_value, entries in grouped_entries.items():
                 if len(entries) > index:
-                    csv_data = read_csv(f'output_results/{entries[index]["config_file"]}')
+                    csv_data = read_csv(f'../output_results/{entries[index]["config_file"]}')
 
                     config_map[param_value] = {
                         'data_width': entries[index]["data_width"],
@@ -125,7 +125,7 @@ def calculate_hamming_weights(test: test_defines.TestType, memory_id: int, targe
         for index in range(len(next(iter(grouped_entries.values())))):
             for param_value, entries in grouped_entries.items():
                 if len(entries) > index:
-                    csv_data = read_csv(f'output_results/{entries[index]["config_file"]}')
+                    csv_data = read_csv(f'../output_results/{entries[index]["config_file"]}')
 
                     config_map[round(float(param_value), 3)] = {
                         'data_width': entries[index]["data_width"],
@@ -168,7 +168,7 @@ def evaluate_intra_hamming_distance(test: test_defines.TestType, memory_id: int,
             if entry[selected_param] == timing_value:
                 bit_width = int(entry["data_width"])
                 max_addr = entry["max_addr"]
-                csv_data = read_csv(f'output_results/{entry["config_file"]}')
+                csv_data = read_csv(f'../output_results/{entry["config_file"]}')
                 csv_files.append([int(x[1]) for x in csv_data])
 
     bit_differences_list = []
@@ -200,8 +200,6 @@ def evaluate_inter_hamming_distance(test: test_defines.TestType, memory_id1: int
     Returns:
     - List[float]: The list of Hamming distances as percentages.
     """
-    print(memory_id1)
-    print(memory_id2)
 
     grouped_by_param1 = _query_and_sort_memory_test(test, memory_id1, puf_value, selected_param)
     grouped_by_param2 = _query_and_sort_memory_test(test, memory_id2, puf_value, selected_param)
@@ -228,8 +226,8 @@ def evaluate_inter_hamming_distance(test: test_defines.TestType, memory_id1: int
                     return None
                 max_addr = max_addr1
 
-                csv_data1 = read_csv(f'output_results/{entry1["config_file"]}')
-                csv_data2 = read_csv(f'output_results/{entry1["config_file"]}')
+                csv_data1 = read_csv(f'../output_results/{entry1["config_file"]}')
+                csv_data2 = read_csv(f'../output_results/{entry1["config_file"]}')
                 csv_files1.append([int(x[1]) for x in csv_data1])
                 csv_files2.append(([int(x[1]) for x in csv_data2]))
 
@@ -458,7 +456,7 @@ def calculate_memory_configs():
             logging.error(f"Error while parsing test parameters for test ID {test_id}: {e}")
             continue
         try:
-            csv_data = read_csv(f'output_results/{config_file}')
+            csv_data = read_csv(f'../output_results/{config_file}')
             correct_values, total_addr = check_reliability(csv_data, int(init_value), max_address + 1, memory_label,
                                                            config_file)
             reliable_table.append(
@@ -730,8 +728,110 @@ def evaluate_row_hammering_test(puf_value, metric):
     return evaluate_row_hammering_range(puf_value, metric)
 
 
-def evaluate_latency_test(test_type, reduction_param, puf_value, metric):
+def evaluate_latency_test(test_type, reduction_param, puf_value, metric, board):
     """
     Evaluate latency-related tests using STM32 timing parameters.
     """
     return evaluate_test_range(test_type, reduction_param, puf_value, get_zcu102_timing_param_map(), metric)
+
+def plot_timing_bit_flips(data_to_check, export_file_name, log=False, minimum=0, maximum=100):
+    # Filter relevant timing parameters
+    list_timing_params = []
+    for x in data_to_check.keys():
+        if 'median' in x:
+            if float(x.replace(' (median)', '')) < 100:
+                list_timing_params.append(x.replace(' (median)', ''))
+
+    # Prepare the bar data
+    bar_dict = {}
+    for mem_label in data_to_check['memoryLabels']:
+        bar_list = []
+        for param in list_timing_params:
+            val = data_to_check[f'{param} (median)'][data_to_check['memoryLabels'].index(mem_label)]
+            if val == -1:
+                #if val < 0.5: TODO ADD AGAIN
+                val = 0
+            bar_list.append(val)
+        bar_dict[mem_label] = bar_list
+
+    x = np.arange(len(list_timing_params))  # x positions
+    width = 0.04
+    spacing = 0.01
+
+    fig, ax = plt.subplots(layout='constrained', figsize=[15, 5])
+
+    # Device list with label, color, and optional legend name
+    device_groups = [
+        ('FeLa1', 'green', 'Rohm MR48V256C'),
+        ('FeLa2', 'green', None),
+        ('FeLa3', 'green', None),
+        ('FeLa4', 'green', None),
+        ('FeLa5', 'green', None),
+        ('FeLa6', 'green', None),
+        ('FeLa7', 'green', None),
+        ('FeLa8', 'green', None),
+        ('FeLa9', 'green', None),
+        ('FeLa10', 'green', None),
+        ('FRAM R5', 'green', None),
+        ('FeFJ1', 'blue', 'FRAM Fujitsu MB85R1001ANC'),
+        ('FeFJ3', 'blue', None),
+        ('FeFJ4', 'blue', None),
+        ('FeFJ2', 'blue', None),
+        ('FeFJ5', 'blue', None),
+        ('FeFJ6', 'blue', None),
+        ('Mem 1', 'red', 'Cypress FM22L16 55 TG'),
+        ('Mem 4', 'red', None),
+        ('Mem 1', 'yellow', 'Everspin MR4A08BCMA35'),
+        ('MrE35.1', 'yellow', None),
+        ('MrE35.1', 'yellow', None),
+        ('MrE35.2', 'yellow', None),
+        ('MrE35.3', 'yellow', None),
+        ('MrE45.R2', 'pink', 'Everspin MR4A08BUYS45'),
+        ('MrE45.1', 'pink', None),
+    ]
+
+    # Calculate total non-zero bars per timing_param to compute centering
+    non_zero_bars_per_param = [0] * len(list_timing_params)
+    for _, _, _ in device_groups:
+        for i, val in enumerate(bar_dict.get(_, [0] * len(list_timing_params))):
+            if val > 0:
+                non_zero_bars_per_param[i] += 1
+
+    # Plot dynamically, centered per label
+    offsets_per_param = [[] for _ in range(len(list_timing_params))]
+    bar_positions = [0] * len(list_timing_params)  # track used width per x label
+
+    for device, color, label in device_groups:
+        values = bar_dict.get(device, [])
+        if sum(values) == 0:
+            continue  # skip plotting if all bars are zero
+
+        for i, val in enumerate(values):
+            if val > 0:
+                # Compute offset centered around the timing_param index
+                total_width = non_zero_bars_per_param[i] * (width + spacing)
+                start = -total_width / 2 + bar_positions[i] * (width + spacing)
+                pos = x[i] + start
+                ax.bar(pos, val, width, color=color, label=label if label else None)
+                bar_positions[i] += 1
+
+    # Label formatting
+    ax.set_ylabel('Number of bit-flips')
+    ax.set_xlabel('Timing value [ns]')
+    ax.set_xticks(x)
+    ax.set_xticklabels(list_timing_params)
+    if maximum == -1:
+        ax.set_ylim(0, 110)
+    if log:
+        ax.set_yscale('symlog')
+
+    # Deduplicate legend
+    handles, labels = ax.get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    ax.legend(by_label.values(), by_label.keys(), loc='upper left', ncol=1)
+    ax.grid(True)
+    # plt.show()
+    fig.savefig(f"../export/pdf/{export_file_name}.pdf")
+
+    #tikzplotlib.save(f"export/tex/{export_file_name}.tikz")
+

@@ -165,3 +165,10 @@ This script accepts the following command-line parameters:
 - **-refresh_memories**  
   Adds new memory modules by parsing any files placed in the `config_files` folder.  
   Only new modules and parameters not already present in the database will be added automatically.
+
+## Evaluation 
+
+All evaluation functions and files can be found in the evaluation folder. 
+This directory also includes a Jupyter notebook that demonstrates how to evaluate 
+measurement data collected by the scheduler.
+> All descriptions can be found directly within the notebook.

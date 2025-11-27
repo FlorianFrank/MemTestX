@@ -1,9 +1,9 @@
 # MemTestX - Memory PUF Evaluation Setup
-This work is based on the publication *Reconfigurable Hardware Platform for Characterizing Physical Unclonable Functions in Non-Volatile Memories*, which is currently under review:
-
 
 <div style="text-align: center;"> <img src="doc/figures/memtestx_logo.png" style="width: 100%;" alt="FPGA Block Design"> </div>
 
+
+This work is based on the publication *Reconfigurable Hardware Platform for Characterizing Physical Unclonable Functions in Non-Volatile Memories*, which is currently under review:
 
 > **Abstract:**  
 > Physical Unclonable Functions (PUFs) are widely recognized for deriving strong cryptographic keys from inherent manufacturing variations in hardware.  

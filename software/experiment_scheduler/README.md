@@ -172,3 +172,22 @@ All evaluation functions and files can be found in the evaluation folder.
 This directory also includes a Jupyter notebook that demonstrates how to evaluate 
 measurement data collected by the scheduler.
 > All descriptions can be found directly within the notebook.
+
+
+## Tools 
+
+Additional tools are available in the `tools` folder.
+Currently, this includes a **database merger tool,** which 
+allows you to run multiple instances of the scheduler, 
+each operating on a separate database. This tool can then 
+merge the individual databases into a single combined dataset 
+for analysis.
+
+To run the tool, use the following command:
+
+```bash 
+python3 db_merger.py db1.db db2.db output.db
+```
+
+This command merges the entries from `db1.db` and `db2.db` and 
+creates a new merged database named `output.db`.

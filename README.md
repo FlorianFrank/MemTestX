@@ -1,6 +1,4 @@
-# MemTestX - Memory PUF Evaluation Setup
-
-<div style="text-align: center;"> <img src="doc/figures/memtestx_logo.png" style="width: 100%;" alt="FPGA Block Design"> </div>
+<div style="text-align: center;"> <img src="doc/figures/memtestx_logo.svg" style="width: 100%;" alt="FPGA Block Design"> </div>
 
 
 This work is based on the publication *Reconfigurable Hardware Platform for Characterizing Physical Unclonable Functions in Non-Volatile Memories*, which is currently under review:

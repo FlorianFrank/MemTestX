@@ -1,7 +1,8 @@
 <div style="text-align: center;"> <img src="doc/figures/memtestx_logo.svg" style="width: 100%;" alt="FPGA Block Design"> </div>
 
+</br>
 
-This work is based on the publication *Reconfigurable Hardware Platform for Characterizing Physical Unclonable Functions in Non-Volatile Memories*, which is currently under review:
+This work is based on the publication **Reconfigurable Hardware Platform for Characterizing Physical Unclonable Functions in Non-Volatile Memories**, which is currently under review:
 
 > **Abstract:**  
 > Physical Unclonable Functions (PUFs) are widely recognized for deriving strong cryptographic keys from inherent manufacturing variations in hardware.  
@@ -23,7 +24,6 @@ The **hardware** folder contains:
 - **FMC Adapter PCB Layout:**  
   A PCB adapter designed to interface various memory modules with the ZCU102 through its FMC connector. It supports memories with up to 24 address lines and 16 data lines and bridges the logic voltage level differences between the ZCU102 and the connected memory modules. Additionally, it provides options for connecting external power supplies and includes debugging interfaces. The design prioritizes signal integrity and minimizes glitches and noise.
 
-<center>
 <p align="center" width="100%">
 <img src="doc/figures/pcb_adapter_board.png" style="width: 80%;" alt="FPGA Block Design">
 </p>
@@ -57,7 +57,7 @@ The following provides the basic information to setup the memory evaluator.
 ### Prerequisites
 
 To build the PCB, **KiCad version 6** is required.  
-To build the FPGA design and PS firmware, **Xilinx Vivado 2022.2** with **Vitis** must be installed.  
+To build the FPGA design and PS firmware, **Xilinx Vivado 2022.2** with **Vitis** must be installed as well as a **CMake** build system.
 Note that generating the bitstream for the **ZCU102** requires the **Vivado ML Enterprise Edition**.  
 
 The scheduler requires at least **Python 3.10**.  
@@ -111,7 +111,7 @@ Then, compile the firmware by executing:
 
 This command will start the Docker container, compile the firmware, and copy the resulting `MemoryController.elf` into the `software/memory_evaluator_stm32f429/bin` folder.
 
-To flash the device, OpenOCD integrated within the CLion IDE was used. For more details, refer to the [`README.md`](/software/memory_evaluator_stm32f429/README.md) file.
+To flash the device, OpenOCD integrated within the CLion IDE was used. For more details, refer to the [`README.md`](/software/memory_evaluator_stm32f429/README.md) file found within the respective folder.
 
 
 ### Run the scheduler
@@ -131,8 +131,15 @@ cd software/experiment_scheduler/scripts
 ./run.sh <test_specification>.yaml
 ```
 
-More information about the test specification format can be found in the scheduler’s README file.
+More information about the test specification format can be found in the scheduler’s [`README.md`](/software/experiment_scheduler/README.md) file.
 
+## Planned Improvements
+
+Currently the test scheduler is going to be integrate into our **Experiment Execution Hub**, which provides a management platform for various experiments. It allows graphical definition of experiments, scheduling them, and offers a web interface to evaluate PUF implementations among memory-based PUFs.
+
+[Experiment Execution Hub](https://florianfrank.github.io/experiment_execution_hub/)
+
+> Note: The scheduler can currently only be executed as a command-line tool.
 
 ## Contact
 

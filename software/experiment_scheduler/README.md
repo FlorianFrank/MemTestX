@@ -1,6 +1,6 @@
 # Experiment Scheduler
 
-Here you find a program capable of scheduling experiments either on the Xilinx ZCU102 or the STM32F429.  
+In this folder you will find a program capable of scheduling experiments either on the Xilinx ZCU102 or the STM32F429.  
 Furthermore, it allows the persistent storage of measurement data as CSV files and the storage of metadata in a SQLite database.
 
 <center>
@@ -11,8 +11,8 @@ Overall, this implementation provides the following functionality:
 
 - Definition of experiments in a YAML-based format with different parameters and parameter ranges.  
 - Persistent storage and management of different types of memories and their parameters, which can be imported from JSON files.  
-  Storage of different test instances and keeping track of the number of experiments.  
-- Scheduling of experiments either to a Xilinx ZCU102 using an Ethernet interface or to an STM32F429 using UART.  
+- Storage of different test instances and keeping track of the number of experiments.  
+- Scheduling of experiments either to an AMD ZCU102 using an Ethernet interface or to an STM32F429 using UART.  
 - Persistent storage of measurement data in CSV files, with their metadata stored in a database.  
 - Interconnection to measurement devices using our self-implemented instrument control library, specifically the connection 
   with an SPD1305X power supply in order to perform voltage variation tests.
@@ -40,7 +40,7 @@ In the `config_files` directory, the configuration of the memory models under te
 }
 ```
 
-The timing parameters can be find in a dedicated folder `test_config`, for exxample:
+The timing parameters can be found in a dedicated folder `test_config`. An example of such as file is listed below:
 
 ```json
 {
@@ -80,7 +80,7 @@ Additional configuration files in this folder define the IP settings for the eva
 ### Test Specification
 
 Additional YAML files are provided in the `samples` folder, specifying sets of experiments to be executed on specific memory instances.  
-A custom format is implemented to allow you to define your own tests, as shown in the following snippet:
+A custom format is implemented to allow you to define your own tests, as shown in the following code example:
 
 ```yaml
 
@@ -115,7 +115,7 @@ This example defines a test configuration for a memory type named **FRAM Rohm MR
 In the **experiments** section, individual experiments can be defined in sequential order.  
 In this example, the first experiment performs a reliable read and write operation on the memory, using an initial value of `0x55` and a PUF value of `0xAA`.  
 Afterward, a `readLatencyTest` is executed, where all timing parameters remain unchanged except for `tOERead`.  
-Here, explicit timing values or a range can be specified. In this case, dedicated experiments are generated for each timing value between **75 ns and 27.5 ns**, in **2.5 ns steps** — resulting in **19 individual experiments** executed sequentially.  
+Here, explicit timing values or a range can be specified. In this case, dedicated experiments are generated for each timing value between **75 ns and 27.5 ns**, in **2.5 ns steps**, resulting in **19 individual experiments** executed sequentially.  
 
 Thus, ten iterations of the reliability test and the nineteen read latency tests lead to a total of **200 individual experiments** automatically scheduled and performed.  
 All parameters not explicitly specified in the configuration use their **default values**.
@@ -131,7 +131,7 @@ To create a virtual Python environment, install all dependencies, and initialize
 ./setup_db.sh
 ```
 
-> ️ ⚠️ Calling this script will remove your sqlite database. Do not call this script again after initialization.
+> ️ ⚠️ Calling this script will delete the content of your sqlite database. Do not call this script again after initialization or backup your database first.
 
 
 ## Execute the Program

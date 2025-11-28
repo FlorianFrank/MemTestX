@@ -4,7 +4,7 @@ This folder contains all software components required to execute the memory eval
 
 ### PS Software
 
-The firmware runs on the ZCU102’s Cortex-A53 processor. It provides an interface to receive commands via Ethernet from the test scheduler and is capable of parsing the incoming data. On the other side, it manages the interaction with the software running on the Programmable Logic (PL). The firmware transmits the Ethernet-received commands to the PL, monitors execution through the AXI interface, and collects the resulting measurement data, which it then forwards back to the scheduler via Ethernet.
+The firmware runs on the ZCU102’s Cortex-A53 processor. It provides an interface to receive commands via Ethernet from the test scheduler and is capable of parsing the incoming data. On the other hand, it manages the interaction with the software running on the Programmable Logic (PL). The firmware transmits the Ethernet-received commands to the PL, monitors execution through the AXI interface, and collects the resulting measurement data, which it then forwards back to the scheduler via Ethernet.
 
 ### Experiment Scheduler
 

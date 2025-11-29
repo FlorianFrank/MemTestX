@@ -141,37 +141,49 @@ axi_verifier_full_axi_vip_1_0_slv_mem_t slv_agent;
 
 
 initial begin    
-    data = 32'h0;
-    addr = 32'h0;
     master_agent = new("master vip agent", UUT.axi_verifier_full_i.axi_vip_0.inst.IF);
-    slv_agent = new("master vip agent", UUT.axi_verifier_full_i.axi_vip_1.inst.IF);
-    slv_agent.set_verbosity(400);
 
-    slv_agent.start_slave();
     master_agent.start_master();
-    
 
     wait (aresetn == 1'b1);
     #10
     addr = 32'h0;
   data = 32'h55_55_55_55;
 
-// AXI interface definition. See readme md or ps_pl interface documentation for more information
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h0, 0, 32'h0A_FF_00_01, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h4, 0, 32'h03_03_E8_00, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h8, 0, 32'h00_01_F4_00, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'hc, 0, 32'h00_00_00_00, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h10, 0, 32'h0A_00_08_00, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h14, 0, 32'h55_00_00_00, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h18, 0, 32'h00_AA_AA_55, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h1c, 0, 32'hFF_00_00_00, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h20, 0, 32'hFF_00_00_7F, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h24, 0, 32'h00_09_00_0A, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h28, 0, 32'h00_1E_00_08, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h2c, 0, 32'h00_00_00_1F, resp);
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h30, 0, 32'h00_00_00_00, resp);
-#12000
 
+// Further details on this definition can be found in the ps/pl parser
+master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h0, 0, 32'h12_FF_03_01, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h4, 0, 32'h03_00_02_00, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h8, 0, 32'h05_00_04_00, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'hc, 0, 32'h07_00_06_00, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h10, 0, 32'h09_00_08_00, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h14, 0, 32'h55_00_0A_00, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h18, 0, 32'h00_AA_AA_55, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h1c, 0, 32'h09_00_00_00, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h20, 0, 32'hFF_00_00_00, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h24, 0, 32'h00_09_00_0A, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h28, 0, 32'h00_07_00_08, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h2c, 0, 32'h00_05_00_06, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h30, 0, 32'h00_00_00_04, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h34, 0, 32'h00_02_00_03, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h38, 0, 32'h00_00_00_09, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h3c, 0, 32'h00_00_00_01, resp);
+ master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h40, 0, 32'h00_00_00_00, resp);
+  
+  
+#4000
+master_agent.AXI4LITE_WRITE_BURST(base_addr + addr, 0, 32'h00_22_03_01, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'h4, 0, 32'h01_22_33_44, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'h8, 0, 32'h55_66_77_88, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd12, 0, 32'h99_aa_bb_cc, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd16, 0, 32'hdd_ee_ff_00, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd20, 0, 32'h11_22_33_44, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd24, 0, 32'h55_66_77_88, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd28, 0, 32'h99_aa_bb_cc, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd32, 0, 32'hdd_ee_ff_00, resp);
+  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd36, 0, 32'h11_22_33_44, resp);
+
+#2000
 $finish;
 end
 

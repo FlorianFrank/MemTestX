@@ -69,19 +69,16 @@ module multiplexer#(
 );
 
     reg ub_lb_indicator = 1'h0; 
-    reg[DLINES_SIZE-1:0] dlines_out_reg;
 
 
     always @(posedge clk or posedge set_back) begin
         if (set_back) begin 
             ub_lb_indicator <= 1'b0;
-            dlines_out_reg <= {DLINES_SIZE{1'b0}};
         end else if (start_write || start_read) begin 
             ub_lb_indicator <= 1'h1;
         end else begin
             // Set input data when reading is enabled 
             if (!rw_select_in)
-                dlines_out_reg <= dlines_in;
             if (read_done || write_done) begin 
                 ub_lb_indicator <= 1'h0;
             end else begin 
@@ -107,7 +104,7 @@ module multiplexer#(
 
 
     // Handle the bidirectional data port correctly by assigning dlines based on the current read/write mode.
-    assign dlines = (!rw_select_in) ? dlines_out_reg : {DLINES_SIZE{1'hz}};
+    assign dlines = (!rw_select_in) ? dlines_in : {DLINES_SIZE{1'hz}};
     assign dlines_out = (rw_select_in) ? dlines : {DLINES_SIZE{1'h1}};
     
     // Set these pins to default values

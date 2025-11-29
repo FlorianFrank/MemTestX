@@ -207,7 +207,7 @@ module puf_execution_controller#(
         rw_select <= 1'b0;
         start_read <= 1'b0;
         start_write <= 1'b0;
-        value_write <= {AXI_OUTPUT_DATA_SIZE/8{8'h55}};
+        value_write <= {MEMORY_MODULE_DATA_SIZE/8{8'h55}};
         address_read <= {MEMORY_MODULE_ADDRESS_SIZE{1'h0}};
         
         write_continuously <= 1'h1;
@@ -244,7 +244,7 @@ module puf_execution_controller#(
         
         rw_select <= 0;
         write_continuously <= 1'b1;
-        value_write <= init_value[7:0];
+        value_write <= init_value[MEMORY_MODULE_DATA_SIZE:0];
         if(write_active) begin
             start_write <= 0;
             state <= WAIT_WRITE_FINISH;
@@ -278,7 +278,7 @@ module puf_execution_controller#(
             timing_ctr <= 0;
             rw_select <= 0;
             write_continuously <= 1'b1;
-            value_write <= test_value[7:0];
+            value_write <= test_value[MEMORY_MODULE_DATA_SIZE:0];
             if(write_active) begin
                 start_write <= 0;
                 test_done <= 1'h1;
@@ -307,7 +307,7 @@ task startRowHammering;
                 // Reset timing counter and configure for writing
                 rw_select <= 1'b0; // Set read/write selection to write mode
                 write_continuously <= 1'b1;
-                value_write <= test_value[7:0];
+                value_write <= test_value[MEMORY_MODULE_DATA_SIZE:0];
 
                 // Handle write operation based on active write state
                 if (write_active) begin
@@ -353,7 +353,7 @@ task startRowHammering;
                 end                
                 rw_select <= 1'b0; // Set read/write selection to write mode
                 write_continuously <= 1'b1;
-                value_write <= test_value[7:0];
+                value_write <= test_value[MEMORY_MODULE_DATA_SIZE:0];
 
                 // Handle write operation based on active write state
                 if (write_active) begin
@@ -434,6 +434,7 @@ endtask
     begin
             start_read <= 0;
         if (read_done) begin
+        // Currently only supporting 8 bit
             output_data_tmp[7:0] <= data_in;
             output_data_tmp[15:8] <= 8'h0;
             state <= TRANSMIT_TO_PS;

@@ -51,7 +51,6 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
    create_project project_1 myproj -part xczu9eg-ffvb1156-2-e
-   set_property BOARD_PART xilinx.com:zcu102:part0:3.4 [current_project]
 }
 
 
@@ -229,10 +228,10 @@ proc create_root_design { parentCell } {
   # Create interface ports
 
   # Create ports
-  set address_read [ create_bd_port -dir O -from 14 -to 0 address_read ]
-  set address_write [ create_bd_port -dir O -from 14 -to 0 address_write ]
-  set alines [ create_bd_port -dir O -from 14 -to 0 alines ]
-  set alines_write [ create_bd_port -dir O -from 14 -to 0 alines_write ]
+  set address_read [ create_bd_port -dir O -from 23 -to 0 address_read ]
+  set address_write [ create_bd_port -dir O -from 23 -to 0 address_write ]
+  set alines [ create_bd_port -dir O -from 23 -to 0 alines ]
+  set alines_write [ create_bd_port -dir O -from 23 -to 0 alines_write ]
   set aresetn [ create_bd_port -dir I -type rst aresetn ]
   set_property -dict [ list \
    CONFIG.POLARITY {ACTIVE_LOW} \
@@ -248,16 +247,23 @@ proc create_root_design { parentCell } {
  ] $clk
   set cmd [ create_bd_port -dir O -from 7 -to 0 cmd ]
   set cmd_ready [ create_bd_port -dir O cmd_ready ]
+  set dir_const [ create_bd_port -dir O dir_const ]
+  set dir_var [ create_bd_port -dir O dir_var ]
   set disable_axi_switch [ create_bd_port -dir I disable_axi_switch ]
-  set dlines [ create_bd_port -dir IO -from 7 -to 0 dlines ]
+  set dlines [ create_bd_port -dir IO -from 15 -to 0 dlines ]
+  set en_const [ create_bd_port -dir O en_const ]
+  set en_var [ create_bd_port -dir O en_var ]
   set full_frame [ create_bd_port -dir O -from 639 -to 0 full_frame ]
   set hammeringDistance [ create_bd_port -dir O -from 15 -to 0 hammeringDistance ]
   set hammeringIterations [ create_bd_port -dir O -from 15 -to 0 hammeringIterations ]
   set init_value [ create_bd_port -dir O -from 15 -to 0 init_value ]
+  set lb [ create_bd_port -dir O lb ]
   set locked [ create_bd_port -dir O locked ]
   set oe [ create_bd_port -dir O oe ]
   set outer_state [ create_bd_port -dir O -from 3 -to 0 outer_state ]
   set puf_type [ create_bd_port -dir O -from 7 -to 0 puf_type ]
+  set ref_vcc [ create_bd_port -dir O ref_vcc ]
+  set ref_vcc2 [ create_bd_port -dir O ref_vcc2 ]
   set reset [ create_bd_port -dir I -type rst reset ]
   set_property -dict [ list \
    CONFIG.POLARITY {ACTIVE_HIGH} \
@@ -301,72 +307,60 @@ proc create_root_design { parentCell } {
   set tprcAdjusted [ create_bd_port -dir O -from 15 -to 0 tprcAdjusted ]
   set tprcDefault [ create_bd_port -dir O -from 15 -to 0 tprcDefault ]
   set trigger_axi_master_start [ create_bd_port -dir O trigger_axi_master_start ]
+  set ub [ create_bd_port -dir O ub ]
   set we [ create_bd_port -dir O we ]
+  set zz [ create_bd_port -dir O zz ]
 
   # Create instance: axi_smc, and set properties
   set axi_smc [ create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 axi_smc ]
-  set_property -dict [ list \
-   CONFIG.NUM_SI {1} \
- ] $axi_smc
+  set_property CONFIG.NUM_SI {1} $axi_smc
+
 
   # Create instance: axi_vip_0, and set properties
   set axi_vip_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vip:1.1 axi_vip_0 ]
-  set_property -dict [ list \
-   CONFIG.ADDR_WIDTH {32} \
-   CONFIG.ARUSER_WIDTH {1} \
-   CONFIG.AWUSER_WIDTH {0} \
-   CONFIG.BUSER_WIDTH {0} \
-   CONFIG.DATA_WIDTH {32} \
-   CONFIG.HAS_BRESP {1} \
-   CONFIG.HAS_BURST {0} \
-   CONFIG.HAS_CACHE {0} \
-   CONFIG.HAS_LOCK {0} \
-   CONFIG.HAS_PROT {1} \
-   CONFIG.HAS_QOS {0} \
-   CONFIG.HAS_REGION {0} \
-   CONFIG.HAS_RRESP {1} \
-   CONFIG.HAS_WSTRB {1} \
-   CONFIG.ID_WIDTH {0} \
-   CONFIG.INTERFACE_MODE {MASTER} \
-   CONFIG.PROTOCOL {AXI4LITE} \
-   CONFIG.READ_WRITE_MODE {READ_WRITE} \
-   CONFIG.RUSER_BITS_PER_BYTE {0} \
-   CONFIG.RUSER_WIDTH {0} \
-   CONFIG.SUPPORTS_NARROW {0} \
-   CONFIG.WUSER_BITS_PER_BYTE {0} \
-   CONFIG.WUSER_WIDTH {0} \
- ] $axi_vip_0
+  set_property -dict [list \
+    CONFIG.ADDR_WIDTH {32} \
+    CONFIG.DATA_WIDTH {32} \
+    CONFIG.HAS_BRESP {1} \
+    CONFIG.HAS_PROT {1} \
+    CONFIG.HAS_RRESP {1} \
+    CONFIG.HAS_WSTRB {1} \
+    CONFIG.INTERFACE_MODE {MASTER} \
+    CONFIG.PROTOCOL {AXI4LITE} \
+    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+  ] $axi_vip_0
+
 
   # Create instance: axi_vip_1, and set properties
   set axi_vip_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vip:1.1 axi_vip_1 ]
-  set_property -dict [ list \
-   CONFIG.INTERFACE_MODE {SLAVE} \
- ] $axi_vip_1
+  set_property CONFIG.INTERFACE_MODE {SLAVE} $axi_vip_1
+
 
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
-  set_property -dict [ list \
-   CONFIG.CLKIN1_JITTER_PS {100.0} \
-   CONFIG.CLKIN2_JITTER_PS {100.0} \
-   CONFIG.CLKOUT1_JITTER {90.074} \
-   CONFIG.CLKOUT1_PHASE_ERROR {87.180} \
-   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {400} \
-   CONFIG.CLKOUT2_JITTER {115.831} \
-   CONFIG.CLKOUT2_PHASE_ERROR {87.180} \
-   CONFIG.CLKOUT2_USED {true} \
-   CONFIG.MMCM_CLKIN1_PERIOD {10.000} \
-   CONFIG.MMCM_CLKIN2_PERIOD {10.000} \
-   CONFIG.MMCM_CLKOUT0_DIVIDE_F {3.000} \
-   CONFIG.MMCM_CLKOUT1_DIVIDE {12} \
-   CONFIG.NUM_OUT_CLKS {2} \
-   CONFIG.OPTIMIZE_CLOCKING_STRUCTURE_EN {true} \
-   CONFIG.PRIM_IN_FREQ {100} \
-   CONFIG.PRIM_SOURCE {Single_ended_clock_capable_pin} \
-   CONFIG.RESET_BOARD_INTERFACE {Custom} \
-   CONFIG.SECONDARY_SOURCE {Single_ended_clock_capable_pin} \
-   CONFIG.USE_BOARD_FLOW {true} \
-   CONFIG.USE_INCLK_SWITCHOVER {false} \
- ] $clk_wiz_0
+  set_property -dict [list \
+    CONFIG.CLKIN1_JITTER_PS {100.0} \
+    CONFIG.CLKIN2_JITTER_PS {100.0} \
+    CONFIG.CLKOUT1_JITTER {90.074} \
+    CONFIG.CLKOUT1_PHASE_ERROR {87.180} \
+    CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {400} \
+    CONFIG.CLKOUT2_JITTER {115.831} \
+    CONFIG.CLKOUT2_PHASE_ERROR {87.180} \
+    CONFIG.CLKOUT2_USED {true} \
+    CONFIG.MMCM_CLKIN1_PERIOD {10.000} \
+    CONFIG.MMCM_CLKIN2_PERIOD {10.000} \
+    CONFIG.MMCM_CLKOUT0_DIVIDE_F {3.000} \
+    CONFIG.MMCM_CLKOUT1_DIVIDE {12} \
+    CONFIG.NUM_OUT_CLKS {2} \
+    CONFIG.OPTIMIZE_CLOCKING_STRUCTURE_EN {true} \
+    CONFIG.PRIM_IN_FREQ {100} \
+    CONFIG.PRIM_SOURCE {Single_ended_clock_capable_pin} \
+    CONFIG.RESET_BOARD_INTERFACE {Custom} \
+    CONFIG.SECONDARY_SOURCE {Single_ended_clock_capable_pin} \
+    CONFIG.USE_BOARD_FLOW {true} \
+    CONFIG.USE_INCLK_SWITCHOVER {false} \
+  ] $clk_wiz_0
+
 
   # Create instance: memory_read_top_modu_0, and set properties
   set block_name memory_read_top_module
@@ -378,11 +372,13 @@ proc create_root_design { parentCell } {
      catch {common::send_gid_msg -ssname BD::TCL -id 2096 -severity "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
-    set_property -dict [ list \
-   CONFIG.DATA_BUS_SIZE {8} \
-   CONFIG.DATA_BUS_SIZE_OUT {8} \
-   CONFIG.FREQ_CLK2 {400} \
- ] $memory_read_top_modu_0
+    set_property -dict [list \
+    CONFIG.ADDRESS_BUS_SIZE {24} \
+    CONFIG.DATA_BUS_SIZE {16} \
+    CONFIG.DATA_BUS_SIZE_OUT {16} \
+    CONFIG.FREQ_CLK2 {400} \
+  ] $memory_read_top_modu_0
+
 
   # Create instance: memory_write_top_mod_0, and set properties
   set block_name memory_write_top_module
@@ -394,11 +390,13 @@ proc create_root_design { parentCell } {
      catch {common::send_gid_msg -ssname BD::TCL -id 2096 -severity "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
-    set_property -dict [ list \
-   CONFIG.DATA_BUS_SIZE {8} \
-   CONFIG.DATA_BUS_SIZE_OUT {8} \
-   CONFIG.FREQ_CLK2 {400} \
- ] $memory_write_top_mod_0
+    set_property -dict [list \
+    CONFIG.ADDRESS_BUS_SIZE {24} \
+    CONFIG.DATA_BUS_SIZE {16} \
+    CONFIG.DATA_BUS_SIZE_OUT {16} \
+    CONFIG.FREQ_CLK2 {400} \
+  ] $memory_write_top_mod_0
+
 
   # Create instance: multiplexer_0, and set properties
   set block_name multiplexer
@@ -413,16 +411,16 @@ proc create_root_design { parentCell } {
   
   # Create instance: ps8_0_axi_periph, and set properties
   set ps8_0_axi_periph [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 ps8_0_axi_periph ]
-  set_property -dict [ list \
-   CONFIG.NUM_MI {1} \
-   CONFIG.NUM_SI {1} \
- ] $ps8_0_axi_periph
+  set_property -dict [list \
+    CONFIG.NUM_MI {1} \
+    CONFIG.NUM_SI {1} \
+  ] $ps8_0_axi_periph
+
 
   # Create instance: ps_pl_interface_0, and set properties
   set ps_pl_interface_0 [ create_bd_cell -type ip -vlnv seceng.fim.uni-passau.de:seceng.fim.uni-passau.de:ps_pl_interface:1.0 ps_pl_interface_0 ]
-  set_property -dict [ list \
-   CONFIG.C_AXI_Light_Master_TRANSACTIONS_NUM {4} \
- ] $ps_pl_interface_0
+  set_property CONFIG.C_AXI_Light_Master_TRANSACTIONS_NUM {4} $ps_pl_interface_0
+
 
   # Create instance: puf_exection_control_0_upgraded_ipi, and set properties
   set block_name puf_execution_controller
@@ -434,13 +432,19 @@ proc create_root_design { parentCell } {
      catch {common::send_gid_msg -ssname BD::TCL -id 2096 -severity "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
-  
+    set_property -dict [list \
+    CONFIG.MEMORY_MODULE_ADDRESS_SIZE {24} \
+    CONFIG.MEMORY_MODULE_DATA_SIZE {16} \
+  ] $puf_exection_control_0_upgraded_ipi
+
+
   # Create instance: util_ds_buf_0, and set properties
   set util_ds_buf_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf:2.2 util_ds_buf_0 ]
-  set_property -dict [ list \
-   CONFIG.C_BUF_TYPE {IOBUF} \
-   CONFIG.C_SIZE {8} \
- ] $util_ds_buf_0
+  set_property -dict [list \
+    CONFIG.C_BUF_TYPE {IOBUF} \
+    CONFIG.C_SIZE {16} \
+  ] $util_ds_buf_0
+
 
   # Create interface connections
   connect_bd_intf_net -intf_net S00_AXI_1 [get_bd_intf_pins axi_vip_0/M_AXI] [get_bd_intf_pins ps8_0_axi_periph/S00_AXI]
@@ -451,9 +455,10 @@ proc create_root_design { parentCell } {
   # Create port connections
   connect_bd_net -net Net [get_bd_ports dlines] [get_bd_pins util_ds_buf_0/IOBUF_IO_IO]
   connect_bd_net -net Net1 [get_bd_ports rw_select] [get_bd_pins multiplexer_0/rw_select_in] [get_bd_pins puf_exection_control_0_upgraded_ipi/rw_select] [get_bd_pins util_ds_buf_0/IOBUF_IO_T]
+  connect_bd_net -net Net2 [get_bd_pins memory_read_top_modu_0/reset] [get_bd_pins memory_write_top_mod_0/set_back] [get_bd_pins multiplexer_0/set_back]
   connect_bd_net -net axi_test_wire_1 [get_bd_ports axi_test_wire]
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins memory_read_top_modu_0/clk2] [get_bd_pins memory_write_top_mod_0/clk] 
-  connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_ports clk] [get_bd_pins axi_smc/aclk] [get_bd_pins axi_vip_0/aclk] [get_bd_pins axi_vip_1/aclk] [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins memory_read_top_modu_0/clk1] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins ps_pl_interface_0/axi_light_master_aclk] [get_bd_pins ps_pl_interface_0/axi_light_slave_aclk] [get_bd_pins puf_exection_control_0_upgraded_ipi/clk]
+  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins memory_read_top_modu_0/clk2] [get_bd_pins memory_write_top_mod_0/clk]
+  connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_ports clk] [get_bd_pins axi_smc/aclk] [get_bd_pins axi_vip_0/aclk] [get_bd_pins axi_vip_1/aclk] [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins memory_read_top_modu_0/clk1] [get_bd_pins multiplexer_0/clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins ps_pl_interface_0/axi_light_master_aclk] [get_bd_pins ps_pl_interface_0/axi_light_slave_aclk] [get_bd_pins puf_exection_control_0_upgraded_ipi/clk]
   connect_bd_net -net clk_wiz_0_locked [get_bd_ports locked] [get_bd_pins clk_wiz_0/locked] [get_bd_pins puf_exection_control_0_upgraded_ipi/locked]
   connect_bd_net -net disable_axi_switch_0_1 [get_bd_ports disable_axi_switch] [get_bd_pins puf_exection_control_0_upgraded_ipi/disable_axi_switch]
   connect_bd_net -net memory_read_top_modu_0_alines [get_bd_pins memory_read_top_modu_0/alines] [get_bd_pins multiplexer_0/alines_read]
@@ -474,8 +479,17 @@ proc create_root_design { parentCell } {
   connect_bd_net -net memory_write_top_mod_0_we [get_bd_pins memory_write_top_mod_0/we] [get_bd_pins multiplexer_0/we_write]
   connect_bd_net -net multiplexer_0_alines [get_bd_ports alines] [get_bd_pins multiplexer_0/alines]
   connect_bd_net -net multiplexer_0_ce [get_bd_ports ce] [get_bd_pins multiplexer_0/ce]
+  connect_bd_net -net multiplexer_0_dir_const [get_bd_ports dir_const] [get_bd_pins multiplexer_0/dir_const]
+  connect_bd_net -net multiplexer_0_dir_var [get_bd_ports dir_var] [get_bd_pins multiplexer_0/dir_var]
+  connect_bd_net -net multiplexer_0_en_const [get_bd_ports en_const] [get_bd_pins multiplexer_0/en_const]
+  connect_bd_net -net multiplexer_0_en_var [get_bd_ports en_var] [get_bd_pins multiplexer_0/en_var]
+  connect_bd_net -net multiplexer_0_lb [get_bd_ports lb] [get_bd_pins multiplexer_0/lb]
   connect_bd_net -net multiplexer_0_oe [get_bd_ports oe] [get_bd_pins multiplexer_0/oe]
+  connect_bd_net -net multiplexer_0_ref_vcc [get_bd_ports ref_vcc] [get_bd_pins multiplexer_0/ref_vcc]
+  connect_bd_net -net multiplexer_0_ref_vcc2 [get_bd_ports ref_vcc2] [get_bd_pins multiplexer_0/ref_vcc2]
+  connect_bd_net -net multiplexer_0_ub [get_bd_ports ub] [get_bd_pins multiplexer_0/ub]
   connect_bd_net -net multiplexer_0_we [get_bd_ports we] [get_bd_pins multiplexer_0/we]
+  connect_bd_net -net multiplexer_0_zz [get_bd_ports zz] [get_bd_pins multiplexer_0/zz]
   connect_bd_net -net ps_pl_interface_0_axi_light_master_txn_done [get_bd_ports axi_light_master_txn_done] [get_bd_pins ps_pl_interface_0/axi_light_master_txn_done] [get_bd_pins puf_exection_control_0_upgraded_ipi/axi_master_done]
   connect_bd_net -net ps_pl_interface_0_ceDrivenRead [get_bd_ports ceDrivenRead] [get_bd_pins ps_pl_interface_0/ceDrivenRead] [get_bd_pins puf_exection_control_0_upgraded_ipi/ceDrivenReadIn]
   connect_bd_net -net ps_pl_interface_0_ce_driven [get_bd_ports ce_driven] [get_bd_pins ps_pl_interface_0/ce_driven] [get_bd_pins puf_exection_control_0_upgraded_ipi/ceDrivenIn]

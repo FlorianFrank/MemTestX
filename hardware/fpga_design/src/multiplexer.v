@@ -24,9 +24,21 @@
 
 
 module multiplexer#(
-    parameter integer ALINES_SIZE = 15,
-    parameter integer DLINES_SIZE = 8
-)(
+    parameter integer ALINES_SIZE = 24,
+    parameter integer DLINES_SIZE = 16,
+    parameter SET_ZZ_PIN = 1,
+    parameter ENABLE_LB_UB = 0
+ )(
+ 
+    input wire clk,
+    input wire set_back,
+ 
+    input wire start_write,
+    input wire start_read, 
+    
+    input wire read_done,
+    input wire write_done,
+    
     input wire[ALINES_SIZE-1:0] alines_write,
     input wire[ALINES_SIZE-1:0] alines_read,
     input wire[DLINES_SIZE-1:0] dlines_in,
@@ -35,6 +47,9 @@ module multiplexer#(
     output wire oe,
     output wire ce,
     output wire we,
+    output wire zz,
+    output wire lb,
+    output wire ub,
     input wire oe_write,
     input wire ce_write,
     input wire we_write,
@@ -53,6 +68,29 @@ module multiplexer#(
     output wire ref_vcc2
 );
 
+    reg ub_lb_indicator = 1'h0; 
+    reg[DLINES_SIZE-1:0] dlines_out_reg;
+
+
+    always @(posedge clk or posedge set_back) begin
+        if (set_back) begin 
+            ub_lb_indicator <= 1'b0;
+            dlines_out_reg <= {DLINES_SIZE{1'b0}};
+        end else if (start_write || start_read) begin 
+            ub_lb_indicator <= 1'h1;
+        end else begin
+            // Set input data when reading is enabled 
+            if (!rw_select_in)
+                dlines_out_reg <= dlines_in;
+            if (read_done || write_done) begin 
+                ub_lb_indicator <= 1'h0;
+            end else begin 
+                ub_lb_indicator <= ub_lb_indicator;
+            end 
+        end
+    end
+
+
     assign dir_const = 1'b1;
     assign dir_var = rw_select_in ? 1'b0 : 1'b1; 
     
@@ -67,7 +105,14 @@ module multiplexer#(
     assign ce = !rw_select_in ? ce_write : ce_read;
     assign we = !rw_select_in ? we_write : we_read;
 
+
     // Handle the bidirectional data port correctly by assigning dlines based on the current read/write mode.
-    assign dlines = (!rw_select_in) ? dlines_in : {DLINES_SIZE{1'hz}};
+    assign dlines = (!rw_select_in) ? dlines_out_reg : {DLINES_SIZE{1'hz}};
     assign dlines_out = (rw_select_in) ? dlines : {DLINES_SIZE{1'h1}};
+    
+    // Set these pins to default values
+    assign zz = SET_ZZ_PIN;
+    assign lb = (ENABLE_LB_UB) ? ((ub_lb_indicator) ? 1'h0 : 1'h1) : 0;
+    assign ub = (ENABLE_LB_UB) ? ((ub_lb_indicator && DLINES_SIZE == 16) ? 1'h0 : 1'h1) : 0;
+    
 endmodule

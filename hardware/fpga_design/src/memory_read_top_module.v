@@ -57,7 +57,7 @@ module memory_read_top_module #(
 
     input wire[ADDRESS_BUS_SIZE-1:0] address,
 
-    //% Address lines specifying the address currently used. (only the Rohm FRAM is supported with an address width of 15 bit)
+    //% Address lines specifying the address currently used.
     output wire[ADDRESS_BUS_SIZE-1:0] alines,
 
     //% Chip enable signal.

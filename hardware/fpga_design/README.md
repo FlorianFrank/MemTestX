@@ -69,7 +69,7 @@ This script sources `create_project.tcl`, which generates a new project named `m
 
 Start Creating Project ...
 
-****** Vivado v2022.1 (64-bit)
+****** Vivado v2022.2 (64-bit)
   **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
   **** IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
@@ -107,7 +107,7 @@ There are two ways to generate the bitstream:
     ./generate_bitstream.sh
     INFO: Open project: ../memory_evaluator/memory_evaluator.xpr
 
-    ****** Vivado v2022.1 (64-bit)
+    ****** Vivado v2022.2 (64-bit)
       **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
       **** IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
         ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.

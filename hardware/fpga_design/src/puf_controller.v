@@ -37,7 +37,7 @@ module puf_execution_controller#(
     parameter integer AXI_OUTPUT_ADDRESS_SIZE = 32,
     parameter integer MEMORY_MODULE_DATA_SIZE = 8,
     parameter integer DELAY_READ_WRITE=2,
-    parameter integer MAX_ADDRESS= 15'h7fff
+    parameter integer MAX_ADDRESS= 23'h7fff
 )(
     input wire clk,
     input wire locked,
@@ -207,19 +207,19 @@ module puf_execution_controller#(
         rw_select <= 1'b0;
         start_read <= 1'b0;
         start_write <= 1'b0;
-        value_write <= 8'h55;
-        address_read <= 15'h0;
+        value_write <= {AXI_OUTPUT_DATA_SIZE/8{8'h55}};
+        address_read <= {MEMORY_MODULE_ADDRESS_SIZE{1'h0}};
         
         write_continuously <= 1'h1;
         ceDriven <= 1'h1;
-        tnext <= 16'd5;
-        tStart <= 16'h0;
-        tas <= 16'h2;
-        tah <= 16'h2;
-        tac <= 16'h2;
-        tdh <= 16'h2;
-        tpwd <= 16'h0;
-        tds <= 16'h0;
+        tnext <= `TIMING_PARAMETER_WIDTH'd5;
+        tStart <= `TIMING_PARAMETER_WIDTH'd0;
+        tas <= `TIMING_PARAMETER_WIDTH'd2;
+        tah <= `TIMING_PARAMETER_WIDTH'd2;
+        tac <= `TIMING_PARAMETER_WIDTH'd2;
+        tdh <= `TIMING_PARAMETER_WIDTH'd2;
+        tpwd <= `TIMING_PARAMETER_WIDTH'd0;
+        tds <= `TIMING_PARAMETER_WIDTH'd0;
         address_write <= {MEMORY_MODULE_ADDRESS_SIZE{1'h0}};
         address_read <= {MEMORY_MODULE_ADDRESS_SIZE{1'h0}};
     end

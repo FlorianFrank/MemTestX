@@ -1,23 +1,33 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: University of Passau - Chair of Computer Engineering
+// Engineer: Florian Frank
 // 
 // Create Date: 01/15/2025 06:37:55 PM
-// Design Name: 
-// Module Name: axi_simulator
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
+// Design Name: AXI Full Interface Testbench
+// Module Name: tb_axi_full
+// Project Name: AXI Verification and Simulation
+// Target Devices: [Specify Target Devices, e.g., Xilinx ZCU102]
+// Tool Versions: Vivado 2022.2
+// 
 // Description: 
-// 
+// Testbench to simulate specific PUF (Physically Unclonable Function) tests. 
+// The simulation starts with AXI transactions to configure and write initial data 
+// into memory, followed by controlled memory read and write operations. The testbench 
+// drives the DUT through AXI VIP agents, verifies correct AXI communication, 
+// and allows evaluation of memory-based PUF behavior. Timing parameters, read/write 
+// operations, or row hammering sequences are included for thorough testing.
+//
 // Dependencies: 
+// - axi_vip_pkg
+// - axi_verifier_full_axi_vip_0_0_pkg
+// - axi_verifier_full_axi_vip_1_0_pkg
 // 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+// Revision History:
+// Rev. 0.01 - File Created
+//
 //////////////////////////////////////////////////////////////////////////////////
+
 import axi_vip_pkg::*;
 import axi_verifier_full_axi_vip_0_0_pkg::*;
 import axi_verifier_full_axi_vip_1_0_pkg::*;
@@ -27,11 +37,22 @@ module tb_axi_full();
 bit disable_axi_switch = 0;
 bit simulate_test_button = 0;
 
-logic[14:0] address_write;
-logic[14:0] address_read;
+logic[23:0] address_write;
+logic[23:0] address_read;
 
-logic[14:0] alines;
-wire[7:0] dlines;
+logic[23:0] alines;
+wire[15:0] dlines;
+logic zz;
+logic ub;
+logic lb;
+logic dir_const;
+logic dir_var;
+logic en_const;
+logic en_var;
+logic ref_vcc;
+logic ref_vcc2;
+
+
 logic oe, ce, we; 
 logic[31:0] data, addr, base_addr = 32'h4000_0000;
 xil_axi_resp_t 	resp;
@@ -49,7 +70,7 @@ logic[31:0] start_addr;
 logic[31:0] stop_addr;
 logic [3:0] outer_state;
 logic [3:0] sram_state;
-logic [14:0] alines_write;
+logic [23:0] alines_write;
 logic rw_select;
 logic axi_light_master_txn_done;
 logic axi_test_wire = 1;
@@ -134,76 +155,8 @@ initial begin
     #10
     addr = 32'h0;
   data = 32'h55_55_55_55;
-  /*
-  // Start Test, Row hammering, CE DRIVEN enabled, tWaitAfterInit == 12
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + addr, 0, 32'h12_FF_03_01, resp);
-  
-  // Second half of TWaitAfterInit, TNextRead == 0x02, 8 bit of tStartDefault || CHECKED: TRUE
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'h4, 0, 32'h03_00_02_00, resp);
-  
-  // second half of tStartDefault, tnextWriteDefault = 0x05, 8-bits of tACDefault = 5 || CHECKED:
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'h8, 0, 32'h05_00_04_00, resp);
-  
-  
-  // second half of tACDefault, tASDefault = 0x06, 8-bits of tAHDefault = 0x07 || CHECKED:
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd12, 0, 32'h07_00_06_00, resp);
-  
-  
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd16, 0, 32'h09_00_08_00, resp);
-  
-  
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd20, 0, 32'h55_00_0A_00, resp);
-  
-  
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd24, 0, 32'h00_AA_AA_55, resp);
-  
-  
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd28, 0, 32'h0a_00_00_00, resp);
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd32, 0, 32'h00_00_00_00, resp);
-  
-  // Row hammering
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd36, 0, 32'h00_02_00_03, resp);
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd40, 0, 32'h00_00_00_09, resp);
-*/
-/*
-master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h0, 0, 32'h12_FF_03_01, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h4, 0, 32'h03_00_02_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h8, 0, 32'h05_00_04_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'hc, 0, 32'h07_00_06_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h10, 0, 32'h09_00_08_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h14, 0, 32'h55_00_0A_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h18, 0, 32'h00_AA_AA_55, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h1c, 0, 32'h09_00_00_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h20, 0, 32'hFF_00_00_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h24, 0, 32'h00_09_00_0A, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h28, 0, 32'h00_07_00_08, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h2c, 0, 32'h00_05_00_06, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h30, 0, 32'h00_00_00_04, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h34, 0, 32'h00_02_00_03, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h38, 0, 32'h00_00_00_09, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h3c, 0, 32'h00_00_00_01, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h40, 0, 32'h00_00_00_00, resp);
- */
- /*
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h0, 0, 32'h12_FF_03_01, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h4, 0, 32'h03_00_02_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h8, 0, 32'h05_00_04_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'hc, 0, 32'h07_00_06_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h10, 0, 32'h09_00_08_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h14, 0, 32'h00_00_0A_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h18, 0, 32'h00_00_09_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h1c, 0, 32'h09_00_00_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h20, 0, 32'hFF_00_00_00, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h24, 0, 32'h00_09_00_0A, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h28, 0, 32'h00_07_00_08, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h2c, 0, 32'h00_05_00_06, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h30, 0, 32'h00_00_00_04, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h34, 0, 32'h00_02_00_03, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h38, 0, 32'h00_00_00_09, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h3c, 0, 32'h00_00_00_01, resp);
- master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h40, 0, 32'h00_00_00_00, resp);
-*/
 
+// AXI interface definition. See readme md or ps_pl interface documentation for more information
 master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h0, 0, 32'h0A_FF_00_01, resp);
 master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h4, 0, 32'h03_03_E8_00, resp);
 master_agent.AXI4LITE_WRITE_BURST(base_addr + addr + 32'h8, 0, 32'h00_01_F4_00, resp);

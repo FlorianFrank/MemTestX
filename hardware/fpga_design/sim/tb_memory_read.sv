@@ -1,22 +1,32 @@
 `timescale 1ns / 1ps
+`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: University of Passau – Chair of Computer Engineering
+// Engineer: Florian Frank
 // 
 // Create Date: 01/22/2025 03:49:54 PM
-// Design Name: 
+// Design Name: Memory Read Testbench
 // Module Name: tb_memory_read
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
+// Project Name: Memory Evaluation and Verification
+// Target Devices: [Specify Target Devices, e.g., Xilinx ZCU102]
+// Tool Versions: Vivado 2022.2
+// 
 // Description: 
-// 
+// Testbench for memory read operations using the memory_read_top_module. 
+// This simulation drives two clocks (management and memory controller clocks),
+// asserts start and reset signals, sets timing parameters, and reads values 
+// from memory. It verifies that the memory_read_top_module correctly handles 
+// synchronization, read timing, and output values. The focus is on memory 
+// read verification, timing parameter validation, and proper state machine 
+// operation.
+//
 // Dependencies: 
+// - memory_read_top_module.v
+// - state_machine_definitions.vh
 // 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+// Revision History:
+// Rev. 0.01 - File Created
+//
 //////////////////////////////////////////////////////////////////////////////////
 
 `define CLOCK_CONFIG_WIDTH 16

@@ -1,23 +1,33 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: University of Passau – Chair of Computer Engineering
+// Engineer: Florian Frank
 // 
 // Create Date: 01/15/2025 06:37:55 PM
-// Design Name: 
-// Module Name: axi_simulator
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
+// Design Name: AXI Interface Testbench
+// Module Name: tb_axi_interface
+// Project Name: AXI Verification and Simulation
+// Target Devices: [Specify Target Devices, e.g., Xilinx ZCU102]
+// Tool Versions: Vivado 2022.2
+// 
 // Description: 
-// 
+// Testbench to verify the basic functionality of an AXI interface. 
+// This simulation exercises AXI read and write operations by driving 
+// transactions through AXI VIP agents to the DUT. It initializes memory 
+// locations, performs sequential writes, and optionally simulates row 
+// hammering sequences. The focus is purely on testing correct AXI signaling, 
+// timing, and transaction behavior.
+//
 // Dependencies: 
+// - axi_vip_pkg
+// - axi_verification_axi_vip_0_0_pkg
+// - axi_verification_axi_vip_1_0_pkg
 // 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+// Revision History:
+// Rev. 0.01 - File Created
+//
 //////////////////////////////////////////////////////////////////////////////////
+
 import axi_vip_pkg::*;
 import axi_verification_axi_vip_0_0_pkg::*;
 import axi_verification_axi_vip_1_0_pkg::*;
@@ -122,33 +132,7 @@ initial begin
     #10
     addr = 32'h0;
   data = 32'h55_55_55_55;
-  
-  // Start Test, Row hammering, CE DRIVEN enabled, tWaitAfterInit == 12
- /* master_agent.AXI4LITE_WRITE_BURST(base_addr + addr, 0, 32'h12_FF_03_01, resp);
-  
-  // Second half of TWaitAfterInit, TNextRead == 0x02, 8 bit of tStartDefault || CHECKED: TRUE
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'h4, 0, 32'h03_00_02_00, resp);
-  
-  // second half of tStartDefault, tnextWriteDefault = 0x05, 8-bits of tACDefault = 5 || CHECKED:
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'h8, 0, 32'h05_00_04_00, resp);
-  
-  
-  // second half of tACDefault, tASDefault = 0x06, 8-bits of tAHDefault = 0x07 || CHECKED:
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd12, 0, 32'h07_00_06_00, resp);
-  
-  
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd16, 0, 32'h09_00_08_00, resp);
-  
-  
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd20, 0, 32'h55_00_0A_00, resp);
-  
-  
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd24, 0, 32'h00_AA_AA_55, resp);
-  
-  
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd28, 0, 32'h09_00_00_00, resp);
-  master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd32, 0, 32'hFF_00_00_00, resp);
-  
+
   // Row hammering
   master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd36, 0, 32'h00_20_22_22, resp);
   master_agent.AXI4LITE_WRITE_BURST(base_addr + 32'd40, 0, 32'h00_00_00_09, resp);*/

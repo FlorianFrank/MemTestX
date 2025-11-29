@@ -244,7 +244,7 @@ module puf_execution_controller#(
         
         rw_select <= 0;
         write_continuously <= 1'b1;
-        value_write <= init_value[MEMORY_MODULE_DATA_SIZE:0];
+        value_write <= init_value[MEMORY_MODULE_DATA_SIZE-1:0];
         if(write_active) begin
             start_write <= 0;
             state <= WAIT_WRITE_FINISH;
@@ -278,7 +278,7 @@ module puf_execution_controller#(
             timing_ctr <= 0;
             rw_select <= 0;
             write_continuously <= 1'b1;
-            value_write <= test_value[MEMORY_MODULE_DATA_SIZE:0];
+            value_write <= test_value[MEMORY_MODULE_DATA_SIZE-1:0];
             if(write_active) begin
                 start_write <= 0;
                 test_done <= 1'h1;
@@ -307,7 +307,7 @@ task startRowHammering;
                 // Reset timing counter and configure for writing
                 rw_select <= 1'b0; // Set read/write selection to write mode
                 write_continuously <= 1'b1;
-                value_write <= test_value[MEMORY_MODULE_DATA_SIZE:0];
+                value_write <= test_value[MEMORY_MODULE_DATA_SIZE-1:0];
 
                 // Handle write operation based on active write state
                 if (write_active) begin
@@ -353,7 +353,7 @@ task startRowHammering;
                 end                
                 rw_select <= 1'b0; // Set read/write selection to write mode
                 write_continuously <= 1'b1;
-                value_write <= test_value[MEMORY_MODULE_DATA_SIZE:0];
+                value_write <= test_value[MEMORY_MODULE_DATA_SIZE-1:0];
 
                 // Handle write operation based on active write state
                 if (write_active) begin

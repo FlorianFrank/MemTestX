@@ -11,6 +11,6 @@ current_fileset -simset sim_1
 restart
 
 # Run the simulation (modify as needed)
-run 10000 ns
+run 100000 ns
 
 start_gui

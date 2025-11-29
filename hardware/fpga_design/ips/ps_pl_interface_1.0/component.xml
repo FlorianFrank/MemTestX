@@ -2330,7 +2330,7 @@
       <xilinx:coreCreationDateTime>2025-02-05T11:04:55Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
-      <xilinx:xilinxVersion>2022.1</xilinx:xilinxVersion>
+      <xilinx:xilinxVersion>2022.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="76ac5168"/>
       <xilinx:checksum xilinx:scope="addressSpaces" xilinx:value="3d2ba159"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="4f996081"/>

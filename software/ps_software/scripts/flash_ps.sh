@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VITIS_PATH="/opt/Xilinx/Vitis/2022.1/bin/xsdb"
+VITIS_PATH="/opt/Xilinx/Vitis/2022.2/bin/xsdb"
 TCL_SCRIPT="tcl/flash_ps.tcl"
 
 RED="\e[1;31m"

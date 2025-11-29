@@ -12,15 +12,15 @@ The firmware provides the following functionallity:
 ### Requirements
 
 To compile the firmware for the PS, the necessary toolchains must be installed,
-with come with **Vitis 2022.1.** Furthermore, building the firmware requires **Make** and **CMake** to be installed.
+with come with **Vitis 2022.2.** Furthermore, building the firmware requires **Make** and **CMake** to be installed.
 Make sure the hardware was exported correctly running the `export_hardware.sh` script within the `fpga_design` folder. More information is provided in the corresponding folder!
 
 ### Building the Firmware
 
 Instead of using Vitis directly, we implemented a CMake-based build enrivonment. For this purpose, a toolchain file has been defined in the `memory_controller/toolchain` directory.  In this file, ensure that the TOOLCHAIN_PATH variable is correctly set.
-The project was compiled on an **Ubuntu 24.04** system with **Vitis 2022.1** installed. Accordingly, the toolchain path is defined as:
+The project was compiled on an **Ubuntu 24.04** system with **Vitis 2022.2** installed. Accordingly, the toolchain path is defined as:
 ```bash
-/opt/Xilinx/Vitis/2022.1/gnu/aarch64/lin/aarch64-none/bin
+/opt/Xilinx/Vitis/2022.2/gnu/aarch64/lin/aarch64-none/bin
 ```
 
 Adjust this path if necessary to your system. 

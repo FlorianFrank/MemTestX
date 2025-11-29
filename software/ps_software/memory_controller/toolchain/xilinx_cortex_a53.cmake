@@ -3,9 +3,10 @@
 # xilinx-arm-r5-toolchain.cmake
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR cortex-a53)
-set(PLATFORM_DIR ${PROJECT_SOURCE_DIR}/../platform)
+set(PLATFORM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../platform)
+message("PLATFORM ${PLATFORM_DIR}")
 
-set(TOOLCHAIN_PATH /opt/Xilinx/Vitis/2022.1/gnu/aarch64/lin/aarch64-none/bin)
+set(TOOLCHAIN_PATH /opt/Xilinx/Vitis/2022.2/gnu/aarch64/lin/aarch64-none/bin)
 
 set(CMAKE_C_COMPILER ${TOOLCHAIN_PATH}/aarch64-none-elf-gcc)
 set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PATH}/aarch64-none-elf-g++)

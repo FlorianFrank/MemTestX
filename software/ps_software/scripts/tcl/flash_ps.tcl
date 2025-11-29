@@ -1,4 +1,4 @@
-set vitis_path "/opt/Xilinx/Vitis/2022.1"
+set vitis_path "/opt/Xilinx/Vitis/2022.2"
 set cpu "A53"
 set core "#0"
 set project_name "memory_evaluator"

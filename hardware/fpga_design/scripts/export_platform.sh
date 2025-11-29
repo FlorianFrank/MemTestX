@@ -4,7 +4,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 BUILD_DIR="../memory_evaluator"
 PROJECT_FILE="memory_evaluator.xpr"
-VITIS_PATH="/opt/Xilinx/Vitis/2022.1/bin/xsct"
+VITIS_PATH="/opt/Xilinx/Vitis/2022.2/bin/xsct"
 TCL_SCRIPT="tcl/export_platform.tcl"
 PLATFORM_DIR="${BUILD_DIR}/export/platform/memory_evaluator/*"
 PS_SOFTWARE_DIR="${SCRIPT_DIR}/../../../software/ps_software/platform"

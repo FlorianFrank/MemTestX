@@ -4,7 +4,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 BUILD_DIR="../memory_evaluator"
 PROJECT_FILE="memory_evaluator.xpr"
-VIVADO_PATH="/opt/Xilinx/Vivado/2022.1/bin/vivado"
+VIVADO_PATH="/opt/Xilinx/Vivado/2022.2/bin/vivado"
 TCL_SCRIPT="tcl/run_simulation.tcl"
 
 

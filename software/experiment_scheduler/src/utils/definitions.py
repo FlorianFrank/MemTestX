@@ -47,9 +47,10 @@ def cmd_to_str(cmd: Command) -> str:
 DB_NAME = "memories.db"
 
 # Network Configuration (e.g. to the ZCU102)
-IP_SUFFIX = "192.168.178"
 PORT_SEND = 5024
 PORT_RECV = 5023
+NIC_SUFFIX = "132.231.14"
+SCHEDULER_IP = "132.231.14.106"
 
 NETWORK_MAX_RECV_BUF_LEN = 4096  # Maximum length for received buffers (ethernet)
 NETWORK_TIMEOUT_RESPONSE = 500.0  # Timeout for receiving a response (in seconds)
@@ -60,4 +61,5 @@ MEASURE_FILE_DELIMITER = ';'  # Delimiter used in measurement files
 MEASURE_FILE_QUOTE_CHAR = '"'  # Quote character for measurement files
 
 SCHEDULER_THREAD_TIMEOUT_IN_S = 10
+TIME_BETWEEN_TESTS_IN_MS = 200
 DEFAULT_PATH = 'output_results'

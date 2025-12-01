@@ -25,6 +25,8 @@ The project was compiled on an **Ubuntu 24.04** system with **Vitis 2022.2** ins
 
 Adjust this path if necessary to your system. 
 
+Before compiling make sure the IP of the experiment scheduler is set within `./src/config/app_config.h` as `SERVER_IP_ADDRESS`. Furthermore also check the specified ports and further settings.
+
 To compile the firmware, simply execute the the
 
 ```bash

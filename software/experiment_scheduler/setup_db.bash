@@ -56,7 +56,7 @@ read -p "Press 'y' to continue, or any other key to cancel: " -n 1 -r
 echo "WARNING: This will remove the existing database setup!"
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-  mkdir output_results
+  mkdir -p output_results
   python3 main.py -init_db_scheme
 fi
 

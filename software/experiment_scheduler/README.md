@@ -124,7 +124,13 @@ Further examples on how to define writeLatency or voltage variation tests are pr
 
 ## Setup
 
-Similar to the other components of this project, we provide scripts to set up the system and run the implementation.  
+Similar to the other components of this project, we provide scripts to set up the system and run the implementation. 
+Before running the program make sure that in main.py the following line is set to the IP of the current machine: 
+
+```python
+    zync_ip_configuration = IPConfig(ip=<scheduler_ip>, port=PORT_SEND)
+```
+ 
 To create a virtual Python environment, install all dependencies, and initialize the database (including storing all memory class and instance definitions found in the `config_files` directory) simply run the following commands:
 
 ```bash

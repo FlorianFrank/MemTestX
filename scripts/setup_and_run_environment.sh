@@ -42,7 +42,7 @@ pushd ../hardware/fpga_design/scripts
 popd
 fi
 
-read -p "Would you like to flash bit PS Firmware? [y/N] " -n 1 -r
+read -p "Would you like to flash the PS Firmware? [y/N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 pushd ../software/ps_software/scripts

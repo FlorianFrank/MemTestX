@@ -9,7 +9,8 @@ Furthermore, it allows the persistent storage of measurement data as CSV files a
 
 Overall, this implementation provides the following functionality:
 
-- Definition of experiments in a YAML-based format with different parameters and parameter ranges.  
+- Definition of experiments in a YAML-based format with different parameters and parameter ranges.
+- Can be started as NATS endpoint running as microservice to interface with a GUI, as explained here [https://github.com/FlorianFrank/experiment_execution_hub](https://github.com/FlorianFrank/experiment_execution_hub)
 - Persistent storage and management of different types of memories and their parameters, which can be imported from JSON files.  
 - Storage of different test instances and keeping track of the number of experiments.  
 - Scheduling of experiments either to an AMD ZCU102 using an Ethernet interface or to an STM32F429 using UART.  
@@ -17,7 +18,7 @@ Overall, this implementation provides the following functionality:
 - Interconnection to measurement devices using our self-implemented instrument control library, specifically the connection 
   with an SPD1305X power supply in order to perform voltage variation tests.
 
-## Configuration
+## Configuration when running in Standalone Mode
 
 The program can be customized through multiple configuration files.  
 In the `config_files` directory, the configuration of the memory models under test can be found in the `memory_configs` subfolder. For example:
@@ -77,7 +78,7 @@ For more information about the timing parameters, refer to the `hardware/fpga_de
 
 Additional configuration files in this folder define the IP settings for the evaluation and measurement devices.
 
-### Test Specification
+### Test Specification when running in Standalone Mode
 
 Additional YAML files are provided in the `samples` folder, specifying sets of experiments to be executed on specific memory instances.  
 A custom format is implemented to allow you to define your own tests, as shown in the following code example:
@@ -122,6 +123,51 @@ All parameters not explicitly specified in the configuration use their **default
 
 Further examples on how to define writeLatency or voltage variation tests are provided in the same folder.
 
+## Configuration when running in Microservice Mode
+
+The basic settings for running in microservice mode are defined in ```config_files/micro_service_config.json```.
+
+```json
+{
+  "general_config": {
+    "executor_name": "Memory Test Executor",
+    "executor_type": "fpga",
+    "protocol": "TCP_IP",
+    "scheduler_time_interval": 5,
+    "enable_device_discovery": "false",
+    "discovery_port": 5025,
+    "discovery_interval": 20,
+    "heartbeat_interval": 20000,
+    "heartbeat_publish_continuously": "false",
+    "enable_live_streaming": "true"
+  },
+  "fpga_config": {
+    "ip": "192.168.178.2",
+    "port": 5023,
+    "board": "ZCU102 Evaluation Board",
+    "timing_resolution": "2.5 ns (400 Mhz)",
+    "cpus": "Cortex A53/ Cortex R5"
+  },
+  "nats_config": {
+    "nats_broker_ip": "localhost",
+    "nats_broker_port": 4222
+  }
+}
+```
+
+This file defines the name of the microservice and the type of measurement device it is connected to. It also specifies 
+the scheduler trigger interval (in seconds), as well as the configuration for device discovery and the heartbeat service 
+used to communicate with the backend and GUI.
+The FPGA configuration flow and the IP address of the target device (e.g., a ZCU102) are defined here as well. In addition, 
+the ANTS configuration specifies the IP address and port used to access the service-oriented architecture.
+
+All this information is displayed at the GUI after connecting as shown in the figure below:
+
+<center>
+<img src="../../doc/figures/gui_device_info.png" style="width: 60%;" alt="Experiment Scheduler">
+</center>
+
+
 ## Setup
 
 Similar to the other components of this project, we provide scripts to set up the system and run the implementation. 
@@ -136,7 +182,7 @@ To create a virtual Python environment, install all dependencies, and initialize
 > ️ ⚠️ Calling this script will delete the content of your sqlite database. Do not call this script again after initialization or backup your database first.
 
 
-## Execute the Program
+## Execute as Standalone Program
 
 In order to start the scheduler run the following script:
 
@@ -167,6 +213,30 @@ This script accepts the following command-line parameters:
 - **-refresh_memories**  
   Adds new memory modules by parsing any files placed in the `config_files` folder.  
   Only new modules and parameters not already present in the database will be added automatically.
+
+## Execute as Microservice
+
+The service can be started in microservice mode by simply running: 
+
+```bash
+./run_microservice.bash
+```
+
+This will automatically launch the program and connect it to the NATS broker (if it is already running).
+Instructions for starting the backend and the NATS broker can be found here:
+[https://github.com/FlorianFrank/experiment_execution_hub](https://github.com/FlorianFrank/experiment_execution_hub)
+
+
+## Simulation
+
+To simulate the functionality of the scheduler, a simple simulation program is provided that emulates the MPSoC endpoint. 
+It sends acknowledgements and dummy measurement data to mimic a real measurement device.
+The simulator can be started with:
+
+```bash
+cd ./tests
+python3 measurement_endpoint_simulator.py
+```
 
 ## Evaluation 
 

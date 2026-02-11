@@ -1,12 +1,11 @@
 import json
 import logging
 
+from controller.test_parser import TestParser
 from messaging_service.messaging_service_config import get_topic_str, Topic
 from messaging_service.streaming_service import StreamingService
-from controller.test_parser import TestParser
-from model.test_colletion import TestCollection
+from model.test_collection import TestCollection
 from test_scheduling.test_scheduler import TestScheduler
-from tests.row_hammering_test import RowHammeringTest
 
 
 class MessagingServiceCallbackHandler:
@@ -65,7 +64,6 @@ class MessagingServiceCallbackHandler:
                 self._logger.info(f"Add new Test of type {test_type} Test to waiting queue")
                 iterations = parsed_json_list['testData']['iterations']
 
-                # Parse config from JSON
                 test_collection = TestCollection(identifier=parsed_json_list['instanceID'], logger=self._logger,
                                                  iterations=iterations,
                                                  test_instance=test_instance)

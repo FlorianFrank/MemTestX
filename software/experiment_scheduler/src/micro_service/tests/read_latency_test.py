@@ -1,10 +1,9 @@
 """
 Module contains state machine to execute read latency tests.
 """
-import time
-
 from communication_interfaces.interface_wrapper import InterfaceWrapper
 from communication_interfaces.ip_definitions import IPConfig
+from db_handler import logger
 from model.result import Result
 from test_scheduling.memory_test import MemoryTest
 
@@ -16,12 +15,25 @@ class ReadLatencyTest(MemoryTest):
 
 
     def init(self) -> None:
-        """Initialize the row hammering test."""
+        """Initialize the latency variation test."""
+        logger.info("Initializing latency variation test.")
+        src = self.config['testData']
+        dict_read_latency = {
+            "init_value": src.get("writeValue"),
+            "puf_value": src.get("writeValue"),
+        }
+
+        self._command_dict =   {
+            "puf_type": "readLatency",
+            **MemoryTest.get_dict_all_tests(src),
+            **MemoryTest.get_dict_latency(src),
+            **dict_read_latency }
         super().init()
-        #self._cmd_
+
 
     def run(self, repeated=False, stop_condition=None) -> None:
         """Execute the read latency test."""
+        logger.info("Run read latency violation test.")
         super().run(repeated, stop_condition)
 
     def fetch_result(self) -> Result:

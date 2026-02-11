@@ -3,7 +3,7 @@ import logging
 
 from typing import Optional
 
-from test_colletion import TestCollection, TestCollectionStatus
+from test_collection import TestCollection, TestCollectionStatus
 
 
 class TestQueue:

@@ -1,3 +1,4 @@
+"""TestParser module for registering and resolving test types by identifier."""
 import logging
 from typing import Optional, List, Tuple, Type
 

@@ -16,6 +16,18 @@ class WriteLatencyTest(MemoryTest):
 
     def init(self) -> None:
         """Initialize the write latency test."""
+        src = self.config['testData']
+        dict_write_latency = {
+            "init_value": src.get("initializationValue"),
+            "puf_value": src.get("writeValue"),
+        }
+        self._command_dict = {
+            "puf_type": "writeLatency",
+            **MemoryTest.get_dict_all_tests(src),
+            **MemoryTest.get_dict_latency(src),
+            **dict_write_latency
+        }
+
         super().init()
 
     def run(self, repeated=False, stop_condition=None) -> None:

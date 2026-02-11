@@ -2,7 +2,7 @@ import json
 import logging
 from typing import Optional
 
-from test_colletion import TestCollection, TestCollectionStatus
+from model.test_collection import TestCollection, TestCollectionStatus
 
 
 class TestQueue:
@@ -65,6 +65,7 @@ class TestQueue:
             return False
 
     def get_test_state(self) -> tuple[int, TestCollectionStatus, int]:
+        """Return the current test identifier, collection status, and iteration index."""
         if not self._running_test and len(self._test_queue_waiting) == 0:
             return -1, TestCollectionStatus.NONE, 0
         if self._running_test:
@@ -72,7 +73,7 @@ class TestQueue:
                 self._running_test.get_current_iteration()
         return -1, TestCollectionStatus.TEST_IDLE, 0
 
-    def get_waiting_test_ids(self) -> list[{int, str, int}]:
+    def get_waiting_test_ids(self) -> list[dict]:
         """
         Get the list of waiting test identifiers with their status and iteration.
 
@@ -85,27 +86,30 @@ class TestQueue:
              'queue': 'waiting',
              'iteration': test_collection_instance.get_current_iteration(),
              'progress': test_collection_instance.get_current_progress(),
+             # TODO should be removed in the past as used for tests such as cnt-fet measurements
              'additional': json.dumps({
-                 'current_row': f'{test_collection_instance.get_meta_data()[0]}',
-                 'current_column': f'{test_collection_instance.get_meta_data()[1]}'
-             })
+                 'current_row': 'undefined',
+                 'current_column': 'undefined'
+             }),
              } for
             test_collection_instance in self._test_queue_waiting]
 
-    def get_running_tests_ids(self) -> list[{int, str, int}]:
+    def get_running_tests_ids(self) -> list[dict]:
         ret = [{'id': self._running_test.get_identifier(),
                 'queue': 'running',
                 'status': self._running_test.get_status_of_current_test().name,
                 'iteration': self._running_test.get_current_iteration(),
                 'progress': self._running_test.get_current_progress(),
+                # TODO should be removed in the past as used for tests such as cnt-fet measurements
                 'additional': json.dumps({
-                    'current_row': f'{self._running_test.get_meta_data()[0]}',
-                    'current_column': f'{self._running_test.get_meta_data()[1]}'
+                    'current_row': 'undefined',
+                    'current_column': 'undefined'
                 })
                 }] if self._running_test else []
+
         return ret
 
-    def get_finished_test_ids(self) -> list[{int, str, int}]:
+    def get_finished_test_ids(self) -> list[dict]:
         """
         Get the list of finished test identifiers with their status and iteration.
 
@@ -117,9 +121,10 @@ class TestQueue:
              'status': test_collection_instance.get_status_of_current_test().name,
              'queue': 'finished',
              'iteration': test_collection_instance.get_current_iteration(),
+             # TODO should be removed in the past as used for tests such as cnt-fet measurements
              'additional': json.dumps({
-                 'current_row': '0',
-                 'current_column': '0'
+                 'current_row': 'undefined',
+                 'current_column': 'undefined'
              }),
              'progress': test_collection_instance.get_current_progress()} for
             test_collection_instance in self._test_queue_done]

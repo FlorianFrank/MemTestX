@@ -49,8 +49,8 @@ DB_NAME = "memories.db"
 # Network Configuration (e.g. to the ZCU102)
 PORT_SEND = 5024
 PORT_RECV = 5023
-NIC_SUFFIX = "132.231.14"
-SCHEDULER_IP = "132.231.14.106"
+NIC_SUFFIX = "127.0.0."
+SCHEDULER_IP = "localhost"
 
 NETWORK_MAX_RECV_BUF_LEN = 4096  # Maximum length for received buffers (ethernet)
 NETWORK_TIMEOUT_RESPONSE = 500.0  # Timeout for receiving a response (in seconds)

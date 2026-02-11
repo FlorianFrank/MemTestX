@@ -3,7 +3,8 @@ import os
 import sqlite3
 import logging
 
-from test_defines import Test, test_type_to_str
+from micro_service.utils.test_state_machine import Test
+from test_scheduling.test_defines import test_type_to_str
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

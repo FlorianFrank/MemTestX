@@ -47,7 +47,6 @@ def select_network_interface_and_setup_scheduler(platform: str, run_microservice
             logger.error("Error could not detect any serial port! -> Exit program")
             exit(1)
         comm_interface = SerialHandler(serial_ports[0], DEFAULT_BAUDRATE)
-    print(zync_ip_configuration.ip)
     return TestScheduler(test_queue=None, time_between_tests_in_ms=TIME_BETWEEN_TESTS_IN_MS, server_ip=zync_ip_configuration,
                          comm_interface=comm_interface, run_microservices=run_microservice)
 

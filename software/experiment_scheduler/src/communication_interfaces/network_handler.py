@@ -7,12 +7,13 @@ from typing import Optional
 import netifaces
 from typing_extensions import override
 
+from communication_interfaces.interface_wrapper import InterfaceWrapper
+from communication_interfaces.ip_definitions import IPConfig
 from db_handler import logger
-from definitions import Command, cmd_to_str, NETWORK_TIMEOUT_RESPONSE, NETWORK_MAX_RECV_BUF_LEN, \
-    InterfaceEnum
-from interface_wrapper import InterfaceWrapper
-from ip_definitions import IPConfig
-from test_defines import Test, TestState
+from test_scheduling.memory_test import MemoryTest
+
+from test_scheduling.test_defines import TestState, StandaloneTest
+from utils.definitions import Command, cmd_to_str, NETWORK_TIMEOUT_RESPONSE, NETWORK_MAX_RECV_BUF_LEN, InterfaceEnum
 
 
 class NetworkHandler(InterfaceWrapper):
@@ -71,7 +72,7 @@ class NetworkHandler(InterfaceWrapper):
             raise
 
     @override
-    def parse_msg(self, response: bytes, test: Test):
+    def parse_msg(self, response: bytes, test: MemoryTest | StandaloneTest): # TODO to not forget
         try:
             decoded_str = response.decode('utf-8')
             if decoded_str[-1] != '}':
@@ -82,11 +83,11 @@ class NetworkHandler(InterfaceWrapper):
                 if response_json['cmd'] == 'start_measurement':
                     if response_json['cmd_status'] == 'processing':
                         logger.debug("Transition state to processing")
-                        test.state = TestState.PROCESSING
+                        test.set_processing()
                     if response_json['cmd_status'] == 'ready':
                         InterfaceWrapper.wait_until_writer_finishes(test)
                     if response_json['cmd_status'] == 'error':
-                        test.state = TestState.ERROR
+                        test.set_error()
                         logger.error(f"Error returned {response_json}")
 
                 if response_json['cmd'] == 'idn':
@@ -103,13 +104,21 @@ class NetworkHandler(InterfaceWrapper):
                     self._response = response_json
 
             if response_json['msg_type'] == 'm':
-                test.measure_file.add_to_buffer(response_json['d'])
+                data = response_json['d']
+                if len(data) > 0:
+                    test.update_progress(data[-1][0])
+
+                if test and test.measure_file:
+                    test.measure_file.add_to_buffer(data)
+                else:
+                    # TODO may remove in the future
+                    logger.warning("Received measurement data but no measure_file is initialized for the current test.")
 
         except Exception as e:
             logger.error(f"Failed to decode response ({response.decode()}): {e}")
 
     @override
-    def recv_thread_func(self, test: Test):
+    def recv_thread_func(self, test: StandaloneTest | MemoryTest):
         self._recv_socket = self.create_udp_socket()
         logger.info(f"Starting Receive Thread bind to: {self._ip}:{self._recv_port}")
         self._recv_socket.bind((self._ip, self._recv_port))
@@ -122,9 +131,9 @@ class NetworkHandler(InterfaceWrapper):
                     logger.info("Received data from %s: %s", server, response.decode())
                     self.parse_msg(response, test)
                 except TimeoutError:
-                    if test.state == TestState.WAITING_FOR_RESPONSE:
+                    if test.get_state() == TestState.WAITING_FOR_RESPONSE:
                         logger.error(f"Timed out waiting {NETWORK_TIMEOUT_RESPONSE} seconds for response")
-                        test.state = TestState.ERROR
+                        test.set_error()
                     if self._stop_thread:
                         logger.info(f"Stopping recv_thread function")
 
@@ -132,7 +141,7 @@ class NetworkHandler(InterfaceWrapper):
             logger.error("Error in Receive Thread: %s", e)
 
     @override
-    def start_recv_thread(self, test: Test):
+    def start_recv_thread(self, test: StandaloneTest | MemoryTest):
         self._stop_thread = False
         self._recv_thread = threading.Thread(target=self.recv_thread_func, args=(test,))
         self._recv_thread.start()

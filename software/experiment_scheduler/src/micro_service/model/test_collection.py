@@ -18,7 +18,9 @@ class TestCollectionStatus(Enum):
 
 class TestCollection:
 
-    def __init__(self, identifier: int, test_instance: Test | MemoryTest, logger: logging.Logger, iterations: int = 1):
+    def __init__(self, identifier: int,
+                 test_instance: Test | MemoryTest,
+                 logger: logging.Logger, iterations: int = 1) -> None:
         """
          Initialize TestCollection instance.
 
@@ -54,20 +56,27 @@ class TestCollection:
         return self._test_template.get_test_status()
 
     def get_collection_status(self) -> TestCollectionStatus:
-        """Returns the status of the test collection."""
-        if self._test_template.get_test_status().value == TestStatus.STOPPED.value:
+        """Return the aggregated collection status."""
+
+        status = self._test_template.get_test_status()
+
+        if status.value == TestStatus.STOPPED.value:
             if self._current_iteration == self._nr_iterations:
                 return TestCollectionStatus.COLLECTION_FINISHED
-            if self._current_iteration < self._nr_iterations:
-                return TestCollectionStatus.ITERATION_FINISHED
-        elif self._test_template.get_test_status().value == TestStatus.RUNNING.value:
+            return TestCollectionStatus.ITERATION_FINISHED
+
+        if status.value == TestStatus.RUNNING.value:
             return TestCollectionStatus.TEST_RUNNING
-        elif self._test_template.get_test_status().value == TestStatus.IDLE.value:
+
+        if status.value == TestStatus.IDLE.value:
             return TestCollectionStatus.TEST_IDLE
-        elif self._test_template.get_test_status().value == TestStatus.INIT.value:
+
+        if status.value == TestStatus.INIT.value:
             return TestCollectionStatus.TEST_INIT
-        elif self._test_template.get_test_status().value == TestStatus.FAILED.value:
+
+        if status.value == TestStatus.FAILED.value:
             return TestCollectionStatus.TEST_FAILED
+
         return TestCollectionStatus.NONE
 
     def get_nr_iterations(self) -> int:

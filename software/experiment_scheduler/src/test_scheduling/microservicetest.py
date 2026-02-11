@@ -5,9 +5,12 @@ import threading
 import time
 from abc import ABC, abstractmethod
 from enum import Enum
+from typing import Optional
 
-from config import Config
-from result import Result
+from db_handler import logger
+from message_handling.file_handler import MeasureFileHandler
+from micro_service.model.result import Result
+from test_scheduling.test_defines import TestState
 
 
 class TestStatus(Enum):
@@ -22,7 +25,7 @@ class TestStatus(Enum):
     FAILED = 4
 
 
-class Test(ABC):
+class MicroserviceTest(ABC):
     """
     The base class of all tests. It defines an interface to work with tests and provides a fixed test procedure.
     Always use this class as a superclass for your own tests and implement all abstract methods.
@@ -30,7 +33,7 @@ class Test(ABC):
     the method does already.
     """
 
-    def __init__(self, config: Config, multithread=False, log_level=logging.DEBUG) -> None:
+    def __init__(self, config: dict, multithread=False, log_level=logging.DEBUG) -> None:
         """
         Constructs a new test object. Declare all used attributes here, even if they are uninitialized for now.
         Always call super().__init__() in your base classes!
@@ -38,20 +41,47 @@ class Test(ABC):
         :param multithread: Whether this test should use multithreading.
         :param log_level: The level of logs to be shown.
         """
-        self.config: Config = config
+        self.config: dict = config
         self.repeated: bool = False
         self.stop_condition: bool = False
         self.status: TestStatus = TestStatus.IDLE
         self.timestamp: dict = {"start": 0.0, "stop": 0.0}
+        self._internal_state: TestState = TestState.INACTIVE
         self.progress_counter = 0
         self.__climate_chamber: None #ClimateChamberControl | None = None
-        self._progess_callback = None
-
-        #logging.set_log_level(log_level)
+        self.measure_file: Optional[MeasureFileHandler] = None # TODO may remove in the future
+        self._progress_callback = None
 
         self.thread: threading.Thread | None = None
         if multithread:
+            logger.info("Start test execution in single thread")
             self.thread = threading.Thread(target=self.execute, args=(1,))
+
+    def set_error(self):
+        self.status: TestStatus = TestStatus.FAILED
+
+    def set_initializing(self):
+        self.status: TestStatus = TestStatus.INIT
+
+    def set_processing(self):
+        self.status: TestStatus = TestStatus.RUNNING
+        self._internal_state = TestState.PROCESSING
+
+    def get_additional_test_state(self) -> TestState:
+        return self._internal_state
+
+    def set_finished(self):
+        self.status = TestStatus.STOPPED
+        self._internal_state = TestState.FINISHED
+
+    def set_init(self):
+        self.status = TestStatus.INIT
+
+    def set_running(self):
+        self.status = TestStatus.RUNNING
+
+    def set_done(self):
+        self.status = TestStatus.STOPPED
 
     def start_test(self) -> None:
         """
@@ -60,11 +90,12 @@ class Test(ABC):
         :return: None
         """
         self.timestamp['start'] = time.time()
-        logging.info("Start: " + str(self.timestamp['start']))
+        logger.info("Start: " + str(self.timestamp['start']))
 
         if self.thread:
             self.thread.start()
         else:
+            logger.info("Start execution single threaded")
             self.execute(None)
 
     def execute(self, thread_param) -> None:
@@ -73,8 +104,6 @@ class Test(ABC):
         deinitializing. If there is an error while executing the test, the status gets set to FAILED and the error
         propagates.
 
-        :param thread_param: TODO: What is this for?
-        :return: None
         """
         self.init()
         #   try:
@@ -83,11 +112,6 @@ class Test(ABC):
                 self.run()
         else:
             self.run()
-        self.done()
-
-    #     except Exception as e:
-    #        self.status = TestStatus.FAILED
-    #       raise e
 
     @abstractmethod
     def init(self) -> None:
@@ -120,6 +144,12 @@ class Test(ABC):
         self.timestamp['stop'] = time.time()
         logging.info("Stop: " + str(self.timestamp['stop']) + " Difference: " + str(
             self.timestamp['stop'] - self.timestamp['start']) + " seconds")
+
+        # TODO may remove in the future.
+        #  Currently the microservice is storing the results locally.
+        if self.measure_file:
+            self.measure_file.stop_store_data_thread()
+            self.measure_file.close_file()
 
         self._finish_progress()
 
@@ -166,7 +196,6 @@ class Test(ABC):
     def __wait_for_climate_chamber(self, temperature: float, humidity: float) -> None:
         """
         Waits for the climate chamber to reach the given values.
-        TODO: Change to optimized version
 
         :param temperature: The temperature to be reached.
         :param humidity: The humidity to be reached.
@@ -203,7 +232,7 @@ class Test(ABC):
         Registers a function that is called every time there is progress in the test execution. This function should
         expect exactly one argument, which is the result object of the current test, filled with the values so far.
         """
-        self._progess_callback = callback_func
+        self._progress_callback = callback_func
 
     def _progress(self) -> None:
         """
@@ -214,8 +243,8 @@ class Test(ABC):
         """
         self.progress_counter += 1
         logging.info(f'{round((self.progress_counter / self.test_length) * 100, 1)} %')
-        if self._progess_callback is not None:
-            self._progess_callback(self.fetch_result())
+        if self._progress_callback is not None:
+            self._progress_callback(self.fetch_result())
 
     def _finish_progress(self) -> None:
         """

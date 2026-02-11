@@ -4,14 +4,15 @@ import threading
 import time
 from typing import Optional
 
-from definitions import DB_NAME, Command, DEFAULT_PATH, SCHEDULER_THREAD_TIMEOUT_IN_S
-from file_handler import MeasureFileHandler
-from interface_wrapper import InterfaceWrapper
-from measure_device_wrapper import PowerSupplyWrapper
-from network_handler import IPConfig
+from communication_interfaces.interface_wrapper import InterfaceWrapper
+from communication_interfaces.ip_definitions import IPConfig
+from communication_interfaces.measure_device_wrapper import PowerSupplyWrapper
+from message_handling.file_handler import MeasureFileHandler
 from src.db_handler import DBHandler, logger
-from test_defines import TestRange, Test, TestState, test_type_to_str, TestType, TestInternalState
-from test_queue import TestQueue
+from model.test_collection import TestCollectionStatus
+from test_scheduling.test_defines import TestRange, StandaloneTest, test_type_to_str, TestType, TestState, TestInternalState
+from test_scheduling.test_queue import TestQueue
+from utils.definitions import DB_NAME, Command, DEFAULT_PATH, SCHEDULER_THREAD_TIMEOUT_IN_S
 
 
 class TestScheduler:
@@ -23,20 +24,33 @@ class TestScheduler:
     for continuous scheduling.
     """
     def __init__(self, test_queue: Optional[TestQueue], time_between_tests_in_ms: int, server_ip: IPConfig,
-                 comm_interface: InterfaceWrapper):
+                 comm_interface: InterfaceWrapper, run_microservices: bool = False):
         self._test_range: TestRange = TestRange([], time_between_tests_in_ms)
         self._test_thread: Optional[threading.Thread] = None
         self._stop_test_thread: bool = False
         self._current_test_idx: int = 0
-        self._current_test: Optional[Test] = None
+        self._current_test: Optional[StandaloneTest] = None
         self._db_handler: Optional[DBHandler] = None
         self._server_ip: IPConfig = server_ip
         self._test_queue: TestQueue = test_queue
         self.communication_interface: InterfaceWrapper = comm_interface
         self.db_updated = False
         self._measure_device = None
+        self._run_microservices = run_microservices
 
-    def add_test(self, test: Test):
+    def set_test_queue(self, test_queue: TestQueue):
+        self._test_queue = test_queue
+
+    def set_time_between_tests_in_ms(self, time_between_tests_in_ms: int):
+        self._time_between_tests_in_ms = time_between_tests_in_ms
+
+    def get_communication_interface(self) -> InterfaceWrapper:
+        return self.communication_interface
+
+    def get_server_ip(self) -> IPConfig:
+        return self._server_ip
+
+    def add_test(self, test: StandaloneTest):
         self._test_range.lists.append(test)
 
     def start_test(self):
@@ -168,9 +182,10 @@ class TestScheduler:
         if self._measure_device:
             self._measure_device.turn_on()
         self.communication_interface.send_config(Command.CMD_START_MEASUREMENT, self._server_ip, cfg=command_dict)
+        return None
 
     @staticmethod
-    def create_file_name(test: Test):
+    def create_file_name(test: StandaloneTest):
         """
         Generates a unique filename for storing measurement data using the current timestamp and some experiment parameters.
         """
@@ -212,86 +227,94 @@ class TestScheduler:
         Starts the scheduler loop in a dedicated thread.
         """
         while not self._stop_test_thread:
-            if len(self._test_range.lists) > self._current_test_idx:
-                if self._test_range.lists[self._current_test_idx].state == TestState.WAITING_FOR_RESPONSE:
-                    logger.info(f"Waiting for response ...")
-                if self._test_range.lists[self._current_test_idx].state == TestState.PROCESSING:
-                    if not self.db_updated:
-                        self._db_handler.update_start_ts(
-                            datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'),
-                            self._test_range.lists[self._current_test_idx])
-                        self.db_updated = True
+            if self._run_microservices:
+                identifier, state, iteration = self._test_queue.get_test_state()
+                if state == TestCollectionStatus.ITERATION_FINISHED or state == TestCollectionStatus.TEST_IDLE \
+                        or state == TestCollectionStatus.COLLECTION_FINISHED:
+                    logger.info('Schedule new test')
+                    self._test_queue.schedule_new_test()
+            else:
 
-                    # APPLY VOLTAGE VARIATION TESTS
-                    if self._test_range.lists[self._current_test_idx].test_template.type == TestType.VOLTAGE_WRITE or \
-                            self._test_range.lists[self._current_test_idx].test_template.type == TestType.VOLTAGE_READ:
-                        if self._test_range.lists[self._current_test_idx].internal_state == TestInternalState.INIT:
-                            logger.info(f"Memory initialization finished")
-                            if 'voltage_change' in self._test_range.lists[
-                                self._current_test_idx].test_template.parameters or 'current_change' in \
-                                    self._test_range.lists[self._current_test_idx].test_template.parameters:
-                                voltage_offset = 0
-                                current_offset = 0
-                                if self._test_range.lists[
-                                    self._current_test_idx].test_template.type == TestType.VOLTAGE_WRITE:
-                                    voltage_offset = \
-                                    self._test_range.lists[self._current_test_idx].test_template.parameters[
-                                        'voltage_change'] if 'voltage_change' in self._test_range.lists[
-                                        self._current_test_idx].test_template.parameters else 0
-                                    current_offset = \
-                                        self._test_range.lists[self._current_test_idx].test_template.parameters[
-                                            'current_change'] if 'current_change' in self._test_range.lists[
-                                            self._current_test_idx].test_template.parameters else 0
+                if len(self._test_range.lists) > self._current_test_idx:
+                    if self._test_range.lists[self._current_test_idx].state == TestState.WAITING_FOR_RESPONSE:
+                        logger.info(f"Waiting for response ...")
+                    if self._test_range.lists[self._current_test_idx].state == TestState.PROCESSING:
+                        if not self.db_updated:
+                            self._db_handler.update_start_ts(
+                                datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'),
+                                self._test_range.lists[self._current_test_idx])
+                            self.db_updated = True
 
-                                self.adjust_electrical_params(voltage_offset, current_offset)
-
-                        elif self._test_range.lists[self._current_test_idx].internal_state == TestInternalState.RUN:
-                            logger.info(f"Memory run finished")
-                            if 'voltage_change' in self._test_range.lists[
-                                self._current_test_idx].test_template.parameters or 'current_change' in \
-                                    self._test_range.lists[self._current_test_idx].test_template.parameters:
-                                voltage_offset = 0
-                                current_offset = 0
-                                if self._test_range.lists[
-                                    self._current_test_idx].test_template.type == TestType.VOLTAGE_READ:
-                                    voltage_offset = \
+                        # APPLY VOLTAGE VARIATION TESTS
+                        if self._test_range.lists[self._current_test_idx].test_template.type == TestType.VOLTAGE_WRITE or \
+                                self._test_range.lists[self._current_test_idx].test_template.type == TestType.VOLTAGE_READ:
+                            if self._test_range.lists[self._current_test_idx].internal_state == TestInternalState.INIT:
+                                logger.info(f"Memory initialization finished")
+                                if 'voltage_change' in self._test_range.lists[
+                                    self._current_test_idx].test_template.parameters or 'current_change' in \
+                                        self._test_range.lists[self._current_test_idx].test_template.parameters:
+                                    voltage_offset = 0
+                                    current_offset = 0
+                                    if self._test_range.lists[
+                                        self._current_test_idx].test_template.type == TestType.VOLTAGE_WRITE:
+                                        voltage_offset = \
                                         self._test_range.lists[self._current_test_idx].test_template.parameters[
                                             'voltage_change'] if 'voltage_change' in self._test_range.lists[
                                             self._current_test_idx].test_template.parameters else 0
-                                    current_offset = \
-                                        self._test_range.lists[self._current_test_idx].test_template.parameters[
-                                            'current_change'] if 'current_change' in self._test_range.lists[
-                                            self._current_test_idx].test_template.parameters else 0
+                                        current_offset = \
+                                            self._test_range.lists[self._current_test_idx].test_template.parameters[
+                                                'current_change'] if 'current_change' in self._test_range.lists[
+                                                self._current_test_idx].test_template.parameters else 0
 
-                                self.adjust_electrical_params(voltage_offset, current_offset)
+                                    self.adjust_electrical_params(voltage_offset, current_offset)
 
-                        elif self._test_range.lists[self._current_test_idx].internal_state == TestInternalState.DONE:
-                            logger.info(f"Memory done received")
+                            elif self._test_range.lists[self._current_test_idx].internal_state == TestInternalState.RUN:
+                                logger.info(f"Memory run finished")
+                                if 'voltage_change' in self._test_range.lists[
+                                    self._current_test_idx].test_template.parameters or 'current_change' in \
+                                        self._test_range.lists[self._current_test_idx].test_template.parameters:
+                                    voltage_offset = 0
+                                    current_offset = 0
+                                    if self._test_range.lists[
+                                        self._current_test_idx].test_template.type == TestType.VOLTAGE_READ:
+                                        voltage_offset = \
+                                            self._test_range.lists[self._current_test_idx].test_template.parameters[
+                                                'voltage_change'] if 'voltage_change' in self._test_range.lists[
+                                                self._current_test_idx].test_template.parameters else 0
+                                        current_offset = \
+                                            self._test_range.lists[self._current_test_idx].test_template.parameters[
+                                                'current_change'] if 'current_change' in self._test_range.lists[
+                                                self._current_test_idx].test_template.parameters else 0
+
+                                    self.adjust_electrical_params(voltage_offset, current_offset)
+
+                            elif self._test_range.lists[self._current_test_idx].internal_state == TestInternalState.DONE:
+                                logger.info(f"Memory done received")
+                                self._measure_device.turn_off()
+
+                        logger.info(f"Test is processing wait till finished ...")
+                    elif self._test_range.lists[self._current_test_idx].state == TestState.INACTIVE:
+                        file_name = self.create_file_name(self._test_range.lists[self._current_test_idx])
+                        self._test_range.lists[self._current_test_idx].measure_file = MeasureFileHandler(DEFAULT_PATH,
+                                                                                                         file_name)
+                        logger.info(f"Start new test and store data in {file_name}")
+                        if not self.communication_interface.is_recv_thread_running():
+                            self.communication_interface.start_recv_thread(self._test_range.lists[self._current_test_idx])
+                        self.start_test()
+                    elif self._test_range.lists[self._current_test_idx].state == TestState.FINISHED:
+                        if self._measure_device:
+                            logger.info(f"Turn off power supply.")
                             self._measure_device.turn_off()
-
-                    logger.info(f"Test is processing wait till finished ...")
-                elif self._test_range.lists[self._current_test_idx].state == TestState.INACTIVE:
-                    file_name = self.create_file_name(self._test_range.lists[self._current_test_idx])
-                    self._test_range.lists[self._current_test_idx].measure_file = MeasureFileHandler(DEFAULT_PATH,
-                                                                                                     file_name)
-                    logger.info(f"Start new test and store data in {file_name}")
-                    if not self.communication_interface.is_recv_thread_running():
-                        self.communication_interface.start_recv_thread(self._test_range.lists[self._current_test_idx])
-                    self.start_test()
-                elif self._test_range.lists[self._current_test_idx].state == TestState.FINISHED:
-                    if self._measure_device:
-                        logger.info(f"Turn off power supply.")
-                        self._measure_device.turn_off()
-                    if not self.db_updated:
-                        self._db_handler.update_stop_ts(
-                            datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'),
-                            self._test_range.lists[self._current_test_idx])
-                        self.db_updated = False
-                    logger.info(f"Test Finish -> Stop network thread")
-                    self.communication_interface.stop_thread()
-                    self._current_test_idx += 1
-                elif self._test_range.lists[self._current_test_idx].state == TestState.ERROR:
-                    logger.error(f"An error occurred while executing test with index {self._current_test_idx}")
+                        if not self.db_updated:
+                            self._db_handler.update_stop_ts(
+                                datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'),
+                                self._test_range.lists[self._current_test_idx])
+                            self.db_updated = False
+                        logger.info(f"Test Finish -> Stop network thread")
+                        self.communication_interface.stop_thread()
+                        self._current_test_idx += 1
+                    elif self._test_range.lists[self._current_test_idx].state == TestState.ERROR:
+                        logger.error(f"An error occurred while executing test with index {self._current_test_idx}")
             time.sleep(self._test_range.wait_between_tests_in_ms / 1000)
 
     def run_scheduler_loop(self, start_in_dedicated_threads: bool = True):
@@ -299,6 +322,7 @@ class TestScheduler:
           Starts the scheduler loop either in a dedicated thread or the main thread.
           Currently only threaded execution is supported!!
           """
+        logger.info("Start Scheduler Loop")
         if start_in_dedicated_threads:
             logger.info("Start Scheduling thread")
             self._stop_test_thread = False
@@ -313,5 +337,5 @@ class TestScheduler:
         self._stop_test_thread = True
         self._test_thread.join(SCHEDULER_THREAD_TIMEOUT_IN_S)
 
-    def get_test_queue(self):
+    def get_test_queue(self) -> TestQueue:
         return self._test_queue

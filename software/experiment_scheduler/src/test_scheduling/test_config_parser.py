@@ -4,8 +4,8 @@ from itertools import product
 import numpy as np
 import yaml
 
-from test_defines import string_to_test_type, TestTemplate, Test
-from test_scheduler import TestScheduler
+from test_scheduling.test_defines import TestTemplate, string_to_test_type, StandaloneTest
+from test_scheduling.test_scheduler import TestScheduler
 
 
 class TestConfigParser:
@@ -93,8 +93,8 @@ class TestConfigParser:
                     for experiment in experiments:
                         for template in self.parse_experiment(experiment['experiment'], memory_type):
                             logging.debug(f"Register experiment: {template}")
-                            self._test_list.append(Test(memory_label=memory_instance, test_template=template,
-                                                        board=self._platform))
+                            self._test_list.append(StandaloneTest(memory_label=memory_instance, test_template=template,
+                                                                  board=self._platform))
 
         except Exception as err:
             logging.error(f"Could not parse config, returned with error {err}")

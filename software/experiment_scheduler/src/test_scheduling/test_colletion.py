@@ -2,7 +2,7 @@ import logging
 from enum import Enum
 
 from result import Result
-from test_scheduling.test import Test, TestStatus
+from test_scheduling.microservicetest import MicroserviceTest, TestStatus
 
 
 class TestCollectionStatus(Enum):
@@ -17,13 +17,13 @@ class TestCollectionStatus(Enum):
 
 class TestCollection:
 
-    def __init__(self, identifier: int, test_instance: Test, logger: logging.Logger, iterations: int = 1):
+    def __init__(self, identifier: int, test_instance: MicroserviceTest, logger: logging.Logger, iterations: int = 1):
         """
          Initialize TestCollection instance.
 
          Args:
              identifier (int): Identifier for the test collection.
-             test_instance (Test): Instance of the test to be executed.
+             test_instance (MicroserviceTest): Instance of the test to be executed.
              logger (logging.Logger): Logger instance for logging messages.
              iterations (int, optional): Number of iterations to run the test. Defaults to 1.
          """
@@ -31,7 +31,7 @@ class TestCollection:
         self._nr_iterations: int = iterations
         self._current_iteration: int = 0
         self._logger: logging.Logger = logger
-        self._test_template: Test = test_instance
+        self._test_template: MicroserviceTest = test_instance
 
     def get_iteration(self) -> int:
         """Returns the current iteration number."""

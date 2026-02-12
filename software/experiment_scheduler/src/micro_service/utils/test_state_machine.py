@@ -1,25 +1,23 @@
-from __future__ import annotations
+"""
+Base definitions for the test framework.
+
+This module defines the TestStatus enum and the abstract Test base class, providing a
+standardized lifecycle (init → run → done), optional multithreading, progress tracking,
+and climate chamber integration for all concrete test implementations.
+"""
 
 import logging
+import math
 import threading
 import time
 from abc import ABC, abstractmethod
-from enum import Enum
 
-from config import Config
-from result import Result
+from micro_service.model.result import Result
+from test_scheduling.test_defines import TestStatus
+
+from py_instrument_control_lib.device_types.ClimateChamber import ClimateChamber
 
 
-class TestStatus(Enum):
-    """
-    The various possible statuses of the test execution.
-    """
-
-    IDLE = 0
-    INIT = 1
-    RUNNING = 2
-    STOPPED = 3
-    FAILED = 4
 
 
 class Test(ABC):
@@ -30,24 +28,21 @@ class Test(ABC):
     the method does already.
     """
 
-    def __init__(self, config: Config, multithread=False, log_level=logging.DEBUG) -> None:
+    def __init__(self, config: dict, multithread=False) -> None:
         """
         Constructs a new test object. Declare all used attributes here, even if they are uninitialized for now.
         Always call super().__init__() in your base classes!
 
         :param multithread: Whether this test should use multithreading.
-        :param log_level: The level of logs to be shown.
         """
-        self.config: Config = config
+        self.config: dict = config
         self.repeated: bool = False
         self.stop_condition: bool = False
         self.status: TestStatus = TestStatus.IDLE
         self.timestamp: dict = {"start": 0.0, "stop": 0.0}
         self.progress_counter = 0
-        self.__climate_chamber: None #ClimateChamberControl | None = None
+        self.__climate_chamber: ClimateChamber | None = None
         self._progess_callback = None
-
-        #logging.set_log_level(log_level)
 
         self.thread: threading.Thread | None = None
         if multithread:
@@ -67,27 +62,22 @@ class Test(ABC):
         else:
             self.execute(None)
 
-    def execute(self, thread_param) -> None:
+    def execute(self, _) -> None:
         """
         Executes the test by first initializing it, then running the test and after a successful execution stopping and
         deinitializing. If there is an error while executing the test, the status gets set to FAILED and the error
         propagates.
 
-        :param thread_param: TODO: What is this for?
+        :param _: Unused
         :return: None
         """
         self.init()
-        #   try:
         if self.repeated:
             while self.stop_condition:
                 self.run()
         else:
             self.run()
         self.done()
-
-    #     except Exception as e:
-    #        self.status = TestStatus.FAILED
-    #       raise e
 
     @abstractmethod
     def init(self) -> None:
@@ -153,40 +143,37 @@ class Test(ABC):
         :param humidity: The humidity to be set.
         :return: None
         """
-        if temperature is not None:
-            pass
-          #  self.__climate_chamber.set_target_temperature(temperature)
-        if humidity is not None:
-            pass
-         #   self.__climate_chamber.set_target_humidity(humidity)
-        #self.__climate_chamber.start_execution()
+        if self.__climate_chamber:
+            if temperature is not None:
+                self.__climate_chamber.set_target_temperature(temperature)
+            if humidity is not None:
+                self.__climate_chamber.set_target_humidity(humidity)
+            self.__climate_chamber.start()
 
-        #self.__wait_for_climate_chamber(temperature, humidity)
+            self.__wait_for_climate_chamber(temperature, humidity)
 
     def __wait_for_climate_chamber(self, temperature: float, humidity: float) -> None:
         """
         Waits for the climate chamber to reach the given values.
-        TODO: Change to optimized version
 
         :param temperature: The temperature to be reached.
         :param humidity: The humidity to be reached.
         :return: None
         """
-
         def temperature_reached():
-            pass
-
-        #     return math.isclose(self.__climate_chamber.get_current_temperature(), temperature, abs_tol=0.5) \
-        #        or temperature is None
+            if temperature is None:
+                return True
+            return math.isclose(self.__climate_chamber.get_current_temperature(), temperature, abs_tol=0.5)
 
         def humidity_reached():
-            pass
-            # return math.isclose(self.__climate_chamber.get_current_humidity(), humidity, abs_tol=0.5) \
-            #   or humidity is None
+            if humidity is None:
+                return True
+            return math.isclose(self.__climate_chamber.get_current_humidity(), humidity, abs_tol=0.5)
 
-        while not temperature_reached() or not humidity_reached():
-            print(f'Waiting for climate chamber to get to the target values')
-            time.sleep(10)
+        if self.__climate_chamber:
+            while not temperature_reached() or not humidity_reached():
+                logging.info(f'Waiting for climate chamber to get to the target values')
+                time.sleep(10)
 
     def _init_progress(self, length: int) -> None:
         """
@@ -231,12 +218,12 @@ class Test(ABC):
 
         :return: None
         """
-        # if self.__climate_chamber:
-        #     self.__climate_chamber.stop_execution()
-        #     self.__climate_chamber.deinitialize()
+        if self.__climate_chamber:
+            self.__climate_chamber.stop()
 
     def get_test_status(self):
         return self.status
 
     def get_meta_data(self):
-        pass
+        """Returns metadata about the test."""
+        return self.progress_counter, self.test_length

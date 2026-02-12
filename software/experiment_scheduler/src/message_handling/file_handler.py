@@ -7,8 +7,8 @@ from typing import List
 
 import numpy as np
 
-from data_buffer import MeasureDataTuple
-from definitions import MEASURE_FILE_DELIMITER, MEASURE_FILE_QUOTE_CHAR
+from message_handling.data_buffer import MeasureDataTuple
+from utils.definitions import MEASURE_FILE_DELIMITER, MEASURE_FILE_QUOTE_CHAR
 
 
 class MeasureFileHandler:

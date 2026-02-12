@@ -1,0 +1,96 @@
+import logging
+from enum import Enum
+
+from test_scheduling.test_defines import TestStatus
+from micro_service.utils.test_state_machine import Test
+from model.result import Result
+from test_scheduling.memory_test import MemoryTest
+
+
+class TestCollectionStatus(Enum):
+    TEST_RUNNING = 1
+    ITERATION_FINISHED = 2
+    COLLECTION_FINISHED = 3
+    TEST_IDLE = 4
+    TEST_INIT = 5
+    TEST_FAILED = 6
+    NONE = 7
+
+
+class TestCollection:
+
+    def __init__(self, identifier: int,
+                 test_instance: Test | MemoryTest,
+                 logger: logging.Logger, iterations: int = 1) -> None:
+        """
+         Initialize TestCollection instance.
+
+         Args:
+             identifier (int): Identifier for the test collection.
+             test_instance (Test): Instance of the test to be executed.
+             logger (logging.Logger): Logger instance for logging messages.
+             iterations (int, optional): Number of iterations to run the test. Defaults to 1.
+         """
+        self._identifier: int = identifier
+        self._nr_iterations: int = iterations
+        self._current_iteration: int = 0
+        self._logger: logging.Logger = logger
+        self._test_template: Test = test_instance
+
+    def get_iteration(self) -> int:
+        """Returns the current iteration number."""
+        return self._current_iteration
+
+    def fetch_result(self) -> Result:
+        pass
+
+    def run_next(self):
+        """Runs the next iteration of the test."""
+        if self._current_iteration < self._nr_iterations:
+            self._logger.info(f'Initialize and run test iteration {self._current_iteration}')
+            self._test_template.execute(None)
+            self._current_iteration += 1
+        else:
+            self._logger.warning('Maximum number of iterations reached')
+
+    def get_status_of_current_test(self) -> TestStatus:
+        return self._test_template.get_test_status()
+
+    def get_collection_status(self) -> TestCollectionStatus:
+        """Return the aggregated collection status."""
+
+        status = self._test_template.get_test_status()
+
+        if status == TestStatus.STOPPED:
+            if self._current_iteration == self._nr_iterations:
+                return TestCollectionStatus.COLLECTION_FINISHED
+            return TestCollectionStatus.ITERATION_FINISHED
+
+        if status == TestStatus.RUNNING:
+            return TestCollectionStatus.TEST_RUNNING
+
+        if status == TestStatus.IDLE:
+            return TestCollectionStatus.TEST_IDLE
+
+        if status == TestStatus.INIT:
+            return TestCollectionStatus.TEST_INIT
+
+        if status == TestStatus.FAILED:
+            return TestCollectionStatus.TEST_FAILED
+
+        return TestCollectionStatus.NONE
+
+    def get_nr_iterations(self) -> int:
+        return self._nr_iterations
+
+    def get_current_iteration(self) -> int:
+        return self._current_iteration
+
+    def get_current_progress(self) -> int:
+        return self._test_template.get_progress()
+
+    def get_meta_data(self):
+        return self._test_template.get_meta_data()
+
+    def get_identifier(self) -> int:
+        return self._identifier

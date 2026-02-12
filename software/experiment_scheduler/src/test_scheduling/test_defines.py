@@ -2,7 +2,18 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, List
 
-from file_handler import MeasureFileHandler
+from message_handling.file_handler import MeasureFileHandler
+
+
+class TestStatus(Enum):
+    """
+    The various possible statuses of the test execution.
+    """
+    IDLE = 0
+    INIT = 1
+    RUNNING = 2
+    STOPPED = 3
+    FAILED = 4
 
 
 class TestType(Enum):
@@ -84,7 +95,7 @@ class TestTemplate:
 
 
 @dataclass
-class Test:
+class StandaloneTest:
     identifier: int
     state: TestState
     internal_state: TestInternalState
@@ -101,8 +112,29 @@ class Test:
         self.board = board
         self.internal_state: TestInternalState = TestInternalState.INACTIVE
 
+    def set_error(self):
+        self.state = TestState.ERROR
+
+    def get_state(self) -> TestState:
+        return self.state
+
+    def set_processing(self):
+        self.state = TestState.PROCESSING
+
+    def set_finished(self):
+        self.state = TestState.FINISHED
+
+    def set_init(self):
+        self.internal_state = TestInternalState.INIT
+
+    def set_running(self):
+        self.internal_state = TestInternalState.RUN
+
+    def set_done(self):
+        self.internal_state = TestInternalState.DONE
+
 
 @dataclass
 class TestRange:
-    lists: List[Test]
+    lists: List[StandaloneTest]
     wait_between_tests_in_ms: int

@@ -1,6 +1,6 @@
+from communication_interfaces.network_handler import NetworkHandler
 from db_handler import DBHandler, logger
-from json_parser import JSONParser
-from network_handler import NetworkHandler
+from message_handling.json_parser import JSONParser
 
 MEM_CONFIG_FILE_DIR = 'config_files/memory_configs'
 MEM_TIMING_FILE_DIR = 'config_files/memory_timings'

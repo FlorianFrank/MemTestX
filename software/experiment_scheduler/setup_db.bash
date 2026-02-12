@@ -30,7 +30,7 @@ else
 fi
 }
 
-export PYTHONPATH="$(pwd):$(pwd)/src:${PYTHONPATH}"
+export PYTHONPATH="$(pwd):$(pwd)/src:$(pwd)/src/micro_service:${PYTHONPATH}"
 
 
 echo -e "\n**************************************************"

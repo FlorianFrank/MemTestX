@@ -1,26 +1,26 @@
 import sys
 import time
+from typing import Optional
+from src.micro_service.microservice_entry_point import run_microservice
 
+from communication_interfaces.interface_wrapper import InterfaceWrapper
+from communication_interfaces.ip_definitions import IPConfig
+from communication_interfaces.network_handler import NetworkHandler
+from communication_interfaces.serial_handler import SerialHandler, DEFAULT_BAUDRATE
+from db_handler import DBHandler
 from src.utils.import_paths import set_import_paths
+from test_scheduling.test_config_parser import TestConfigParser
+from test_scheduling.test_scheduler import TestScheduler
+from utils.definitions import DB_NAME, SCHEDULER_IP, PORT_SEND, NIC_SUFFIX, PORT_RECV, TIME_BETWEEN_TESTS_IN_MS
+from utils.logging_handler import initialize_logging
+from utils.memory_instance_handler import add_all_memory_instances_to_db
+from utils.setup import Setup
 
 # Add directories to python path
 set_import_paths()
 
-from serial_handler import SerialHandler, DEFAULT_BAUDRATE
-from interface_wrapper import InterfaceWrapper
-from typing import Optional
-from db_handler import DBHandler
-from ip_definitions import IPConfig
-from network_handler import NetworkHandler
-from test_scheduler import TestScheduler
-from memory_instance_handler import add_all_memory_instances_to_db
-from utils.logging_handler import initialize_logging
-from definitions import DB_NAME, PORT_SEND, PORT_RECV, SCHEDULER_IP, NIC_SUFFIX, TIME_BETWEEN_TESTS_IN_MS
-from setup import Setup
-from test_config_parser import TestConfigParser
 
-
-def select_network_interface_and_setup_scheduler(platform: str):
+def select_network_interface_and_setup_scheduler(platform: str, run_microservice: bool):
     """
     Selects the appropriate communication interface based on the test platform
     and initializes a TestScheduler instance with the configured setup.
@@ -47,9 +47,8 @@ def select_network_interface_and_setup_scheduler(platform: str):
             logger.error("Error could not detect any serial port! -> Exit program")
             exit(1)
         comm_interface = SerialHandler(serial_ports[0], DEFAULT_BAUDRATE)
-
     return TestScheduler(test_queue=None, time_between_tests_in_ms=TIME_BETWEEN_TESTS_IN_MS, server_ip=zync_ip_configuration,
-                         comm_interface=comm_interface)
+                         comm_interface=comm_interface, run_microservices=run_microservice)
 
 
 if __name__ == "__main__":
@@ -65,7 +64,9 @@ if __name__ == "__main__":
         db_handler.initialize()
         logger.info(f"Database scheme created")
         add_all_memory_instances_to_db(db_handler, logger)
-
+    elif len(sys.argv) > 1 and sys.argv[1] == '-run_microservice':
+        scheduler = select_network_interface_and_setup_scheduler("Ultrascale ZCU102", run_microservice=True)
+        run_microservice(logger, scheduler)
     else:
         config_file = None
         refresh_memories = False
@@ -89,7 +90,7 @@ if __name__ == "__main__":
             add_all_memory_instances_to_db(db_handler, logger)
 
         # Add tests to scheduler
-        scheduler = select_network_interface_and_setup_scheduler(parser.get_platform())
+        scheduler = select_network_interface_and_setup_scheduler(parser.get_platform(),  run_microservice=False)
         parser.initialize_test_scheduler(scheduler)
         scheduler.run_scheduler_loop()
 

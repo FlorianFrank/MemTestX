@@ -6,10 +6,11 @@ from abc import abstractmethod
 import serial
 import serial.tools.list_ports
 
+from communication_interfaces.interface_wrapper import InterfaceWrapper
 from db_handler import logger
-from definitions import InterfaceEnum, Command
-from interface_wrapper import InterfaceWrapper
-from test_defines import Test, TestState, TestInternalState
+from test_scheduling.memory_test import MemoryTest
+from test_scheduling.test_defines import StandaloneTest, TestState, TestInternalState
+from utils.definitions import InterfaceEnum, Command
 
 MAX_RECV_BUF_LEN = 4096
 TIMEOUT_RESPONSE = 2.0
@@ -70,12 +71,12 @@ class SerialHandler(InterfaceWrapper):
         """
         return self._serial_if.readline(size)
 
-    def start_recv_thread(self, test: Test):
+    def start_recv_thread(self, test: StandaloneTest | MemoryTest):
         """
         Starts a background thread to receive data from the serial interface.
 
         Args:
-            test (Test): Test object to handle received data.
+            test (StandaloneTest): Test object to handle received data.
         """
         self._stop_thread = False
         self._recv_thread = threading.Thread(target=self.recv_thread_func, args=(test,))
@@ -94,12 +95,12 @@ class SerialHandler(InterfaceWrapper):
         else:
             logger.warning("Receive thread was not running.")
 
-    def recv_thread_func(self, test: Test):
+    def recv_thread_func(self, test: MemoryTest): # TODO not forget
         """
         Function executed by the reception thread to continuously read data from the serial interface.
 
         Args:
-            test (Test): Test object to handle received data.
+            test (StandaloneTest): Test object to handle received data.
         """
         logger.info(f"Starting Receive Thread on serial port to: {self._serial_if} with baudrate {self._baudrate}")
         try:
@@ -110,21 +111,21 @@ class SerialHandler(InterfaceWrapper):
                     if len(response) > 0:
                         self.parse_msg(response, test)
                 except TimeoutError:
-                    if test.state == TestState.WAITING_FOR_RESPONSE:
+                    if test.get_test_status() == TestState.WAITING_FOR_RESPONSE:
                         logger.error(f"Timed out waiting {TIMEOUT_RESPONSE} seconds for response")
-                        test.state = TestState.ERROR
+                        test.set_error()
                     if self._stop_thread:
                         logger.info(f"Stopping recv_thread function")
         except Exception as e:
             logger.error("Error in Receive Thread: %s", e)
 
-    def parse_msg(self, response: bytes, test: Test):
+    def parse_msg(self, response: bytes, test: StandaloneTest | MemoryTest):
         """
         Parses incoming messages and handles different response types.
 
         Args:
             response (bytes): Raw response from the serial interface.
-            test (Test): Test object to handle parsed messages.
+            test (StandaloneTest): Test object to handle parsed messages.
         """
         try:
             response_parsed = response.decode('utf-8').replace('\x00', '')
@@ -140,7 +141,7 @@ class SerialHandler(InterfaceWrapper):
                             logger.info(f"Device identified as {response_parsed[2]}")
                         if single_response[1] == 'processing':
                             logger.info(f"Response -> board is processing is received")
-                            test.state = TestState.PROCESSING
+                            test.set_processing()
                         if single_response[1] == 'ready':
                             self._incomplete_msg = ''
                             logger.info(f"Response -> processing finished is received")
@@ -149,24 +150,27 @@ class SerialHandler(InterfaceWrapper):
                         # Only required for voltage variations
                         if single_response[1] == 'init':
                             logger.info(f"Response -> init phase completed")
-                            test.internal_state = TestInternalState.INIT
+                            test.set_init()
 
                         if single_response[1] == 'run':
                             logger.info(f"Response -> run phase completed")
-                            test.internal_state = TestInternalState.RUN
+                            test.set_running()
 
                         if single_response[1] == 'done':
                             logger.info(f"Response -> done phase completed")
-                            test.internal_state = TestInternalState.DONE
+                            test.set_done()
 
                     if single_response[0] == 'm':
                         # e.g. 'm:55,aa,10'
                         split = single_response.split(':')
-                        test.measure_file.add_to_buffer([[int(x, 16) for x in split[1].split(',')]])
+                        if type(test) == StandaloneTest:
+                            test.measure_file.add_to_buffer([[int(x, 16) for x in split[1].split(',')]])
+                        else:
+                            pass # Add routine to microcontroller service
                     if response_parsed[0] == 'E':
                         response_parsed = response_parsed.replace('\n', '').replace('\r', '').split(': ')
                         logger.error(f"Error returned {response_parsed[1]}")
-                        test.state = TestState.ERROR
+                        test.set_error()
         except Exception as e:
             logger.error(f"Failed to decode response ({response.decode()}): {e}")
 

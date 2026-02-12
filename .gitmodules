@@ -4,3 +4,6 @@
 [submodule "software/experiment_scheduler/src/py_instrument_control_lib"]
 	path = software/experiment_scheduler/src/py_instrument_control_lib
 	url = https://github.com/AlexanderBraml/py_instrument_control_lib.git
+[submodule "software/experiment_execution_hub"]
+	path = software/experiment_execution_hub
+	url = git@github.com:FlorianFrank/experiment_execution_hub.git

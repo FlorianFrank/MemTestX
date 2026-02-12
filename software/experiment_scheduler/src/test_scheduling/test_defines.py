@@ -5,6 +5,17 @@ from typing import Optional, List
 from message_handling.file_handler import MeasureFileHandler
 
 
+class TestStatus(Enum):
+    """
+    The various possible statuses of the test execution.
+    """
+    IDLE = 0
+    INIT = 1
+    RUNNING = 2
+    STOPPED = 3
+    FAILED = 4
+
+
 class TestType(Enum):
     RELIABLE = 0,
     WRITE_LATENCY = 1,

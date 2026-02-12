@@ -10,19 +10,9 @@ from typing import Optional
 from db_handler import logger
 from message_handling.file_handler import MeasureFileHandler
 from micro_service.model.result import Result
-from test_scheduling.test_defines import TestState
+from test_scheduling.test_defines import TestState, TestStatus
 
 
-class TestStatus(Enum):
-    """
-    The various possible statuses of the test execution.
-    """
-
-    IDLE = 0
-    INIT = 1
-    RUNNING = 2
-    STOPPED = 3
-    FAILED = 4
 
 
 class MicroserviceTest(ABC):

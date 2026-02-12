@@ -24,7 +24,7 @@ class RowHammeringTest(MemoryTest):
         dict_row_hammering = {
             "hammeringIterations": src.get("hammerIterations"),
             "hammeringDistance": src.get("addressOffset"),
-            "tWaitBetweenHammering": 1000,  # TODO: GUI field later
+            "tWaitBetweenHammering": src.get("waitBetweenHammering")
         }
 
         self._command_dict =   {

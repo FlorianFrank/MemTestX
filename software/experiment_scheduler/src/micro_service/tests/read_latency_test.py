@@ -39,7 +39,3 @@ class ReadLatencyTest(MemoryTest):
     def fetch_result(self) -> Result:
         """Fetch the test results."""
         pass
-
-    def get_progress(self) -> int:
-        """Fetch the test results."""
-        return  self._progress

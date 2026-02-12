@@ -85,11 +85,7 @@ class TestQueue:
              'status': test_collection_instance.get_status_of_current_test().name,
              'queue': 'waiting',
              'iteration': test_collection_instance.get_current_iteration(),
-             'progress': test_collection_instance.get_current_progress(),
-             'additional': json.dumps({
-                 'current_row': f'{test_collection_instance.get_meta_data()[0]}',
-                 'current_column': f'{test_collection_instance.get_meta_data()[1]}'
-             })
+             'progress': test_collection_instance.get_current_progress()
              } for
             test_collection_instance in self._test_queue_waiting]
 
@@ -99,10 +95,6 @@ class TestQueue:
                  'status': self._running_test.get_status_of_current_test().name,
                  'iteration': self._running_test.get_current_iteration(),
                  'progress': self._running_test.get_current_progress(),
-                'additional': json.dumps({
-                    'current_row': f'{self._running_test.get_meta_data()[0]}',
-                    'current_column': f'{self._running_test.get_meta_data()[1]}'
-                })
                  }] if self._running_test else []
         return ret
 
@@ -118,9 +110,5 @@ class TestQueue:
              'status': test_collection_instance.get_status_of_current_test().name,
              'queue': 'finished',
              'iteration': test_collection_instance.get_current_iteration(),
-             'additional': json.dumps({
-                 'current_row': '0',
-                 'current_column': '0'
-             }),
              'progress': test_collection_instance.get_current_progress()} for
             test_collection_instance in self._test_queue_done]

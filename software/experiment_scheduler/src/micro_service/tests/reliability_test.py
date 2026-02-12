@@ -36,10 +36,6 @@ class ReliabilityTest(MemoryTest):
         """Fetch the test results."""
         pass
 
-    def get_progress(self) -> int:
-        """Fetch the test results."""
-        return  self._progress
-
 
     @staticmethod
     def get_dict_tests_reliable(src):

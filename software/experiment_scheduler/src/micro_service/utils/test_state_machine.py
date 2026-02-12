@@ -11,23 +11,13 @@ import math
 import threading
 import time
 from abc import ABC, abstractmethod
-from enum import Enum
 
 from micro_service.model.result import Result
+from test_scheduling.test_defines import TestStatus
 
 from py_instrument_control_lib.device_types.ClimateChamber import ClimateChamber
 
 
-class TestStatus(Enum):
-    """
-    The various possible statuses of the test execution.
-    """
-
-    IDLE = 0
-    INIT = 1
-    RUNNING = 2
-    STOPPED = 3
-    FAILED = 4
 
 
 class Test(ABC):

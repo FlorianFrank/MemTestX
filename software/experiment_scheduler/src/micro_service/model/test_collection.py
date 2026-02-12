@@ -1,7 +1,8 @@
 import logging
 from enum import Enum
 
-from micro_service.utils.test_state_machine import TestStatus, Test
+from test_scheduling.test_defines import TestStatus
+from micro_service.utils.test_state_machine import Test
 from model.result import Result
 from test_scheduling.memory_test import MemoryTest
 
@@ -60,21 +61,21 @@ class TestCollection:
 
         status = self._test_template.get_test_status()
 
-        if status.value == TestStatus.STOPPED.value:
+        if status == TestStatus.STOPPED:
             if self._current_iteration == self._nr_iterations:
                 return TestCollectionStatus.COLLECTION_FINISHED
             return TestCollectionStatus.ITERATION_FINISHED
 
-        if status.value == TestStatus.RUNNING.value:
+        if status == TestStatus.RUNNING:
             return TestCollectionStatus.TEST_RUNNING
 
-        if status.value == TestStatus.IDLE.value:
+        if status == TestStatus.IDLE:
             return TestCollectionStatus.TEST_IDLE
 
-        if status.value == TestStatus.INIT.value:
+        if status == TestStatus.INIT:
             return TestCollectionStatus.TEST_INIT
 
-        if status.value == TestStatus.FAILED.value:
+        if status == TestStatus.FAILED:
             return TestCollectionStatus.TEST_FAILED
 
         return TestCollectionStatus.NONE

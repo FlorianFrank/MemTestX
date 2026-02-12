@@ -105,8 +105,9 @@ class NetworkHandler(InterfaceWrapper):
 
             if response_json['msg_type'] == 'm':
                 data = response_json['d']
-                if len(data) > 0:
-                    test.update_progress(data[-1][0])
+                if isinstance(test, MemoryTest):
+                    if len(data) > 0 and len(data[-1]) > 0:
+                        test.update_progress(data[-1][0])
 
                 if test and test.measure_file:
                     test.measure_file.add_to_buffer(data)

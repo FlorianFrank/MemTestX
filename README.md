@@ -50,6 +50,10 @@ The **software** folder contains:
 - **Microcontroller-Based Setup:**  
   An implementation running on an STM32F429 microcontroller with an integrated memory controller, capable of executing the same set of experiments as the ZCU102. However, this setup is constrained by the significantly lower clock frequency of its memory controller (120 MHz compared to 400 MHz on the FPGA). Communication with the experiment scheduler is established via a UART interface.
 
+- **GUI support:**
+
+
+
 ## Quick Setup
 
 The following provides the basic information to setup the memory evaluator. 
@@ -114,7 +118,7 @@ This command will start the Docker container, compile the firmware, and copy the
 To flash the device, OpenOCD integrated within the CLion IDE was used. For more details, refer to the [`README.md`](/software/memory_evaluator_stm32f429/README.md) file found within the respective folder.
 
 
-### Run the scheduler
+### Run the Scheduler (standalone)
 
 All necessary dependencies for the scheduler can be installed by running:
 
@@ -132,6 +136,52 @@ cd software/experiment_scheduler/scripts
 ```
 
 More information about the test specification format can be found in the scheduler’s [`README.md`](/software/experiment_scheduler/README.md) file.
+
+### Run the Scheduler (with GUI Support)
+
+Our microcontroller can be connected to a graphical user interface to define tests, schedule and monitor their execution.
+
+#### Checkout the Backend and GUI 
+
+If you are working from the Zenodo archive, you need to manually clone the backend and GUI:
+
+```bash
+cd software
+git clone git@github.com:FlorianFrank/experiment_execution_hub.git
+cd experiment_execution_hub
+git sumbmodule update --init --recursive
+```
+If you instead cloned the GitHub repository with submodules, the backend and GUI are already present in the software folder and no additional setup is required.
+
+#### Start the Backend and GUI
+
+From inside the ```experiment_execution_hub``` directory, start the Django backend and the React frontend using Docker:
+
+```bash
+docker compose up
+```
+This will launch the: 
+  - nats broker to connect multiple schedulers with the GUI
+  - the Django backend (API and services), and
+  - the React frontend (web-based GUI).
+
+Afterwards you can see the gui when opening
+
+[http://localhost:8000](http://localhost:8000)
+
+  ![GUI Demo](/doc/figures/gui_demo.gif)
+
+Detailed information can be found in the repositories documentation [https://github.com/FlorianFrank/experiment_execution_hub](https://github.com/FlorianFrank/experiment_execution_hub)
+
+as well as on a decicated documentation website [https://test-automation.florian-frank.com](https://test-automation.florian-frank.com)
+
+To run the microservice go to ```software/experiment_scheduler``` from the root direcory and simply run:
+
+```bash
+./run_microservice.bash
+```
+
+Make sure the microservice is configured the right way (see the dedicated documentation in ```software/experiment_scheduler```)
 
 ## Planned Improvements
 

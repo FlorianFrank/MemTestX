@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "MR48V256C")(type "KiCad")(uri "${KIPRJMOD}/footprints/footprint_fram_rohm_MR48V256C/MR48V256C.pretty")(options "")(descr ""))
+)

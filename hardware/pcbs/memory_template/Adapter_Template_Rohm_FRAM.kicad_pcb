@@ -1165,7 +1165,7 @@
 			(pintype "passive+no_connect")
 			(uuid "7687ead3-ec9a-4439-9160-73011ada59dd")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_2x32_P2.54mm_Vertical.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_2x32_P2.54mm_Vertical.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1173,7 +1173,7 @@
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 180 0)
 			)
 		)
 	)
@@ -3414,7 +3414,7 @@
 			(pintype "passive+no_connect")
 			(uuid "be2f78b9-d7d3-4de0-8f09-7b00d8a4e0cf")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_2x32_P2.54mm_Vertical.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_2x32_P2.54mm_Vertical.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -3422,7 +3422,7 @@
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 180 0)
 			)
 		)
 	)
@@ -3437,18 +3437,18 @@
 		(uuid "2d3af594-dbc2-429f-a7f4-8c6e3ca6987d")
 	)
 	(gr_line
-		(start 69.25 38.1)
-		(end 69.25 124.46)
+		(start 223.52 38.1)
+		(end 223.52 128.27)
 		(stroke
-			(width 0.05)
+			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "8d2625c6-25e3-452a-979d-daaaa713a8ec")
+		(uuid "7881dcd9-9e9a-4199-9d10-532f83bc9328")
 	)
 	(gr_line
-		(start 69.25 124.46)
-		(end 223.52 124.46)
+		(start 69.25 128.27)
+		(end 223.52 128.27)
 		(stroke
 			(width 0.05)
 			(type default)
@@ -3457,14 +3457,14 @@
 		(uuid "91b9037f-fa80-49b5-92f3-7ad62276a39c")
 	)
 	(gr_line
-		(start 223.52 38.1)
-		(end 223.52 124.46)
+		(start 69.25 38.1)
+		(end 69.25 128.27)
 		(stroke
-			(width 0.05)
+			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "fc9cbacc-86fc-4c9e-9132-503f22a08e3c")
+		(uuid "cf452002-fb22-4bcc-b3d9-d0d5aa2d35df")
 	)
 	(gr_text "PG0/A10"
 		(at 88.57 86.875 0)

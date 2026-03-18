@@ -186,14 +186,6 @@ To run the microservice go to ```software/experiment_scheduler``` from the root 
 
 Make sure the microservice is configured the right way (see the dedicated documentation in ```software/experiment_scheduler```)
 
-## Planned Improvements
-
-Currently the test scheduler is going to be integrate into our **Experiment Execution Hub**, which provides a management platform for various experiments. It allows graphical definition of experiments, scheduling them, and offers a web interface to evaluate PUF implementations among memory-based PUFs.
-
-[Experiment Execution Hub](https://florianfrank.github.io/experiment_execution_hub/)
-
-> Note: The scheduler can currently only be executed as a command-line tool.
-
 ## Contact
 
 If you encounter any issues or errors, please open an issue on this page or contact me at:  **florian.frank(at)uni-passau.de**

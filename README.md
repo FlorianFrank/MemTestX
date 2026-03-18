@@ -28,6 +28,9 @@ The **hardware** folder contains:
 <img src="doc/figures/pcb_adapter_board.png" style="width: 80%;" alt="FPGA Block Design">
 </p>
 
+- **Memory Adapter Reference Design:**
+A reference adapter board currently configured for the Lapis Semiconductor MR48V256C memory module, designed to interface with the FMC adapter PCB. This folder contains a short tutorial on how to adjust the board for other memory footprints.
+
 - **FPGA Design:**  
   Contains the FPGA design implementing a custom SRAM memory controller with all timing parameters adjustable at runtime. It supports several types of experiments, including rowhammering as well as read and write latency variations. Timing parameters can be tuned with a granularity of 2.5 nanoseconds. The design also includes an AXI interface for communication with the ZCU102’s processing system.
 

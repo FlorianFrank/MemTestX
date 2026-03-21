@@ -263,3 +263,85 @@ python3 db_merger.py db1.db db2.db output.db
 
 This command merges the entries from `db1.db` and `db2.db` and 
 creates a new merged database named `output.db`.
+
+## Database Scheme
+
+As described above, the measurements are persistently stored in an SQLite database containing all relevant metadata, while the measurement data itself is stored separately in CSV files. This design keeps the database lightweight and portable.
+
+The corresponding schema is illustrated in the following ER diagram:
+
+<center>
+<img src="doc/figures/er_diagram_experiment_scheduler.svg" style="width: 100%;" alt="Experiment Scheduler">
+</center>
+
+Our scheme contains four tables, allowing the maintenance of specific memory models with corresponding memory timing configurations, extracted from the memory datasheet. Based on these memory types, different memory instances can be added, on which tests are performed. The resulting test data itself is stored as an easy-to-parse CSV file in the following format:
+
+
+| Memory Address | Read Value | Checksum |
+|--------:|------:|---------:|
+| 1       | 85    | 86       |
+| 2       | 85    | 87       |
+| 3       | 84    | 87       |
+
+
+There is no explicit relation between the Test Configuration and the Memory Timing Configuration, as modified timing parameters, as well as supply voltages or row hammering parameters, are stored in the `test_parameter_json` field. This field contains a JSON object that includes only the parameters deviating from the default configuration, while all unspecified parameters keep their default values.
+
+````json
+  {
+  "pwd_write": -4, 
+  "init_value": 21845, 
+  "puf_value": 43690
+  }
+````
+
+In this example, the `pwd_write` parameter is reduced by 4 × 2.5 ns (the model’s step size). The values 21845 (`0x5555`, checkerboard pattern) and 43690 (`0xAAAA`, inverted checkerboard pattern) define the initialization and PUF patterns, respectively.
+
+Subsequently, sample data for each table is given when performing an experiment on a Rohm FRAM memory module on a ZCU102 board.
+
+
+### Memory Types
+
+Contains a list of the different memory modules that provide a temlate to a memory instance for executing a test.
+
+| id | name | manufacturer | technology | model | interface_type | data_width | address_width | min_addr | max_addr | comment | config_file | voltage | current |
+|---:|:---|:---|:---|:---|:---|---:|---:|---:|---:|:---|:---|---:|---:|
+| 1 | MRAM_Everspin_MR4A08BUYS45 | Everspin | MRAM | MR4A08BUYS45 | parallel | 8 | 21 | 0 | 2097151 | none | | 3 | 0.02 |
+| 2 | FRAM_Cypress_FM22L16_55_TG | Cypress | FRAM | FM22L16_55_TG | parallel | 16 | 18 | 0 | 262143 | Also configurable as 8 bit using UB and LB | | 3 | 0.02 |
+| 3 | MRAM_Everspin_MR4A08BCMA35 | Everspin | MRAM | MR4A08BCMA35 | parallel | 8 | 21 | 0 | 2097151 | none | | 3 | 0.02 |
+| 4 | FRAM_Fujitsu_MB85R1001ANC_GE1 | Fujitsu | FRAM | FM22L16-55-TG | parallel | 8 | 17 | 0 | 131071 | Two CE signals while CE2 constantly set to high. Requires 3 power supplied and 3 ground connections | | 3 | 0.015 |
+| 5 | FRAM_Rohm_MR48V256C | LAPIS Semiconductor | FRAM | MR48V256C | parallel | 8 | 15 | 0 | 32767 | none | | 3 | 0.02 |
+
+### Timing Configurations
+
+The default timing values, in 2.5 ns increments, assigned to each memory type.
+
+| id | name | memory_type_id | ceDrivenWrite | ceDrivenRead | tWaitAfterInit | tNextRead | tStartWrite | tNextWrite | tACWrite | tASWrite | tAHWrite | tPWDWrite | tDSWrite | tDHWrite | tStartRead | tASRead | tAHRead | tOEDRead | tPRCRead | tCEOEEnableRead | tCEOEDisableRead | comment |
+|---:|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---|
+| 1 | MRAM_Everspin_MR4A08BUYS45 | 1 | 1 | 1 | 18 | 100000 | 3 | 4 | 5 | 6 | 7 | 17 | 9 | 10 | 10 | 9 | 8 | 7 | 17 | 5 | 4 | Nothing to report |
+| 2 | FRAM_Cypress_FM22L16_55_TG | 2 | 1 | 1 | 100 | 0 | 3 | 4 | 5 | 6 | 7 | 30 | 9 | 10 | 10 | 10 | 8 | 7 | 30 | 5 | 4 | Nothing to report |
+| 3 | MRAM_Everspin_MR4A08BCMA35 | 3 | 1 | 1 | 18 | 100000 | 3 | 4 | 5 | 6 | 7 | 17 | 9 | 10 | 10 | 9 | 8 | 7 | 17 | 5 | 4 | Nothing to report |
+| 4 | FRAM_Fujitsu_MB85R1001ANC_GE1 | 4 | 1 | 1 | 18 | 100000 | 3 | 4 | 5 | 0 | 7 | 48 | 9 | 10 | 10 | 0 | 8 | 7 | 48 | 5 | 4 | Nothing to report |
+| 5 | FRAM_Rohm_MR48V256C | 5 | 1 | 1 | 18 | 10000 | 3 | 4 | 5 | 6 | 7 | 30 | 9 | 10 | 10 | 9 | 8 | 7 | 30 | 5 | 4 | Nothing to report |
+
+## Memory Instances
+
+This table lists specific memory instances, each identified by a unique identifier and associated with a memory type.
+
+| id | test_ctr | memory_type_id | label | comment |
+|---:|---:|---:|:---|:---|
+| 1 | 10260 | 5 | FeLaR1 | old_chip_unknown test_ctr |
+| 2 | 10308 | 5 | FRAM R5 | old_chip_unknown test_ctr |
+| 3 | 10210 | 5 | FRAM R7 | old_chip_unknown test_ctr |
+| 4 | 243 | 5 | FeLa1 | new chip |
+| 5 | 350 | 5 | FeLa2 | new chip |
+
+
+### Test Configurations
+
+A specific test conducted on a memory instance, with parameters adjusted relative to their default values.
+
+| ID | Type | Board | Mem ID | Config | Params | Comment | Start | End |
+|---:|:---|:---|---:|:---|:---|:---|:---|:---|
+| `1005` | `readLatency` | `ZCU102` | `12` | `readLatency_...csv` | `{"tPRC": -6, ...}` | OE width measured with 50.5 ns CE is aligned with OE at the first flank. | `18:58:24` | `18:58:25` |
+
+
